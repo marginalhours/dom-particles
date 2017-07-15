@@ -1,28 +1,28 @@
 {
-  "//1": "describes your app and its dependencies",
-  "//2": "https://docs.npmjs.com/files/package.json",
-  "//3": "updating this file will download and update your packages",
-
-  "name": "my-glitch-app",
+  "name": "webpack-es6-glitch-template",
   "version": "0.0.1",
-  "description": "What am I about?",
+  "description": "a template for webpack + es6 + glitch",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "npm run build && node server.js",
+    "build": "webpack"
   },
   "dependencies": {
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "lodash": "^4.17.4",
+    "webpack": "^3.2.0"
   },
   "engines": {
     "node": "8.1.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/welcome-project"
+    "url": "https://glitch.com/edit/#!/webpack-es6-glitch-template"
   },
   "license": "MIT",
   "keywords": [
     "node",
     "glitch",
-    "express"
+    "express",
+    "webpack"
   ]
 }
