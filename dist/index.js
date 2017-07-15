@@ -69,9 +69,14 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["default"] = printMe;
+/* harmony export (immutable) */ __webpack_exports__["printMe"] = printMe;
+/* harmony export (immutable) */ __webpack_exports__["unused"] = unused;
 function printMe() {
   console.log('I get called from print.js!');
+}
+
+function unused() {
+  console.log("This shouldn't get imported");
 }
 
 /***/ }),
@@ -95,7 +100,7 @@ function component() {
   element.innerHTML = __WEBPACK_IMPORTED_MODULE_0_lodash_join___default()(['Hello', 'webpack'], ' ');
   element.classList.add('hello');
   btn.innerHTML = 'Click me and check the Console!';
-  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print_js__["default"];
+  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print_js__["printMe"];
   element.appendChild(btn);
   return element;
 }

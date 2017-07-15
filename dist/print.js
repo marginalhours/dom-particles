@@ -69,9 +69,14 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["default"] = printMe;
+/* harmony export (immutable) */ __webpack_exports__["printMe"] = printMe;
+/* harmony export (immutable) */ __webpack_exports__["unused"] = unused;
 function printMe() {
   console.log('I get called from print.js!');
+}
+
+function unused() {
+  console.log("This shouldn't get imported");
 }
 
 /***/ })

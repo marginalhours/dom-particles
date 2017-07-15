@@ -1,6 +1,6 @@
 import join from 'lodash/join';
 import './style.css';
-import printMe from './print.js';
+import {printMe} from './print.js';
 
 function component() {
   var element = document.createElement('div');
