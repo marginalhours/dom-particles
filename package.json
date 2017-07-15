@@ -5,11 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "npm run build && node server.js",
-    "build": "webpack --display-used-exports --display-reasons"
+    "build": "webpack"
   },
   "dependencies": {
     "express": "^4.15.3",
-    "lodash": "^4.17.4",
     "webpack": "^3.3.0",
     "style-loader": "^0.18.2",
     "css-loader": "^0.28.4",
