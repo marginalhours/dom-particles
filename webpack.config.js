@@ -1,6 +1,8 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+// heyo
+
 module.exports = {
   entry: {
     index: './src/index.js',
@@ -8,7 +10,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Output Mgmt'
+      title: 'Output Mgmt',
+      filename: 'index.html',
+      template: './src/index.html',
+      inject: true
     })
   ],
   output: {
