@@ -20,7 +20,7 @@ function component() {
   element.innerHTML = __WEBPACK_IMPORTED_MODULE_0_lodash_join___default()(['Hello', 'webpack'], ' ');
   element.classList.add('hello');
   btn.innerHTML = 'Click me and check the Console!';
-  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print_js__["printMe"];
+  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print_js__["default"];
   element.appendChild(btn);
   return element;
 }
