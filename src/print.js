@@ -1,6 +1,6 @@
 import join from 'lodash/join';
 
-export function printMe() {
+export default function printMe() {
   console.log(join(['hello', 'from', 'print.js']));
 }
 
