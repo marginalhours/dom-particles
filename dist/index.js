@@ -1,30 +1,26 @@
 webpackJsonp([0],[
 /* 0 */,
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_join__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__style_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__print_js__ = __webpack_require__(7);
 
 
-var _join = __webpack_require__(0);
 
-var _join2 = _interopRequireDefault(_join);
-
-__webpack_require__(2);
-
-var _print = __webpack_require__(7);
-
-var _print2 = _interopRequireDefault(_print);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function component() {
   var element = document.createElement('div');
   var btn = document.createElement('button');
-  element.innerHTML = (0, _join2.default)(['Hello', 'webpack'], ' ');
+  element.innerHTML = __WEBPACK_IMPORTED_MODULE_0_lodash_join___default()(['Hello', 'webpack'], ' ');
   element.classList.add('hello');
   btn.innerHTML = 'Click me and check the Console!';
-  btn.onclick = _print2.default;
+  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print_js__["default"];
   element.appendChild(btn);
   return element;
 }

@@ -183,26 +183,19 @@ module.exports = join;
 /***/ }),
 
 /***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "printMe", function() { return printMe; });
+/* harmony export (immutable) */ __webpack_exports__["unused"] = unused;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_join__);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = printMe;
-exports.unused = unused;
-
-var _join = __webpack_require__(0);
-
-var _join2 = _interopRequireDefault(_join);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function printMe() {
-  console.log((0, _join2.default)(['hello', 'from', 'print.js']));
-}
+var printMe = function printMe(name) {
+  return console.log("(printMe) hello " + name);
+};
 
 function unused() {
   console.log("This shouldn't get imported");
