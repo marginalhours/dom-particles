@@ -1,5 +1,3 @@
-import join from 'lodash/join';
-
 export const printMe = name => console.log(`(printMe) hello ${name}`);
 
 export function unused() {

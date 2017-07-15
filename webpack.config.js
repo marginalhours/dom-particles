@@ -42,6 +42,7 @@ module.exports = {
         loader: 'babel-loader',
         options: { 
           presets: [ 
+            // Step 6: http://jakewiesler.com/tree-shaking-es6-modules-in-webpack-2/
             ['es2015', { modules: false }]
           ] 
         }

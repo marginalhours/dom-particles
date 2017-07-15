@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "npm run build && node server.js",
-    "build": "webpack"
+    "build": "webpack --display-used-exports --display-reasons"
   },
   "dependencies": {
     "express": "^4.15.3",
