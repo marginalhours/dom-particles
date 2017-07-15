@@ -10,7 +10,7 @@
   "dependencies": {
     "express": "^4.15.3",
     "lodash": "^4.17.4",
-    "webpack": "^3.2.0",
+    "webpack": "^3.3.0",
     "style-loader": "^0.18.2",
     "css-loader": "^0.28.4",
     "html-webpack-plugin": "^2.29.0",
