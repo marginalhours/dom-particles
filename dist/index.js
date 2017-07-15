@@ -4,22 +4,20 @@ webpackJsonp([0],[
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_join__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__style_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__print__ = __webpack_require__(7);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_css__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__style_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__print__ = __webpack_require__(6);
+//import join from 'lodash/join';
 
 
 
 function component() {
   var element = document.createElement('div');
   var btn = document.createElement('button');
-  element.innerHTML = __WEBPACK_IMPORTED_MODULE_0_lodash_join___default()(['Hello', 'webpack'], ' ');
+  element.innerHTML = 'aloha';
   element.classList.add('hello');
   btn.innerHTML = 'Click me and check the Console!';
-  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print__["printMe"];
+  btn.onclick = __WEBPACK_IMPORTED_MODULE_1__print__["a" /* printMe */];
   element.appendChild(btn);
   return element;
 }
@@ -28,44 +26,12 @@ document.body.appendChild(component());
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
-
-/** Used for built-in method references. */
-var arrayProto = Array.prototype;
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeJoin = arrayProto.join;
-
-/**
- * Converts all elements in `array` into a string separated by `separator`.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Array
- * @param {Array} array The array to convert.
- * @param {string} [separator=','] The element separator.
- * @returns {string} Returns the joined string.
- * @example
- *
- * _.join(['a', 'b', 'c'], '~');
- * // => 'a~b~c'
- */
-function join(array, separator) {
-  return array == null ? '' : nativeJoin.call(array, separator);
-}
-
-module.exports = join;
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(3);
+var content = __webpack_require__(2);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -73,7 +39,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(5)(content, options);
+var update = __webpack_require__(4)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -90,10 +56,10 @@ if(false) {
 }
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -104,7 +70,7 @@ exports.push([module.i, ".hello {\n  color: red;\n}", ""]);
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 /*
@@ -186,7 +152,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -232,7 +198,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(6);
+var	fixUrls = __webpack_require__(5);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -545,7 +511,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 
@@ -638,6 +604,21 @@ module.exports = function (css) {
 	return fixedCss;
 };
 
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return printMe; });
+/* unused harmony export unused */
+var printMe = function printMe(name) {
+  return console.log("(printMe) hello " + name);
+};
+
+var unused = function unused() {
+  return console.log("This shouldn't get imported");
+};
 
 /***/ })
 ],[0]);

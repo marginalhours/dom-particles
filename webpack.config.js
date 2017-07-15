@@ -5,8 +5,7 @@ const path = require('path'),
 
 module.exports = {
   entry: {
-    index: './src/index.js',
-    print: './src/print.js'
+    index: './src/index.js'
   },
   plugins: [
     // https://webpack.js.org/guides/output-management/#cleaning-up-the-dist-folder

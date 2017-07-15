@@ -34,7 +34,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		2: 0
+/******/ 		1: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -147,23 +147,4 @@
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 7:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "printMe", function() { return printMe; });
-/* harmony export (immutable) */ __webpack_exports__["unused"] = unused;
-var printMe = function printMe(name) {
-  return console.log("(printMe) hello " + name);
-};
-
-function unused() {
-  console.log("This shouldn't get imported");
-}
-
-/***/ })
-
-/******/ });
+/******/ ([]);
