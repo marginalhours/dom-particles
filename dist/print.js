@@ -60,19 +60,55 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+/** Used for built-in method references. */
+var arrayProto = Array.prototype;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeJoin = arrayProto.join;
+
+/**
+ * Converts all elements in `array` into a string separated by `separator`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Array
+ * @param {Array} array The array to convert.
+ * @param {string} [separator=','] The element separator.
+ * @returns {string} Returns the joined string.
+ * @example
+ *
+ * _.join(['a', 'b', 'c'], '~');
+ * // => 'a~b~c'
+ */
+function join(array, separator) {
+  return array == null ? '' : nativeJoin.call(array, separator);
+}
+
+module.exports = join;
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["printMe"] = printMe;
 /* harmony export (immutable) */ __webpack_exports__["unused"] = unused;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_join__);
+
+
 function printMe() {
-  console.log('I get called from print.js!');
+  console.log(__WEBPACK_IMPORTED_MODULE_0_lodash_join___default()(['hello', 'from', 'print.js'], ' '));
 }
 
 function unused() {

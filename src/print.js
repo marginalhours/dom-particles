@@ -1,5 +1,7 @@
+import join from 'lodash/join';
+
 export function printMe() {
-  console.log('I get called from print.js!');
+  console.log(join(['hello', 'from', 'print.js'], ' '));
 }
 
 export function unused() {

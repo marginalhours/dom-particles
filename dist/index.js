@@ -60,55 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["printMe"] = printMe;
-/* harmony export (immutable) */ __webpack_exports__["unused"] = unused;
-function printMe() {
-  console.log('I get called from print.js!');
-}
-
-function unused() {
-  console.log("This shouldn't get imported");
-}
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_join__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__style_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__print_js__ = __webpack_require__(0);
-
-
-
-
-function component() {
-  var element = document.createElement('div');
-  var btn = document.createElement('button'); 
-  element.innerHTML = __WEBPACK_IMPORTED_MODULE_0_lodash_join___default()(['Hello', 'webpack'], ' ');
-  element.classList.add('hello');
-  btn.innerHTML = 'Click me and check the Console!';
-  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print_js__["printMe"];
-  element.appendChild(btn);
-  return element;
-}
-
-document.body.appendChild(component());
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -138,6 +94,54 @@ function join(array, separator) {
 
 module.exports = join;
 
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["printMe"] = printMe;
+/* harmony export (immutable) */ __webpack_exports__["unused"] = unused;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_join__);
+
+
+function printMe() {
+  console.log(__WEBPACK_IMPORTED_MODULE_0_lodash_join___default()(['hello', 'from', 'print.js'], ' '));
+}
+
+function unused() {
+  console.log("This shouldn't get imported");
+}
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_join__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__style_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__print_js__ = __webpack_require__(1);
+
+
+
+
+function component() {
+  var element = document.createElement('div');
+  var btn = document.createElement('button'); 
+  element.innerHTML = __WEBPACK_IMPORTED_MODULE_0_lodash_join___default()(['Hello', 'webpack'], ' ');
+  element.classList.add('hello');
+  btn.innerHTML = 'Click me and check the Console!';
+  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print_js__["printMe"];
+  element.appendChild(btn);
+  return element;
+}
+
+document.body.appendChild(component());
 
 /***/ }),
 /* 3 */
