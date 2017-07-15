@@ -1,7 +1,7 @@
 {
-  "name": "webpack-es6-glitch-template",
+  "name": "webpack-template",
   "version": "0.0.1",
-  "description": "a template for webpack + es6 + glitch",
+  "description": "a webpack template for glitch",
   "main": "server.js",
   "scripts": {
     "start": "npm run build && node server.js",
@@ -10,13 +10,15 @@
   "dependencies": {
     "express": "^4.15.3",
     "lodash": "^4.17.4",
-    "webpack": "^3.2.0"
+    "webpack": "^3.2.0",
+    "style-loader": "^0.18.2",
+    "css-loader": "^0.28.4"
   },
   "engines": {
     "node": "8.1.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/webpack-es6-glitch-template"
+    "url": "https://glitch.com/edit/#!/webpack-template"
   },
   "license": "MIT",
   "keywords": [
