@@ -9,7 +9,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_join__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__style_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__print_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__print__ = __webpack_require__(7);
 
 
 
@@ -20,7 +20,7 @@ function component() {
   element.innerHTML = __WEBPACK_IMPORTED_MODULE_0_lodash_join___default()(['Hello', 'webpack'], ' ');
   element.classList.add('hello');
   btn.innerHTML = 'Click me and check the Console!';
-  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print_js__["default"];
+  btn.onclick = __WEBPACK_IMPORTED_MODULE_2__print__["printMe"];
   element.appendChild(btn);
   return element;
 }
