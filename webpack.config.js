@@ -10,7 +10,6 @@ module.exports = {
     a: './src/a.js'
   },
   plugins: [
-    // https://webpack.js.org/guides/output-management/#cleaning-up-the-dist-folder
     new clean(['dist']),
     new html({
       filename: 'index.html',
