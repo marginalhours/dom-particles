@@ -1,5 +1,6 @@
 import './style.css';
 import {printMe} from './print';
+import qs from './helpers';
 
 function component() {
   var element = document.createElement('div');

@@ -1,7 +1,8 @@
 const path = require('path'),
       html = require('html-webpack-plugin'),
       clean = require('clean-webpack-plugin'),
-      webpack = require('webpack');
+      webpack = require('webpack'),
+      commons = 'commons';
 
 module.exports = {
   entry: {
@@ -15,18 +16,11 @@ module.exports = {
       filename: 'index.html',
       template: './src/template.html',
       inject: true,
-      "files": {
-        "js": [ "index.js"],
-        "chunks": {
-          "head": {
-            "entry": "index.js"
-          }
-        }
-      }
+      chunks: [commons, 'index']
     }),
     // https://webpack.js.org/guides/code-splitting/#prevent-duplication
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'commons'
+      name: commons
     })
   ],
   output: {
