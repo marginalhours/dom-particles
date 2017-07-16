@@ -11,13 +11,19 @@ module.exports = {
   plugins: [
     // https://webpack.js.org/guides/output-management/#cleaning-up-the-dist-folder
     new clean(['dist']),
-    /*new html({
-      title: 'Output Mgmt',
+    new html({
       filename: 'index.html',
       template: './src/template.html',
-      inject: true
-    }),*/
-    new html(),
+      inject: true,
+      "files": {
+        "js": [ "index.js"],
+        "chunks": {
+          "head": {
+            "entry": "index.js"
+          }
+        }
+      }
+    }),
     // https://webpack.js.org/guides/code-splitting/#prevent-duplication
     new webpack.optimize.CommonsChunkPlugin({
       name: 'commons'
