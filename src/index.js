@@ -1,4 +1,3 @@
-//import join from 'lodash/join';
 import './style.css';
 import {printMe} from './print';
 

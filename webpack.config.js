@@ -1,7 +1,8 @@
 const path = require('path'),
       html = require('html-webpack-plugin'),
       clean = require('clean-webpack-plugin'),
-      webpack = require('webpack');
+      webpack = require('webpack'),
+      inline = require('html-webpack-inline-source-plugin');
 
 module.exports = {
   entry: {
@@ -14,8 +15,10 @@ module.exports = {
       title: 'Output Mgmt',
       filename: 'index.html',
       template: './src/index.html',
-      inject: true
+      inject: true,
+      inlineSource: '.(js|css)$'
     }),
+    new inline(),
     // https://webpack.js.org/guides/code-splitting/#prevent-duplication
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common'

@@ -7,7 +7,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_css__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__style_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__print__ = __webpack_require__(6);
-//import join from 'lodash/join';
 
 
 
