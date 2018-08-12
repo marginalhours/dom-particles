@@ -5,18 +5,65 @@ webpackJsonp([0],[
 "use strict";
 
 
-__webpack_require__(1);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var _helpers = __webpack_require__(6);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var qs = exports.qs = function qs(selector) {
+    return document.querySelector(selector);
+};
+
+/*
+* HTML templating without tears (TM). Takes a template string with data-hook attributes on everything you want available on the object,
+* and rehydrates it. After you call super() anything with a data-hook is available for function calls, etc.
+*/
+
+var Hookable = exports.Hookable = function Hookable(options) {
+    var _this = this;
+
+    _classCallCheck(this, Hookable);
+
+    this.parent = options.parent;
+    var container = document.createElement('div');
+    this.parent.appendChild(container);
+
+    container.innerHTML = options.template;
+    var oldContainer = container;
+    container = container.children[0];
+
+    this.parent.replaceChild(container, oldContainer);
+
+    [container].concat(_toConsumableArray(Array.prototype.slice.call(container.querySelectorAll('*[data-hook]'), 0))).map(function (el) {
+        var hook = el.getAttribute('data-hook');
+        _this[hook] = el;
+    });
+};
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+__webpack_require__(2);
+
+var _helpers = __webpack_require__(0);
+
+var _bar = __webpack_require__(7);
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(2);
+var content = __webpack_require__(3);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -24,7 +71,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(4)(content, options);
+var update = __webpack_require__(5)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -41,10 +88,10 @@ if(false) {
 }
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(3)(true);
+exports = module.exports = __webpack_require__(4)(true);
 // imports
 
 
@@ -55,7 +102,7 @@ exports.push([module.i, "body {\n  background-color: #f00; }\n", "", {"version":
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 /*
@@ -137,7 +184,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -183,7 +230,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(5);
+var	fixUrls = __webpack_require__(6);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -496,7 +543,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 
@@ -591,18 +638,41 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+   value: true
 });
-var qs = exports.qs = function qs(selector) {
-  return document.querySelector(selector);
-};
+exports.Bar = undefined;
+
+var _helpers = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Bar = exports.Bar = function (_Hookable) {
+   _inherits(Bar, _Hookable);
+
+   function Bar(options) {
+      _classCallCheck(this, Bar);
+
+      var parent = options.parent,
+          name = options.name;
+      return _possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).call(this, {
+         parent: parent,
+         template: '<div class=\'bar-outer ' + name + '\' data-hook=\'container\'>\n              <div class=\'progress-shadow\' data-hook=\'shadow\'></div>\n              <div class=\'progress\' data-hook=\'progress\'></div>\n              <div class=\'readout\' data-hook=\'readout\'></div>\n             </div>'
+      }));
+   }
+
+   return Bar;
+}(_helpers.Hookable);
 
 /***/ })
-],[0]);
+],[1]);
