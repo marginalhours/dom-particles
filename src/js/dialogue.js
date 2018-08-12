@@ -31,7 +31,20 @@ export class Dialogue extends Hookable {
     k.innerText = "Double";
     this.choicelist.appendChild(k);
     
-    k.addEven
+    k.addEventListener('click', () => {
+      this.queue.pop();
+      this.queue.addAtHead();
+      this.queue.addAtHead();
+      this.hydrate(this.queue.peek());
+    });
     
+    let l = document.createElement('button');
+    l.innerText = 'Nothing';
+    this.choicelist.append(l);
+    
+    l.addEventListener('click', () => {
+      this.queue.pop();
+      this.hydrate(this.queue.peek());
+    });
   }
 }

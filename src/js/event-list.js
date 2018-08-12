@@ -20,13 +20,23 @@ export class EventList extends Hookable {
     this.reposition();
   }
   
+  addAtHead () {
+    let e = new Event({ parent: this.container, position: 1 });
+    e.inner.classList.add('spin1');
+    this._events.splice(1, 0, e); 
+    this.reposition();
+  }
+  
   peek () {
    return this._events[0]; 
   }
   
   pop () {
-   return this._events.shift(); 
+    let m =  this._events.shift(); 
+    this.reposition();
+    return m;
   }
+  
   
   reposition () {
     // call this to resync 
