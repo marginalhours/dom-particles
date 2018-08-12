@@ -9,6 +9,11 @@ let e = new Bar({parent: qs('body'), name: "experience"});
 
 let s = new EventList({parent: qs('body')});
 
+s.add();
+s.add();
+s.add();
+s.add();
+
 h.setText("15/30 HP");
 k.setText("10/30 MP");
 e.setText("100 EXP"); 
