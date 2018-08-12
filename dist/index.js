@@ -1,29 +1,13 @@
 webpackJsonp([0],[
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scss_style_scss__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scss_style_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__scss_style_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__print__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers__ = __webpack_require__(7);
 
 
+__webpack_require__(1);
 
-
-function component() {
-  var element = document.createElement('div');
-  var btn = document.createElement('button');
-  element.innerHTML = 'aloha';
-  element.classList.add('hello');
-  btn.innerHTML = 'Click me and check the Console!';
-  btn.onclick = __WEBPACK_IMPORTED_MODULE_1__print__["a" /* printMe */];
-  element.appendChild(btn);
-  return element;
-}
-
-document.body.appendChild(component());
+var _helpers = __webpack_require__(6);
 
 /***/ }),
 /* 1 */
@@ -65,7 +49,7 @@ exports = module.exports = __webpack_require__(3)(true);
 
 
 // module
-exports.push([module.i, ".hello {\n  color: red; }\n", "", {"version":3,"sources":["/app/src/scss/style.scss"],"names":[],"mappings":"AAAA;EACE,WAAW,EAAE","file":"style.scss","sourcesContent":[".hello {\n  color: red; }\n"],"sourceRoot":""}]);
+exports.push([module.i, "body {\n  background-color: #f00; }\n", "", {"version":3,"sources":["/app/src/scss/style.scss"],"names":[],"mappings":"AAAA;EACE,uBAAuB,EAAE","file":"style.scss","sourcesContent":["body {\n  background-color: #f00; }\n"],"sourceRoot":""}]);
 
 // exports
 
@@ -608,25 +592,17 @@ module.exports = function (css) {
 
 /***/ }),
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-const printMe = name => console.log(`(printMe) hello ${name}`);
-/* harmony export (immutable) */ __webpack_exports__["a"] = printMe;
 
 
-const unused = () => console.log("This shouldn't get imported");
-/* unused harmony export unused */
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const qs = selector => document.querySelector(selector);
-/* unused harmony export qs */
-
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var qs = exports.qs = function qs(selector) {
+  return document.querySelector(selector);
+};
 
 /***/ })
 ],[0]);
