@@ -18,7 +18,7 @@ $grow-duration: 500ms;
     top: -17px;
     transition: transform $animation-duration ease-in-out;
     
-    inner {
+    .inner {
       border: 1px solid #aaa;
     }
     
