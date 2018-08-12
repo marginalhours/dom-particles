@@ -6,8 +6,7 @@ const path = require('path'),
 
 module.exports = {
   entry: {
-    index: './src/index.js',
-    a: './src/a.js'
+    index: './src/js/index.js'
   },
   plugins: [
     new clean(['dist']),
@@ -36,13 +35,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: { 
-          presets: [ 
-            // Step 6: http://jakewiesler.com/tree-shaking-es6-modules-in-webpack-2/
-            ['es2015', { modules: false }]
-          ] 
-        }
+        loader: 'babel-loader'
       }
     ]
   }

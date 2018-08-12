@@ -1,4 +1,4 @@
-import './style.css';
+import '../scss/style.scss';
 import {printMe} from './print';
 import qs from './helpers';
 
