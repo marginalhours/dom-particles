@@ -3,13 +3,25 @@ $spin-duration: 500ms;
 $grow-duration: 500ms;
 
 .event-list {
+  margin-top: 50px;
   display: block;
-  margin-top: 100px;
   height: 0px;
   border: 2px solid #333;
   border-radius: 5px;
   list-style: none;
   position: relative;
+  
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -25px;
+    left: 50px;
+    z-index: -1;
+    width: 4px;
+    height: 50px;
+    background: #333;
+  }
   
   li {
     width: 34px;

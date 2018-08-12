@@ -23,13 +23,3 @@ e.setText("100 EXP");
 h.setPercentage(80);
 k.setPercentage(90);
 e.setPercentage(50);
-
-setInterval(() => {
-  h.setPercentage(100 * Math.random());
-  k.setPercentage(100 * Math.random());
-  e.setPercentage(100 * Math.random());
-}, 5000); 
-
-
-
-qs(".add").addEventListener("click", () => s.add());

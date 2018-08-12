@@ -7,8 +7,9 @@ export class Dialogue extends Hookable {
     super ({
       parent,
       template: `<div class='big-card' data-hook='container'>
-                  <div class='card-image'></div>
-                  <div class='card-image-inner'></div>
+                  <div class='card-image'>
+                    <div class='card-image-inner'></div>
+                  </div>
                   <div class='choices'>
                     <div class='flavour'></div>
                   </div>

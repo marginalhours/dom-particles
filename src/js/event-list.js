@@ -7,7 +7,6 @@ export class EventList extends Hookable {
     super ({ 
           parent,
           template: `<ul data-hook='container' class='event-list'>
-                      <li><div></div></li>
                     </ul>`
     });
     
@@ -32,7 +31,6 @@ const event_types = ['crossroads', 'creature', 'treasure', 'hallway', 'trap']
 export class Event extends Hookable {
   constructor (options) {
     const { parent } = options;
-    
     super ({
           parent, 
           template: `<li data-hook='outer'>
@@ -43,6 +41,7 @@ export class Event extends Hookable {
                      </li>`
     });
     
+    this.type = event_types[Math.floor(Math.random() * event_types.length)];
     this.position = -1;
   }
   
