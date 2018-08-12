@@ -2,8 +2,6 @@ import { Hookable } from './helpers';
 
 export class EventList extends Hookable {
   constructor (options) {
-    this._events = [];
-    
     const { parent } = options;
 
     super ({ 
@@ -12,14 +10,18 @@ export class EventList extends Hookable {
                       <li><div></div></li>
                     </ul>`
     });
+    
+    this._events = [];
   }
   
   add () {
-     new Event({ parent: this.container }); 
+    this._events.push(new Event({ parent: this.container })); 
+    this.reposition();
   }
   
   reposition () {
-    this._events.ma
+    // call this to resync 
+    this._events.map((e, idx) => e.reposition(idx));
   }
 }
 
@@ -36,5 +38,18 @@ export class Event extends Hookable {
                       </div>
                      </li>`
     });
+    
+    this.position = -1;
+  }
+  
+  reposition (rank) {
+    this.outer.style.transform = "translateX(" + rank * 48 + "px)";
+    if(this.position !== null && Math.abs(this.position - rank) > 1){
+      this.inner.className = '';
+      
+      let anim = (this.position < rank) ? 'upbounce' : 'downbounce';
+      this.inner.classList.add(anim);
+    }
+    this.position = rank;
   }
 }
