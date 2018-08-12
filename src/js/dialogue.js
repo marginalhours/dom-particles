@@ -33,8 +33,8 @@ export class Dialogue extends Hookable {
     
     k.addEventListener('click', () => {
       this.queue.pop();
-      this.queue.addAtHead();
-      this.queue.addAtHead();
+      this.queue.addAtIndex(0);
+      this.queue.addAtIndex(0);
       this.hydrate(this.queue.peek());
     });
     

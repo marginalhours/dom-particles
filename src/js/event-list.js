@@ -20,10 +20,10 @@ export class EventList extends Hookable {
     this.reposition();
   }
   
-  addAtHead () {
+  addAtIndex (index) {
     let e = new Event({ parent: this.container, position: 1 });
     e.inner.classList.add('spin1');
-    this._events.splice(1, 0, e); 
+    this._events.splice(index, 0, e); 
     this.reposition();
   }
   
@@ -34,6 +34,7 @@ export class EventList extends Hookable {
   pop () {
     let m =  this._events.shift(); 
     this.reposition();
+    m.destroy();
     return m;
   }
   
@@ -64,6 +65,7 @@ export class Event extends Hookable {
   }
   
   reposition (rank) {
+    
     this.outer.style.transform = "translateX(" + rank * 48 + "px)";
     if(this.position !== null && Math.abs(this.position - rank) > 1){
       this.inner.className = 'inner';
@@ -76,5 +78,9 @@ export class Event extends Hookable {
   
   getFlavourText () {
     return "A singular occurence.";  
+  }
+  
+  destroy () {
+   this.parent.removeChild(this.outer); 
   }
 }

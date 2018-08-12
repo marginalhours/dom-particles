@@ -768,11 +768,11 @@ var EventList = exports.EventList = function (_Hookable) {
       this.reposition();
     }
   }, {
-    key: 'addAtHead',
-    value: function addAtHead() {
+    key: 'addAtIndex',
+    value: function addAtIndex(index) {
       var e = new Event({ parent: this.container, position: 1 });
       e.inner.classList.add('spin1');
-      this._events.splice(1, 0, e);
+      this._events.splice(index, 0, e);
       this.reposition();
     }
   }, {
@@ -785,6 +785,7 @@ var EventList = exports.EventList = function (_Hookable) {
     value: function pop() {
       var m = this._events.shift();
       this.reposition();
+      m.destroy();
       return m;
     }
   }, {
@@ -824,6 +825,7 @@ var Event = exports.Event = function (_Hookable2) {
   _createClass(Event, [{
     key: 'reposition',
     value: function reposition(rank) {
+
       this.outer.style.transform = "translateX(" + rank * 48 + "px)";
       if (this.position !== null && Math.abs(this.position - rank) > 1) {
         this.inner.className = 'inner';
@@ -837,6 +839,11 @@ var Event = exports.Event = function (_Hookable2) {
     key: 'getFlavourText',
     value: function getFlavourText() {
       return "A singular occurence.";
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      this.parent.removeChild(this.outer);
     }
   }]);
 
@@ -897,8 +904,8 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
 
       k.addEventListener('click', function () {
         _this2.queue.pop();
-        _this2.queue.addAtHead();
-        _this2.queue.addAtHead();
+        _this2.queue.addAtIndex(0);
+        _this2.queue.addAtIndex(0);
         _this2.hydrate(_this2.queue.peek());
       });
 
