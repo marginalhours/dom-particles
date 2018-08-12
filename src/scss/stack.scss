@@ -18,12 +18,15 @@ $grow-duration: 500ms;
     top: -17px;
     transition: transform $animation-duration ease-in-out;
     
+    inner {
+      border: 1px solid #aaa;
+    }
+    
     div {
       width: 34px;
       height: 34px;
       box-sizing:border-box;
       text-align: center;
-      border: 1px solid #aaa;
       background-color: #fff;
     }
   }

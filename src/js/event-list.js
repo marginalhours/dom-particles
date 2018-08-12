@@ -15,7 +15,9 @@ export class EventList extends Hookable {
   }
   
   add () {
-    this._events.push(new Event({ parent: this.container })); 
+    let e = new Event({ parent: this.container });
+    e.inner.classList.add('spin1');
+    this._events.push(e); 
     this.reposition();
   }
   
@@ -25,6 +27,8 @@ export class EventList extends Hookable {
   }
 }
 
+const event_types = ['crossroads', 'creature', 'treasure', 'hallway', 'trap']
+
 export class Event extends Hookable {
   constructor (options) {
     const { parent } = options;
@@ -32,8 +36,8 @@ export class Event extends Hookable {
     super ({
           parent, 
           template: `<li data-hook='outer'>
-                      <div data-hook='inner'> 
-                        <div data-hook='contents'>
+                      <div data-hook='inner' class='inner'> 
+                        <div data-hook='contents' class='contents'>
                         </div>
                       </div>
                      </li>`
@@ -45,7 +49,7 @@ export class Event extends Hookable {
   reposition (rank) {
     this.outer.style.transform = "translateX(" + rank * 48 + "px)";
     if(this.position !== null && Math.abs(this.position - rank) > 1){
-      this.inner.className = '';
+      this.inner.className = 'inner';
       
       let anim = (this.position < rank) ? 'upbounce' : 'downbounce';
       this.inner.classList.add(anim);

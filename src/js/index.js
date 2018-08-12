@@ -17,7 +17,7 @@ s.add();
 h.setText("15/30 HP");
 k.setText("10/30 MP");
 e.setText("100 EXP"); 
-
+ 
 h.setPercentage(80);
 k.setPercentage(90);
 e.setPercentage(50);
@@ -27,3 +27,7 @@ setInterval(() => {
   k.setPercentage(100 * Math.random());
   e.setPercentage(100 * Math.random());
 }, 5000); 
+
+
+
+qs(".add").addEventListener("click", () => s.add());
