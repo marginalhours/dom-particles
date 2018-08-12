@@ -4,6 +4,7 @@ $grow-duration: 500ms;
 
 .event-list {
   margin-top: 50px;
+  margin-bottom: 23px;
   display: block;
   height: 0px;
   border: 2px solid #333;
@@ -16,7 +17,7 @@ $grow-duration: 500ms;
     display: block;
     position: absolute;
     top: -25px;
-    left: 50px;
+    left: 56px;
     z-index: -1;
     width: 4px;
     height: 50px;

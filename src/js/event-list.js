@@ -13,11 +13,19 @@ export class EventList extends Hookable {
     this._events = [];
   }
   
-  add () {
-    let e = new Event({ parent: this.container });
+  add () { 
+    let e = new Event({ parent: this.container, position: this._events.length });
     e.inner.classList.add('spin1');
     this._events.push(e); 
     this.reposition();
+  }
+  
+  peek () {
+   return this._events[0]; 
+  }
+  
+  pop () {
+   return this._events.shift(); 
   }
   
   reposition () {
@@ -30,7 +38,7 @@ const event_types = ['crossroads', 'creature', 'treasure', 'hallway', 'trap']
 
 export class Event extends Hookable {
   constructor (options) {
-    const { parent } = options;
+    const { parent, position } = options;
     super ({
           parent, 
           template: `<li data-hook='outer'>
@@ -42,7 +50,7 @@ export class Event extends Hookable {
     });
     
     this.type = event_types[Math.floor(Math.random() * event_types.length)];
-    this.position = -1;
+    this.position = position;
   }
   
   reposition (rank) {
@@ -54,5 +62,9 @@ export class Event extends Hookable {
       this.inner.classList.add(anim);
     }
     this.position = rank;
+  }
+  
+  getFlavourText () {
+    return "A singular occurence.";  
   }
 }

@@ -16,6 +16,9 @@ s.add();
 s.add();
 s.add();
 
+d.setQueue(s);
+d.hydrate(s.peek());
+
 h.setText("15/30 HP");
 k.setText("10/30 MP");
 e.setText("100 EXP"); 

@@ -11,10 +11,27 @@ export class Dialogue extends Hookable {
                     <div class='card-image-inner'></div>
                   </div>
                   <div class='choices'>
-                    <div class='flavour'></div>
+                    <div class='flavour' data-hook='flavour'></div>
+                    <div class='choices-inner' data-hook='choicelist'></div>
                   </div>
                  </div>
                 `
     });
+  }
+  
+  setQueue (q) {
+   this.queue = q; 
+  }
+  
+  hydrate (event) {
+    this.flavour.innerText = event.getFlavourText();
+    this.choicelist.innerHTML = '';  
+    
+    let k = document.createElement('button');
+    k.innerText = "Double";
+    this.choicelist.appendChild(k);
+    
+    k.addEven
+    
   }
 }
