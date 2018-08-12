@@ -13,4 +13,13 @@ export class Bar extends Hookable {
              </div>`
       });
    }
+  
+  setText (text) {
+    this.readout.innerText = text;
+  }
+  
+  setPercentage (percentage) {
+    this.progress.style.width = percentage + "%";
+    setTimeout(() => this.shadow.style.width = percentage + "%", 1500);
+  }
 }

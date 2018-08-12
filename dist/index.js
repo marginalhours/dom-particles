@@ -56,6 +56,14 @@ var _helpers = __webpack_require__(0);
 
 var _bar = __webpack_require__(7);
 
+var h = new _bar.Bar({ parent: (0, _helpers.qs)('body'), name: "health" });
+var k = new _bar.Bar({ parent: (0, _helpers.qs)('body'), name: "mana" });
+var e = new _bar.Bar({ parent: (0, _helpers.qs)('body'), name: "experience" });
+
+h.setText("15/30 HP");
+k.setText("10/30 MP");
+e.setText("100 EXP");
+
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -96,7 +104,7 @@ exports = module.exports = __webpack_require__(4)(true);
 
 
 // module
-exports.push([module.i, "body {\n  background-color: #f00; }\n", "", {"version":3,"sources":["/app/src/scss/style.scss"],"names":[],"mappings":"AAAA;EACE,uBAAuB,EAAE","file":"style.scss","sourcesContent":["body {\n  background-color: #f00; }\n"],"sourceRoot":""}]);
+exports.push([module.i, ".bar-outer {\n  height: 18px;\n  width: 100%;\n  position: relative;\n  margin-bottom: 2px; }\n  .bar-outer .progress-shadow {\n    background: #eee;\n    height: 100%;\n    position: absolute;\n    z-index: -1;\n    transition: width 500ms ease-in-out;\n    width: 100%; }\n  .bar-outer .progress {\n    height: 100%;\n    position: absolute;\n    transition: width 500ms ease-in-out;\n    z-index: -1; }\n  .bar-outer .readout {\n    font-weight: bold;\n    color: #fff;\n    font-size: 12px;\n    line-height: 1.5;\n    padding-left: 5px;\n    font-family: sans-serif;\n    z-index: 1; }\n  .bar-outer.health .readout {\n    text-shadow: 1px 1px #a00; }\n  .bar-outer.health .progress {\n    background: #d00; }\n  .bar-outer.mana .readout {\n    text-shadow: 1px 1px #00a; }\n  .bar-outer.mana .progress {\n    background: #00d; }\n  .bar-outer.experience .readout {\n    text-shadow: 1px 1px #aaa; }\n  .bar-outer.experience .progress {\n    background: #ddd; }\n", "", {"version":3,"sources":["/app/src/scss/style.scss"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,YAAY;EACZ,mBAAmB;EACnB,mBAAmB,EAAE;EACrB;IACE,iBAAiB;IACjB,aAAa;IACb,mBAAmB;IACnB,YAAY;IACZ,oCAAoC;IACpC,YAAY,EAAE;EAChB;IACE,aAAa;IACb,mBAAmB;IACnB,oCAAoC;IACpC,YAAY,EAAE;EAChB;IACE,kBAAkB;IAClB,YAAY;IACZ,gBAAgB;IAChB,iBAAiB;IACjB,kBAAkB;IAClB,wBAAwB;IACxB,WAAW,EAAE;EACf;IACE,0BAA0B,EAAE;EAC9B;IACE,iBAAiB,EAAE;EACrB;IACE,0BAA0B,EAAE;EAC9B;IACE,iBAAiB,EAAE;EACrB;IACE,0BAA0B,EAAE;EAC9B;IACE,iBAAiB,EAAE","file":"style.scss","sourcesContent":[".bar-outer {\n  height: 18px;\n  width: 100%;\n  position: relative;\n  margin-bottom: 2px; }\n  .bar-outer .progress-shadow {\n    background: #eee;\n    height: 100%;\n    position: absolute;\n    z-index: -1;\n    transition: width 500ms ease-in-out;\n    width: 100%; }\n  .bar-outer .progress {\n    height: 100%;\n    position: absolute;\n    transition: width 500ms ease-in-out;\n    z-index: -1; }\n  .bar-outer .readout {\n    font-weight: bold;\n    color: #fff;\n    font-size: 12px;\n    line-height: 1.5;\n    padding-left: 5px;\n    font-family: sans-serif;\n    z-index: 1; }\n  .bar-outer.health .readout {\n    text-shadow: 1px 1px #a00; }\n  .bar-outer.health .progress {\n    background: #d00; }\n  .bar-outer.mana .readout {\n    text-shadow: 1px 1px #00a; }\n  .bar-outer.mana .progress {\n    background: #00d; }\n  .bar-outer.experience .readout {\n    text-shadow: 1px 1px #aaa; }\n  .bar-outer.experience .progress {\n    background: #ddd; }\n"],"sourceRoot":""}]);
 
 // exports
 
@@ -645,9 +653,11 @@ module.exports = function (css) {
 
 
 Object.defineProperty(exports, "__esModule", {
-   value: true
+  value: true
 });
 exports.Bar = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _helpers = __webpack_require__(0);
 
@@ -658,20 +668,37 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Bar = exports.Bar = function (_Hookable) {
-   _inherits(Bar, _Hookable);
+  _inherits(Bar, _Hookable);
 
-   function Bar(options) {
-      _classCallCheck(this, Bar);
+  function Bar(options) {
+    _classCallCheck(this, Bar);
 
-      var parent = options.parent,
-          name = options.name;
-      return _possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).call(this, {
-         parent: parent,
-         template: '<div class=\'bar-outer ' + name + '\' data-hook=\'container\'>\n              <div class=\'progress-shadow\' data-hook=\'shadow\'></div>\n              <div class=\'progress\' data-hook=\'progress\'></div>\n              <div class=\'readout\' data-hook=\'readout\'></div>\n             </div>'
-      }));
-   }
+    var parent = options.parent,
+        name = options.name;
+    return _possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).call(this, {
+      parent: parent,
+      template: "<div class='bar-outer " + name + "' data-hook='container'>\n              <div class='progress-shadow' data-hook='shadow'></div>\n              <div class='progress' data-hook='progress'></div>\n              <div class='readout' data-hook='readout'></div>\n             </div>"
+    }));
+  }
 
-   return Bar;
+  _createClass(Bar, [{
+    key: "setText",
+    value: function setText(text) {
+      this.readout.innerText = text;
+    }
+  }, {
+    key: "setPercentage",
+    value: function setPercentage(percentage) {
+      var _this2 = this;
+
+      this.progress.style.width = percentage + "%";
+      setTimeout(function () {
+        return _this2.shadow.style.width = percentage + "%";
+      }, 1500);
+    }
+  }]);
+
+  return Bar;
 }(_helpers.Hookable);
 
 /***/ })

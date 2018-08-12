@@ -1,0 +1,62 @@
+.bar-outer {
+  height: 18px;
+  width: 100%;
+  position: relative;
+  margin-bottom: 2px;
+  
+  .progress-shadow {
+    background: #eee;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    transition: width 500ms ease-in-out;
+    width: 100%;
+  }
+  
+  .progress {
+    height: 100%;
+    position: absolute;
+    transition: width 500ms ease-in-out;
+    z-index: -1;
+  }
+  
+  .readout {
+    font-weight: bold;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.5;
+    padding-left: 5px;
+    font-family: sans-serif;
+    z-index: 1; 
+  }
+  
+  &.health {
+    .readout {      
+      text-shadow: 1px 1px #a00;
+    }
+    
+    .progress {
+      background: #d00;
+    }
+  }
+  
+  &.mana {
+    .readout {
+      text-shadow: 1px 1px #00a;
+    }
+    
+    .progress {
+      background: #00d;
+    }
+  }
+  
+  &.experience {
+    .readout {
+      text-shadow: 1px 1px #aaa;
+    }
+    
+    .progress {
+      background: #ddd;
+    }
+  }
+}
