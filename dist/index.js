@@ -56,9 +56,13 @@ var _helpers = __webpack_require__(0);
 
 var _bar = __webpack_require__(7);
 
+var _eventList = __webpack_require__(8);
+
 var h = new _bar.Bar({ parent: (0, _helpers.qs)('body'), name: "health" });
 var k = new _bar.Bar({ parent: (0, _helpers.qs)('body'), name: "mana" });
 var e = new _bar.Bar({ parent: (0, _helpers.qs)('body'), name: "experience" });
+
+var s = new _eventList.EventList({ parent: (0, _helpers.qs)('body') });
 
 h.setText("15/30 HP");
 k.setText("10/30 MP");
@@ -114,7 +118,7 @@ exports = module.exports = __webpack_require__(4)(true);
 
 
 // module
-exports.push([module.i, ".bar-outer {\n  height: 18px;\n  width: 100%;\n  position: relative;\n  margin-bottom: 2px; }\n  .bar-outer .progress-shadow {\n    background: #eee;\n    height: 100%;\n    position: absolute;\n    z-index: -1;\n    transition: width 500ms ease-in-out;\n    width: 100%; }\n  .bar-outer .progress {\n    height: 100%;\n    position: absolute;\n    transition: width 500ms ease-in-out;\n    z-index: -1; }\n  .bar-outer .readout {\n    font-weight: bold;\n    color: #fff;\n    font-size: 12px;\n    line-height: 1.5;\n    padding-left: 5px;\n    font-family: sans-serif;\n    z-index: 1; }\n  .bar-outer.health .readout {\n    text-shadow: 1px 1px #a00; }\n  .bar-outer.health .progress {\n    background: #d00; }\n  .bar-outer.mana .readout {\n    text-shadow: 1px 1px #00a; }\n  .bar-outer.mana .progress {\n    background: #00d; }\n  .bar-outer.experience .readout {\n    text-shadow: 1px 1px #aaa; }\n  .bar-outer.experience .progress {\n    background: #ddd; }\n", "", {"version":3,"sources":["/app/src/scss/style.scss"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,YAAY;EACZ,mBAAmB;EACnB,mBAAmB,EAAE;EACrB;IACE,iBAAiB;IACjB,aAAa;IACb,mBAAmB;IACnB,YAAY;IACZ,oCAAoC;IACpC,YAAY,EAAE;EAChB;IACE,aAAa;IACb,mBAAmB;IACnB,oCAAoC;IACpC,YAAY,EAAE;EAChB;IACE,kBAAkB;IAClB,YAAY;IACZ,gBAAgB;IAChB,iBAAiB;IACjB,kBAAkB;IAClB,wBAAwB;IACxB,WAAW,EAAE;EACf;IACE,0BAA0B,EAAE;EAC9B;IACE,iBAAiB,EAAE;EACrB;IACE,0BAA0B,EAAE;EAC9B;IACE,iBAAiB,EAAE;EACrB;IACE,0BAA0B,EAAE;EAC9B;IACE,iBAAiB,EAAE","file":"style.scss","sourcesContent":[".bar-outer {\n  height: 18px;\n  width: 100%;\n  position: relative;\n  margin-bottom: 2px; }\n  .bar-outer .progress-shadow {\n    background: #eee;\n    height: 100%;\n    position: absolute;\n    z-index: -1;\n    transition: width 500ms ease-in-out;\n    width: 100%; }\n  .bar-outer .progress {\n    height: 100%;\n    position: absolute;\n    transition: width 500ms ease-in-out;\n    z-index: -1; }\n  .bar-outer .readout {\n    font-weight: bold;\n    color: #fff;\n    font-size: 12px;\n    line-height: 1.5;\n    padding-left: 5px;\n    font-family: sans-serif;\n    z-index: 1; }\n  .bar-outer.health .readout {\n    text-shadow: 1px 1px #a00; }\n  .bar-outer.health .progress {\n    background: #d00; }\n  .bar-outer.mana .readout {\n    text-shadow: 1px 1px #00a; }\n  .bar-outer.mana .progress {\n    background: #00d; }\n  .bar-outer.experience .readout {\n    text-shadow: 1px 1px #aaa; }\n  .bar-outer.experience .progress {\n    background: #ddd; }\n"],"sourceRoot":""}]);
+exports.push([module.i, ".bar-outer {\n  height: 18px;\n  width: 100%;\n  position: relative;\n  margin-bottom: 2px; }\n  .bar-outer .progress-shadow {\n    background: #eee;\n    height: 100%;\n    position: absolute;\n    z-index: -1;\n    transition: width 500ms ease-in-out;\n    width: 100%; }\n  .bar-outer .progress {\n    height: 100%;\n    position: absolute;\n    transition: width 500ms ease-in-out;\n    z-index: -1; }\n  .bar-outer .readout {\n    font-weight: bold;\n    color: #fff;\n    font-size: 12px;\n    line-height: 1.5;\n    padding-left: 5px;\n    font-family: sans-serif;\n    z-index: 1; }\n  .bar-outer.health .readout {\n    text-shadow: 1px 1px #a00; }\n  .bar-outer.health .progress {\n    background: #d00; }\n  .bar-outer.mana .readout {\n    text-shadow: 1px 1px #00a; }\n  .bar-outer.mana .progress {\n    background: #00d; }\n  .bar-outer.experience .readout {\n    text-shadow: 1px 1px #aaa; }\n  .bar-outer.experience .progress {\n    background: #ddd; }\n\n.big-card {\n  display: grid;\n  margin-top: 10px;\n  grid-template-columns: 256px 1fr;\n  width: 100%;\n  height: 256px; }\n  .big-card .card-image {\n    border: 1px solid #333; }\n  .big-card .card-image-inner {\n    transition: background-image 0.5s ease-in-out;\n    width: 100%;\n    height: 100%; }\n  .big-card .choices {\n    border: 1px solid #333; }\n  .big-card .flavour {\n    background: #eee;\n    width: 100%;\n    height: 80px;\n    font-style: italic;\n    box-sizing: border-box;\n    padding: 10px 10px;\n    text-align: center; }\n\n.event-list {\n  display: block;\n  margin-top: 100px;\n  height: 0px;\n  border: 2px solid #333;\n  border-radius: 5px;\n  list-style: none;\n  position: relative; }\n  .event-list li {\n    width: 34px;\n    display: block;\n    position: absolute;\n    top: -17px;\n    transition: transform 750ms ease-in-out; }\n    .event-list li div {\n      width: 34px;\n      height: 34px;\n      box-sizing: border-box;\n      text-align: center;\n      border: 1px solid #aaa;\n      background-color: #fff; }\n", "", {"version":3,"sources":["/app/src/scss/style.scss"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,YAAY;EACZ,mBAAmB;EACnB,mBAAmB,EAAE;EACrB;IACE,iBAAiB;IACjB,aAAa;IACb,mBAAmB;IACnB,YAAY;IACZ,oCAAoC;IACpC,YAAY,EAAE;EAChB;IACE,aAAa;IACb,mBAAmB;IACnB,oCAAoC;IACpC,YAAY,EAAE;EAChB;IACE,kBAAkB;IAClB,YAAY;IACZ,gBAAgB;IAChB,iBAAiB;IACjB,kBAAkB;IAClB,wBAAwB;IACxB,WAAW,EAAE;EACf;IACE,0BAA0B,EAAE;EAC9B;IACE,iBAAiB,EAAE;EACrB;IACE,0BAA0B,EAAE;EAC9B;IACE,iBAAiB,EAAE;EACrB;IACE,0BAA0B,EAAE;EAC9B;IACE,iBAAiB,EAAE;;AAEvB;EACE,cAAc;EACd,iBAAiB;EACjB,iCAAiC;EACjC,YAAY;EACZ,cAAc,EAAE;EAChB;IACE,uBAAuB,EAAE;EAC3B;IACE,8CAA8C;IAC9C,YAAY;IACZ,aAAa,EAAE;EACjB;IACE,uBAAuB,EAAE;EAC3B;IACE,iBAAiB;IACjB,YAAY;IACZ,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,mBAAmB;IACnB,mBAAmB,EAAE;;AAEzB;EACE,eAAe;EACf,kBAAkB;EAClB,YAAY;EACZ,uBAAuB;EACvB,mBAAmB;EACnB,iBAAiB;EACjB,mBAAmB,EAAE;EACrB;IACE,YAAY;IACZ,eAAe;IACf,mBAAmB;IACnB,WAAW;IACX,wCAAwC,EAAE;IAC1C;MACE,YAAY;MACZ,aAAa;MACb,uBAAuB;MACvB,mBAAmB;MACnB,uBAAuB;MACvB,uBAAuB,EAAE","file":"style.scss","sourcesContent":[".bar-outer {\n  height: 18px;\n  width: 100%;\n  position: relative;\n  margin-bottom: 2px; }\n  .bar-outer .progress-shadow {\n    background: #eee;\n    height: 100%;\n    position: absolute;\n    z-index: -1;\n    transition: width 500ms ease-in-out;\n    width: 100%; }\n  .bar-outer .progress {\n    height: 100%;\n    position: absolute;\n    transition: width 500ms ease-in-out;\n    z-index: -1; }\n  .bar-outer .readout {\n    font-weight: bold;\n    color: #fff;\n    font-size: 12px;\n    line-height: 1.5;\n    padding-left: 5px;\n    font-family: sans-serif;\n    z-index: 1; }\n  .bar-outer.health .readout {\n    text-shadow: 1px 1px #a00; }\n  .bar-outer.health .progress {\n    background: #d00; }\n  .bar-outer.mana .readout {\n    text-shadow: 1px 1px #00a; }\n  .bar-outer.mana .progress {\n    background: #00d; }\n  .bar-outer.experience .readout {\n    text-shadow: 1px 1px #aaa; }\n  .bar-outer.experience .progress {\n    background: #ddd; }\n\n.big-card {\n  display: grid;\n  margin-top: 10px;\n  grid-template-columns: 256px 1fr;\n  width: 100%;\n  height: 256px; }\n  .big-card .card-image {\n    border: 1px solid #333; }\n  .big-card .card-image-inner {\n    transition: background-image 0.5s ease-in-out;\n    width: 100%;\n    height: 100%; }\n  .big-card .choices {\n    border: 1px solid #333; }\n  .big-card .flavour {\n    background: #eee;\n    width: 100%;\n    height: 80px;\n    font-style: italic;\n    box-sizing: border-box;\n    padding: 10px 10px;\n    text-align: center; }\n\n.event-list {\n  display: block;\n  margin-top: 100px;\n  height: 0px;\n  border: 2px solid #333;\n  border-radius: 5px;\n  list-style: none;\n  position: relative; }\n  .event-list li {\n    width: 34px;\n    display: block;\n    position: absolute;\n    top: -17px;\n    transition: transform 750ms ease-in-out; }\n    .event-list li div {\n      width: 34px;\n      height: 34px;\n      box-sizing: border-box;\n      text-align: center;\n      border: 1px solid #aaa;\n      background-color: #fff; }\n"],"sourceRoot":""}]);
 
 // exports
 
@@ -709,6 +713,42 @@ var Bar = exports.Bar = function (_Hookable) {
   }]);
 
   return Bar;
+}(_helpers.Hookable);
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EventList = undefined;
+
+var _helpers = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EventList = exports.EventList = function (_Hookable) {
+  _inherits(EventList, _Hookable);
+
+  function EventList(options) {
+    _classCallCheck(this, EventList);
+
+    var parent = options.parent;
+    return _possibleConstructorReturn(this, (EventList.__proto__ || Object.getPrototypeOf(EventList)).call(this, {
+      parent: parent,
+      template: '<ul data-hook=\'container\' class=\'event-list\'>\n                      <li><div></div></li>\n                    </ul>'
+    }));
+  }
+
+  return EventList;
 }(_helpers.Hookable);
 
 /***/ })
