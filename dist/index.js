@@ -64,6 +64,16 @@ h.setText("15/30 HP");
 k.setText("10/30 MP");
 e.setText("100 EXP");
 
+h.setPercentage(80);
+k.setPercentage(90);
+e.setPercentage(50);
+
+setInterval(function () {
+  h.setPercentage(100 * Math.random());
+  k.setPercentage(100 * Math.random());
+  e.setPercentage(100 * Math.random());
+}, 5000);
+
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -677,7 +687,7 @@ var Bar = exports.Bar = function (_Hookable) {
         name = options.name;
     return _possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).call(this, {
       parent: parent,
-      template: "<div class='bar-outer " + name + "' data-hook='container'>\n              <div class='progress-shadow' data-hook='shadow'></div>\n              <div class='progress' data-hook='progress'></div>\n              <div class='readout' data-hook='readout'></div>\n             </div>"
+      template: "<div class='bar-outer " + name + "' data-hook='container'>\n            <div class='progress-shadow' data-hook='shadow'></div>\n            <div class='progress' data-hook='progress'></div>\n            <div class='readout' data-hook='readout'></div>\n           </div>"
     }));
   }
 

@@ -1,0 +1,30 @@
+$animation-duration: 750ms;
+$spin-duration: 500ms;
+$grow-duration: 500ms;
+
+.event-list {
+  display: block;
+  margin-top: 100px;
+  height: 0px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  list-style: none;
+  position: relative;
+  
+  li {
+    width: 34px;
+    display: block;
+    position: absolute;
+    top: -17px;
+    transition: transform $animation-duration ease-in-out;
+    
+    div {
+      width: 34px;
+      height: 34px;
+      box-sizing:border-box;
+      text-align: center;
+      border: 1px solid #aaa;
+      background-color: #fff;
+    }
+  }
+}
