@@ -1,5 +1,6 @@
 import '../scss/style.scss';
 import { qs } from './helpers';
+import Bus from './bus';
 import { Bar } from './bar';
 import { EventList } from './event-list';
 import { Dialogue } from './dialogue'; 

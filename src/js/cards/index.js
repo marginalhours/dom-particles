@@ -18,6 +18,14 @@ export class Card {
       }
     });
     
+    options.push({
+      label: "Gain 10 EXP",
+      effect: "Gain 10 EXP",
+      callback: () => {
+        player.exp += 10;
+      }
+    });
+    
     return {
      flavour: this.flavour,
      options 

@@ -33,7 +33,7 @@ export class Dialogue extends Hookable {
     options.map(({ callback, label, effect }) => {
       new Choice ({
         parent: this.choicelist,
-        handleClick: () => callback(),
+        handleClick: () => { callback(); this.hydrate(this.stack.peek()) }, // default look at next card
         label,
         effect
       });
