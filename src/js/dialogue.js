@@ -1,4 +1,5 @@
 import { Hookable } from './helpers';
+import Choice from './choice';
 
 export class Dialogue extends Hookable {
   constructor (options) {
@@ -24,27 +25,21 @@ export class Dialogue extends Hookable {
   }
   
   hydrate (event) {
-    this.flavour.innerText = event.getFlavourText();
+    this.flavour.innerText = "A bonzo loaf";
     this.choicelist.innerHTML = '';  
     
-    let k = document.createElement('button');
-    k.innerText = "Double";
-    this.choicelist.appendChild(k);
-    
-    k.addEventListener('click', () => {
-      this.queue.pop();
-      this.queue.addAtIndex(0);
-      this.queue.addAtIndex(0);
-      this.hydrate(this.queue.peek());
+    new Choice({
+      parent: this.choicelist,
+      handleClick: () => { console.log("woo!") },
+      label: "A shot in the dark",
+      effect: "10% chance of successful hit for 3-9 damage"
     });
     
-    let l = document.createElement('button');
-    l.innerText = 'Nothing';
-    this.choicelist.append(l);
-    
-    l.addEventListener('click', () => {
-      this.queue.pop();
-      this.hydrate(this.queue.peek());
+    new Choice({
+      parent: this.choicelist,
+      handleClick: () => { console.log("whee!") },
+      label: "Defensive stance",
+      effect: "+3 STALWART for 1 round"
     });
   }
 }

@@ -21,6 +21,15 @@
     border: 1px solid #333;
   }
   
+  .choices-inner {
+     display: grid;
+    
+    .choice {
+      background: #fff;
+      border: 2px solid #333;
+    }
+  }
+  
   .flavour {
     background: #eee;
     width: 100%;

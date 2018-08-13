@@ -16,14 +16,14 @@ export class EventList extends Hookable {
   }
   
   add () { 
-    let e = new Event({ parent: this.container, position: this._events.length, type: event_types[Math.floor(Math.random() * event_types.length)] });
+    let e = new Event({ parent: this.container, position: this._events.length, card: { type: "money" } });
     e.inner.classList.add('spin1');
     this._events.push(e); 
     this.reposition();
   }
   
   addAtIndex (index) {
-    let e = new Event({ parent: this.container, position: 1, type: event_types[Math.floor(Math.random() * event_types.length)] });
+    let e = new Event({ parent: this.container, position: 1, card: { type: "money" } });
     e.inner.classList.add('spin1');
     this._events.splice(index, 0, e); 
     this.reposition();
@@ -49,18 +49,17 @@ export class EventList extends Hookable {
 
 export class Event extends Hookable {
   constructor (options) {
-    const { parent, position, type } = options;
+    const { parent, position, card } = options;
     super ({
           parent, 
           template: `<li data-hook='outer'>
                       <div data-hook='inner' class='inner'> 
-                        <div data-hook='contents' class='contents ${type}-card'>
+                        <div data-hook='contents' class='contents ${card.type}-card'>
                         </div>
                       </div>
                      </li>`
     });
     
-    this.type = type;
     this.position = position;
   }
   
@@ -74,10 +73,6 @@ export class Event extends Hookable {
       this.inner.classList.add(anim);
     }
     this.position = rank;
-  }
-  
-  getFlavourText () {
-    return "A singular occurence.";  
   }
   
   destroy () {
