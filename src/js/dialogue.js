@@ -20,26 +20,23 @@ export class Dialogue extends Hookable {
     });
   }
   
-  setQueue (q) {
-   this.queue = q; 
+  setStack (q) {
+   this.stack = q; 
   }
   
   hydrate (event) {
     this.flavour.innerText = "A bonzo loaf";
     this.choicelist.innerHTML = '';  
     
-    new Choice({
-      parent: this.choicelist,
-      handleClick: () => { console.log("woo!") },
-      label: "A shot in the dark",
-      effect: "10% chance of successful hit for 3-9 damage"
-    });
+    let { flavour, options } = event.card.enter({}, this.stack);
     
-    new Choice({
-      parent: this.choicelist,
-      handleClick: () => { console.log("whee!") },
-      label: "Defensive stance",
-      effect: "+3 STALWART for 1 round"
+    options.map(({ callback, label, effect }) => {
+      new Choice ({
+        parent: this.choicelist,
+        handleClick: () => callback(),
+        label,
+        effect
+      });
     });
   }
 }

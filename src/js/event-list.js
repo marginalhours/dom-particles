@@ -1,4 +1,5 @@
 import { Hookable } from './helpers';
+import { Card } from './cards/';
 
 const event_types = ['monster', 'money', 'directions'];
 
@@ -16,14 +17,14 @@ export class EventList extends Hookable {
   }
   
   add () { 
-    let e = new Event({ parent: this.container, position: this._events.length, card: { type: "money" } });
+    let e = new Event({ parent: this.container, position: this._events.length, card: new Card() });
     e.inner.classList.add('spin1');
     this._events.push(e); 
     this.reposition();
   }
   
   addAtIndex (index) {
-    let e = new Event({ parent: this.container, position: 1, card: { type: "money" } });
+    let e = new Event({ parent: this.container, position: 1, card: new Card() });
     e.inner.classList.add('spin1');
     this._events.splice(index, 0, e); 
     this.reposition();
@@ -39,7 +40,6 @@ export class EventList extends Hookable {
     m.destroy();
     return m;
   }
-  
   
   reposition () {
     // call this to resync 
@@ -60,6 +60,7 @@ export class Event extends Hookable {
                      </li>`
     });
     
+    this.card = card;
     this.position = position;
   }
   
@@ -78,4 +79,6 @@ export class Event extends Hookable {
   destroy () {
    this.parent.removeChild(this.outer); 
   }
+  
+  
 }

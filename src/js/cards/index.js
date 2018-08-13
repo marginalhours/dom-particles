@@ -1,7 +1,8 @@
 // Base card class (duh.)
 export class Card {
   constructor (options) {
-    this.flavour = options.flavour;
+    options = options || {};
+    this.flavour = options.flavour || "An empty card";
   }
   
   enter (player, stack) {
@@ -9,6 +10,13 @@ export class Card {
     let options = [];
     
     // create button elements per option...
+    options.push({
+      label: "Default action",
+      effect: "Pop card from stack",
+      callback: () => {
+        stack.pop();
+      }
+    });
     
     return {
      flavour: this.flavour,

@@ -16,7 +16,7 @@ s.add();
 s.add();
 s.add();
 
-d.setQueue(s);
+d.setStack(s);
 d.hydrate(s.peek());
 
 h.setText("15/30 HP");
