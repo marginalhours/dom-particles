@@ -1,5 +1,7 @@
 import { Hookable } from './helpers';
 
+const event_types = ['monster', 'money', 'directions'];
+
 export class EventList extends Hookable {
   constructor (options) {
     const { parent } = options;
@@ -14,14 +16,14 @@ export class EventList extends Hookable {
   }
   
   add () { 
-    let e = new Event({ parent: this.container, position: this._events.length });
+    let e = new Event({ parent: this.container, position: this._events.length, type: event_types[Math.floor(Math.random() * event_types.length)] });
     e.inner.classList.add('spin1');
     this._events.push(e); 
     this.reposition();
   }
   
   addAtIndex (index) {
-    let e = new Event({ parent: this.container, position: 1 });
+    let e = new Event({ parent: this.container, position: 1, type: event_types[Math.floor(Math.random() * event_types.length)] });
     e.inner.classList.add('spin1');
     this._events.splice(index, 0, e); 
     this.reposition();
@@ -45,22 +47,20 @@ export class EventList extends Hookable {
   }
 }
 
-const event_types = ['crossroads', 'creature', 'treasure', 'hallway', 'trap']
-
 export class Event extends Hookable {
   constructor (options) {
-    const { parent, position } = options;
+    const { parent, position, type } = options;
     super ({
           parent, 
           template: `<li data-hook='outer'>
                       <div data-hook='inner' class='inner'> 
-                        <div data-hook='contents' class='contents'>
+                        <div data-hook='contents' class='contents ${type}-card'>
                         </div>
                       </div>
                      </li>`
     });
     
-    this.type = event_types[Math.floor(Math.random() * event_types.length)];
+    this.type = type;
     this.position = position;
   }
   
