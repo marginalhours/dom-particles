@@ -1,6 +1,7 @@
 import '../scss/style.scss';
 import { qs } from './helpers';
 import Bus from './bus';
+import Player from './player';
 import { Bar } from './bar';
 import { EventList } from './event-list';
 import { Dialogue } from './dialogue'; 
@@ -20,10 +21,17 @@ s.add();
 d.setStack(s);
 d.hydrate(s.peek());
 
-h.setText("15/30 HP");
-k.setText("10/30 MP");
-e.setText("100 EXP"); 
+Bus.sub('exp-amount', (amount) => {
+  e.setText(`${amount} EXP`);
+  e.setPercentage(100 * Player.exp/Player.next_level);
+});
 
-h.setPercentage(80);
-k.setPercentage(90);
-e.setPercentage(50);
+Bus.sub('health-amount', (amount) => {
+  h.setText(`${Player.health}/${Player.max_health} HP`);
+  h.setPercentage(100 * Player.health / Player.max_health);
+});
+
+Bus.sub('mana-amount', (amount) => {
+  k.setText(`${Player.mana}/${Player.max_mana} HP`);
+  k.setPercentage(100 * Player.mana / Player.max_mana);
+});

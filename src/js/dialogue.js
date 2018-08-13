@@ -28,7 +28,7 @@ export class Dialogue extends Hookable {
     this.flavour.innerText = "A bonzo loaf";
     this.choicelist.innerHTML = '';  
     
-    let { flavour, options } = event.card.enter({}, this.stack);
+    let { flavour, options } = event.card.enter(this.stack);
     
     options.map(({ callback, label, effect }) => {
       new Choice ({

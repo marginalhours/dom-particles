@@ -1,3 +1,4 @@
+import Player from '../player';
 // Base card class (duh.)
 export class Card {
   constructor (options) {
@@ -5,7 +6,7 @@ export class Card {
     this.flavour = options.flavour || "An empty card";
   }
   
-  enter (player, stack) {
+  enter (stack) {
     // method called on this card becoming the current one. Arguments are player state and stack of cards.
     let options = [];
     
@@ -22,7 +23,23 @@ export class Card {
       label: "Gain 10 EXP",
       effect: "Gain 10 EXP",
       callback: () => {
-        player.exp += 10;
+        Player.changeResource('exp', 10);
+      }
+    });
+    
+    options.push({
+      label: "Gain 5 Health",
+      effect: "Gain 5 Health",
+      callback: () => {
+        Player.changeResource('health', 5);
+      }
+    });
+    
+    options.push({
+      label: "Gain 2 Mana",
+      effect: "Gain 2 Mana",
+      callback: () => {
+        Player.changeResource('mana', 2);
       }
     });
     

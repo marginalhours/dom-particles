@@ -50,19 +50,170 @@ var Hookable = exports.Hookable = function Hookable(options) {
 "use strict";
 
 
-__webpack_require__(2);
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var Bus = {
+	PRELOAD: 0,
+	RUNNING: 1,
+	PAUSED: 2,
+	/* Overall state (see enum above) */
+	state: 0,
 
-var _helpers = __webpack_require__(0);
+	/* Events Pub/Sub stuff (for game logic) */
+	topics: {},
 
-var _bus = __webpack_require__(7);
+	// returns a token that can be used to unsubscribe
+	sub: function sub(topic, listener) {
+		if (!this.topics[topic]) this.topics[topic] = [];
+		var new_token = this.token();
+		this.topics[topic].push({ func: listener, token: new_token });
+
+		return new_token;
+	},
+
+	pub: function pub(topic, data) {
+		if (!this.topics[topic] || this.topics[topic].length < 1) return;
+		this.topics[topic].forEach(function (listener) {
+			listener.func(data);
+		});
+	},
+
+	token: function token() {
+		return Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2); // remove `0.`
+	},
+
+	unsub: function unsub(topic, token) {
+		if (this.topics[topic]) {
+			this.topics[topic] = this.topics[topic].filter(function (item) {
+				return item.token !== token;
+			});
+		}
+	},
+
+	/* overall delta measurement */
+	uptime: 0,
+
+	update: function update(dt) {
+		this.uptime += dt;
+	},
+
+	getTimestamp: function getTimestamp() {
+		/* returns HH:MM:SS timestamp since game began */
+		var hours = Math.floor(this.uptime / 36e5),
+		    mins = Math.floor(this.uptime % 36e5 / 6e4),
+		    secs = Math.floor(this.uptime % 6e4 / 1000);
+		return ('0' + hours).slice(-2) + ':' + ('0' + mins).slice(-2) + ':' + ('0' + secs).slice(-2);
+	},
+
+	log: function log(content) {
+		console.log("[" + this.getTimestamp() + "] " + content.entity + ": " + content.message);
+	}
+};
+
+Bus.start = function () {
+	Bus.state = Bus.RUNNING;
+	Bus.busLog("starting game...");
+	Bus.pub('game-start');
+	Bus.onFrame();
+};
+
+var time = new Date().getTime();
+
+Bus.onFrame = function () {
+	// get immediate delta
+	var now = new Date().getTime(),
+	    dt = now - (time || now);
+	time = now;
+
+	switch (this.state) {
+		case Bus.PRELOAD:
+			break;
+		case Bus.RUNNING:
+			this.pub("update", dt);
+			break;
+		case Bus.PAUSED:
+			break;
+	}
+	// load next frame
+	requestAnimationFrame(this.onFrame);
+};
+
+Bus.onFrame = Bus.onFrame.bind(Bus);
+
+Bus.busLog = function (msg) {
+	Bus.log({
+		entity: "Bus",
+		message: msg
+	});
+};
+
+// subscribe to updates to keep track of delta
+Bus.sub("update", function (dt) {
+	Bus.update(dt);
+});
+
+exports.default = Bus;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _bus = __webpack_require__(1);
 
 var _bus2 = _interopRequireDefault(_bus);
 
-var _bar = __webpack_require__(8);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _eventList = __webpack_require__(9);
+// Big dumb player object
+var Player = {
+  name: "",
+  health: 15,
+  max_health: 15,
+  mana: 15,
+  max_mana: 15,
+  exp: 0,
+  next_level: 1000,
 
-var _dialogue = __webpack_require__(11);
+  changeResource: function changeResource(name, amount) {
+    this[name] += amount;
+    _bus2.default.pub(name + "-amount", this[name]);
+  }
+};
+
+exports.default = Player;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(4);
+
+var _helpers = __webpack_require__(0);
+
+var _bus = __webpack_require__(1);
+
+var _bus2 = _interopRequireDefault(_bus);
+
+var _player = __webpack_require__(2);
+
+var _player2 = _interopRequireDefault(_player);
+
+var _bar = __webpack_require__(9);
+
+var _eventList = __webpack_require__(10);
+
+var _dialogue = __webpack_require__(12);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -81,22 +232,29 @@ s.add();
 d.setStack(s);
 d.hydrate(s.peek());
 
-h.setText("15/30 HP");
-k.setText("10/30 MP");
-e.setText("100 EXP");
+_bus2.default.sub('exp-amount', function (amount) {
+  e.setText(amount + ' EXP');
+  e.setPercentage(100 * _player2.default.exp / _player2.default.next_level);
+});
 
-h.setPercentage(80);
-k.setPercentage(90);
-e.setPercentage(50);
+_bus2.default.sub('health-amount', function (amount) {
+  h.setText(_player2.default.health + '/' + _player2.default.max_health + ' HP');
+  h.setPercentage(100 * _player2.default.health / _player2.default.max_health);
+});
+
+_bus2.default.sub('mana-amount', function (amount) {
+  k.setText(_player2.default.mana + '/' + _player2.default.max_mana + ' HP');
+  k.setPercentage(100 * _player2.default.mana / _player2.default.max_mana);
+});
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(3);
+var content = __webpack_require__(5);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -104,7 +262,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(5)(content, options);
+var update = __webpack_require__(7)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -121,10 +279,10 @@ if(false) {
 }
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(true);
+exports = module.exports = __webpack_require__(6)(true);
 // imports
 
 
@@ -135,7 +293,7 @@ exports.push([module.i, ".bar-outer {\n  height: 18px;\n  width: 100%;\n  positi
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /*
@@ -217,7 +375,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -263,7 +421,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(6);
+var	fixUrls = __webpack_require__(8);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -576,7 +734,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports) {
 
 
@@ -671,119 +829,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-var Bus = {
-	PRELOAD: 0,
-	RUNNING: 1,
-	PAUSED: 2,
-	/* Overall state (see enum above) */
-	state: 0,
-
-	/* Events Pub/Sub stuff (for game logic) */
-	topics: {},
-
-	// returns a token that can be used to unsubscribe
-	sub: function sub(topic, listener) {
-		if (!this.topics[topic]) this.topics[topic] = [];
-		var new_token = this.token();
-		this.topics[topic].push({ func: listener, token: new_token });
-
-		return new_token;
-	},
-
-	pub: function pub(topic, data) {
-		if (!this.topics[topic] || this.topics[topic].length < 1) return;
-		this.topics[topic].forEach(function (listener) {
-			listener.func(data);
-		});
-	},
-
-	token: function token() {
-		return Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2); // remove `0.`
-	},
-
-	unsub: function unsub(topic, token) {
-		if (this.topics[topic]) {
-			this.topics[topic] = this.topics[topic].filter(function (item) {
-				return item.token !== token;
-			});
-		}
-	},
-
-	/* overall delta measurement */
-	uptime: 0,
-
-	update: function update(dt) {
-		this.uptime += dt;
-	},
-
-	getTimestamp: function getTimestamp() {
-		/* returns HH:MM:SS timestamp since game began */
-		var hours = Math.floor(this.uptime / 36e5),
-		    mins = Math.floor(this.uptime % 36e5 / 6e4),
-		    secs = Math.floor(this.uptime % 6e4 / 1000);
-		return ('0' + hours).slice(-2) + ':' + ('0' + mins).slice(-2) + ':' + ('0' + secs).slice(-2);
-	},
-
-	log: function log(content) {
-		console.log("[" + this.getTimestamp() + "] " + content.entity + ": " + content.message);
-	}
-};
-
-Bus.start = function () {
-	Bus.state = Bus.RUNNING;
-	Bus.busLog("starting game...");
-	Bus.pub('game-start');
-	Bus.onFrame();
-};
-
-var time = new Date().getTime();
-
-Bus.onFrame = function () {
-	// get immediate delta
-	var now = new Date().getTime(),
-	    dt = now - (time || now);
-	time = now;
-
-	switch (this.state) {
-		case Bus.PRELOAD:
-			break;
-		case Bus.RUNNING:
-			this.pub("update", dt);
-			break;
-		case Bus.PAUSED:
-			break;
-	}
-	// load next frame
-	requestAnimationFrame(this.onFrame);
-};
-
-Bus.onFrame = Bus.onFrame.bind(Bus);
-
-Bus.busLog = function (msg) {
-	Bus.log({
-		entity: "Bus",
-		message: msg
-	});
-};
-
-// subscribe to updates to keep track of delta
-Bus.sub("update", function (dt) {
-	Bus.update(dt);
-});
-
-exports.default = Bus;
-
-/***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -839,7 +885,7 @@ var Bar = exports.Bar = function (_Hookable) {
 }(_helpers.Hookable);
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -854,7 +900,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _helpers = __webpack_require__(0);
 
-var _cards = __webpack_require__(10);
+var _cards = __webpack_require__(11);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -967,7 +1013,7 @@ var Event = exports.Event = function (_Hookable2) {
 }(_helpers.Hookable);
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -976,8 +1022,15 @@ var Event = exports.Event = function (_Hookable2) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.CreatureCard = exports.Card = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _player = __webpack_require__(2);
+
+var _player2 = _interopRequireDefault(_player);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
@@ -996,7 +1049,7 @@ var Card = exports.Card = function () {
 
   _createClass(Card, [{
     key: "enter",
-    value: function enter(player, stack) {
+    value: function enter(stack) {
       // method called on this card becoming the current one. Arguments are player state and stack of cards.
       var options = [];
 
@@ -1013,7 +1066,23 @@ var Card = exports.Card = function () {
         label: "Gain 10 EXP",
         effect: "Gain 10 EXP",
         callback: function callback() {
-          player.exp += 10;
+          _player2.default.changeResource('exp', 10);
+        }
+      });
+
+      options.push({
+        label: "Gain 5 Health",
+        effect: "Gain 5 Health",
+        callback: function callback() {
+          _player2.default.changeResource('health', 5);
+        }
+      });
+
+      options.push({
+        label: "Gain 2 Mana",
+        effect: "Gain 2 Mana",
+        callback: function callback() {
+          _player2.default.changeResource('mana', 2);
         }
       });
 
@@ -1064,7 +1133,7 @@ var CreatureCard = exports.CreatureCard = function (_Card) {
 }(Card);
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1079,7 +1148,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _helpers = __webpack_require__(0);
 
-var _choice = __webpack_require__(12);
+var _choice = __webpack_require__(13);
 
 var _choice2 = _interopRequireDefault(_choice);
 
@@ -1117,7 +1186,7 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
       this.flavour.innerText = "A bonzo loaf";
       this.choicelist.innerHTML = '';
 
-      var _event$card$enter = event.card.enter({}, this.stack),
+      var _event$card$enter = event.card.enter(this.stack),
           flavour = _event$card$enter.flavour,
           options = _event$card$enter.options;
 
@@ -1142,7 +1211,7 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
 }(_helpers.Hookable);
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1188,4 +1257,4 @@ var Choice = function (_Hookable) {
 exports.default = Choice;
 
 /***/ })
-],[1]);
+],[3]);
