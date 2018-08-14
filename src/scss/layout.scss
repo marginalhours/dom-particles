@@ -3,3 +3,9 @@ body { }
 .game {
   width: 50%;
 }
+
+.header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+}
