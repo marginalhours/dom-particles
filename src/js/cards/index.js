@@ -38,7 +38,7 @@ export class CorridorCard extends Card {
     });
     
     return {
-      label: "An empty corridor.",
+      flavour: "An empty corridor.",
       options
     }
   }
