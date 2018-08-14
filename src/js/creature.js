@@ -12,6 +12,10 @@ class Creature {
   get dead () {
    return this.health <= 0; 
   }
+  
+  changeResource(res, val){
+    this[res] += val;
+  }
 }
 
 

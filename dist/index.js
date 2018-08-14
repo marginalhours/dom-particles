@@ -184,7 +184,9 @@ var Player = {
   gold: 0,
 
   items: {
-    "Potion of Healing": { "count": 1, "effect": "Heal", "callback": function callback() {}, "target": 1 }
+    "Potion of Healing": { "count": 1, "effect": "Heal", "callback": function callback(c) {
+        c.changeResource("health", 5);
+      }, "target": 1 }
   },
 
   changeResource: function changeResource(name, amount) {
@@ -1185,15 +1187,28 @@ var TargetCard = exports.TargetCard = function (_Card3) {
 
     _this3.range = options.range;
     _this3.effect = options.effect;
+    _this3.item = options.item;
     return _this3;
   }
 
   _createClass(TargetCard, [{
     key: "enter",
     value: function enter(stack) {
+      var _this4 = this;
+
       var options = [];
+
+      options.push({
+        label: "You",
+        effect: "",
+        callback: function callback() {
+          stack.pop();
+          _this4.effect(_player2.default);
+        }
+      });
+
       return {
-        flavour: "Choose a target",
+        flavour: "Choose a target for " + this.item,
         options: options
       };
     }
@@ -1211,17 +1226,17 @@ var CreatureCard = exports.CreatureCard = function (_Card4) {
   function CreatureCard(options) {
     _classCallCheck(this, CreatureCard);
 
-    var _this4 = _possibleConstructorReturn(this, (CreatureCard.__proto__ || Object.getPrototypeOf(CreatureCard)).call(this, options));
+    var _this5 = _possibleConstructorReturn(this, (CreatureCard.__proto__ || Object.getPrototypeOf(CreatureCard)).call(this, options));
 
-    _this4.creature = options.creature;
-    _this4.type = 'creature';
-    return _this4;
+    _this5.creature = options.creature;
+    _this5.type = 'creature';
+    return _this5;
   }
 
   _createClass(CreatureCard, [{
     key: "enter",
     value: function enter(stack) {
-      var _this5 = this;
+      var _this6 = this;
 
       // duh
       var options = [];
@@ -1232,12 +1247,12 @@ var CreatureCard = exports.CreatureCard = function (_Card4) {
         callback: function callback() {
           stack.pop();
 
-          _this5.creature.health -= 5;
+          _this6.creature.health -= 5;
 
-          if (_this5.creature.dead) {
+          if (_this6.creature.dead) {
             stack.unshift(new CorpseCard());
           } else {
-            stack.unshift(_this5);
+            stack.unshift(_this6);
           }
         }
       });
@@ -1290,6 +1305,11 @@ var Creature = function () {
   }
 
   _createClass(Creature, [{
+    key: 'changeResource',
+    value: function changeResource(res, val) {
+      this[res] += val;
+    }
+  }, {
     key: 'description',
     get: function get() {
       return this.health < this.maxhealth ? 'A Wounded ' + this.name + ' (' + this.health + '/' + this.maxhealth + ' HP)' : 'A ' + this.name;

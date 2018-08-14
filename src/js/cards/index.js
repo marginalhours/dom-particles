@@ -88,12 +88,23 @@ export class TargetCard extends Card {
     
     this.range = options.range;
     this.effect = options.effect;
+    this.item = options.item;
   }
                                   
   enter (stack) {
     let options = [];
+    
+    options.push({
+      label: "You",
+      effect: "",
+      callback: () => {
+        stack.pop();
+        this.effect(Player); 
+      }
+    });
+    
     return {
-      flavour: "Choose a target",
+      flavour: `Choose a target for ${this.item}`,
       options
     }
   }
