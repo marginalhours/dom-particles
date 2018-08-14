@@ -80,6 +80,7 @@ export class ItemSelectCard extends Card {
   }                     
 }
 
+// Pick a target for an effect (or ranged weapon, or spell, at some point)
 export class TargetCard extends Card {
   
   constructor (options){
@@ -90,7 +91,11 @@ export class TargetCard extends Card {
   }
                                   
   enter (stack) {
-    
+    let options = [];
+    return {
+      flavour: "Choose a target",
+      options
+    }
   }
 }
 
