@@ -6,6 +6,10 @@ export class Card {
     this.flavour = options.flavour || "An empty card";
   }
   
+  buildContents (stack) {
+  // TODO move logic from dialogue into here, so that more complex cards can override this bit instead
+  }
+  
   enter (stack) {
     // method called on this card becoming the current one. Arguments are player state and stack of cards.
     let options = [];
@@ -18,6 +22,25 @@ export class Card {
   
   exit (player, stack) {
    // method called on card leaving stack. 
+  }
+}
+
+export class CorridorCard extends Card {
+  enter (stack){
+    let options = [];
+    
+    options.push({
+      label: "OK",
+      effect: "",
+      callback: () => {
+        stack.pop();
+      }
+    });
+    
+    return {
+      label: "An empty corridor.",
+      options
+    }
   }
 }
 
@@ -34,7 +57,7 @@ export class CorpseCard extends Card {
      effect: "Chance of treasure",
      callback: () => {
        stack.pop();
-       
+       stack.unshift(new CorridorCard());
        Player.changeResource('gold', 5);
      }
    });
@@ -43,7 +66,8 @@ export class CorpseCard extends Card {
      label: "Respect the dead",
      effect: "---",
      callback: () => {
-       stack.pop();  
+       stack.pop();
+       stack.unshift(new CorridorCard());
      }
    });
     
@@ -146,6 +170,7 @@ export class CreatureCard extends Card {
         stack.pop();
         
         this.creature.health -= 5;
+        Player.changeResource('health', -2);
         
         if(this.creature.dead){
           stack.unshift(new CorpseCard());
@@ -182,7 +207,7 @@ export class CharacterSheet extends Card {
   enter (stack) {
     let options = [];
     
-    options.add({
+    options.push({
       label: "OK",
       effect: "",
       callback: () => {
@@ -192,7 +217,7 @@ export class CharacterSheet extends Card {
     
     return {
       flavour: "Yourself",
-      options: [],
+      options
     }
   }
 }

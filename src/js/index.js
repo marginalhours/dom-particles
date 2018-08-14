@@ -5,7 +5,7 @@ import Player from './player';
 import { Bar } from './bar';
 import { EventList } from './event-list';
 import { Dialogue } from './dialogue'; 
-import { CharacterCard } from './cards';
+import { CharacterSheet } from './cards';
 
 let h = new Bar({ parent: qs('.status-wrappers'), name: "health" });
 let k = new Bar({ parent: qs('.status-wrappers'), name: "mana" });
@@ -15,12 +15,15 @@ let s = new EventList({ parent: qs('.game') });
 let d = new Dialogue({ parent: qs('.game') });
 
 qs('.player-image').addEventListener('click', () => {
-  if (!(s.peek().card instanceof CharacterCard)){
-    s.unshift(new CharacterCard());
+  if (!(s.peek().card instanceof CharacterSheet)){
+    s.unshift(new CharacterSheet());
+    d.hydrate(s.peek());
   }
 });
 
-s.add();
+for(var i = 0; i < 5; i++){
+  s.add();
+}
 
 d.setStack(s);
 d.hydrate(s.peek());
