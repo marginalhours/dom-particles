@@ -14,9 +14,6 @@ let s = new EventList({ parent: qs('.game') });
 let d = new Dialogue({ parent: qs('.game') });
 
 s.add();
-s.add();
-s.add();
-s.add();
 
 d.setStack(s);
 d.hydrate(s.peek());

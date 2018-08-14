@@ -21,6 +21,40 @@ export class Card {
   }
 }
 
+export class CorpseCard extends Card {
+  constructor (options) {
+    super(options);
+  }
+  
+  enter (stack) {
+   let options = []; 
+ 
+   options.push({
+     label: "Loot corpse",
+     effect: "Chance of treasure",
+     callback: () => {
+       stack.pop();
+       
+       Player.changeResource('gold', 5);
+     }
+   });
+    
+   options.push({
+     label: "Respect the dead",
+     effect: "---",
+     callback: () => {
+       stack.pop();  
+     }
+   });
+    
+   return {
+     flavour: "A fallen foe",
+     options
+   }
+    
+  }
+}
+
 // For combat and such.
 export class CreatureCard extends Card { 
   constructor (options) {
@@ -29,7 +63,7 @@ export class CreatureCard extends Card {
     this.type = 'creature';
   }
   
-  enter (player, stack) {
+  enter (stack) {
     // duh
     let options = [];
     
@@ -37,7 +71,15 @@ export class CreatureCard extends Card {
       label: "Attack",
       effect: "Deal damage to creature",
       callback: () => {
-        this.creature.health -= 2;
+        stack.pop();
+        
+        this.creature.health -= 5;
+        
+        if(this.creature.dead){
+          stack.addCard(new CorpseCard());
+        } else {
+          stack.addCard(this); 
+        }
       }
     });
     

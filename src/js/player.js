@@ -9,6 +9,7 @@ const Player = {
   max_mana: 15,
   exp: 0,
   next_level: 1000,
+  gold: 0,
   
   changeResource: function(name, amount) {
     this[name] += amount;

@@ -6,7 +6,11 @@ class Creature {
   }
   
   get description () {
-    return (this.health < this.maxhealth) ? `A Wounded ${this.name}` : `A ${this.name}`;
+    return (this.health < this.maxhealth) ? `A Wounded ${this.name} (${this.health}/${this.maxhealth} HP)` : `A ${this.name}`;
+  }
+  
+  get dead () {
+   return this.health <= 0; 
   }
 }
 
