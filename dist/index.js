@@ -186,7 +186,7 @@ var Player = {
   items: {
     "Potion of Healing": { "count": 1, "effect": "Heal", "callback": function callback(c) {
         c.changeResource("health", 5);
-      }, "target": 1 }
+      }, "range": 1 }
   },
 
   changeResource: function changeResource(name, amount) {
@@ -963,8 +963,9 @@ var EventList = exports.EventList = function (_Hookable) {
     }
   }, {
     key: 'peek',
-    value: function peek() {
-      return this._events[0];
+    value: function peek(idx) {
+      idx = idx || 0;
+      return this._events[idx];
     }
   }, {
     key: 'pop',
@@ -1151,17 +1152,19 @@ var ItemSelectCard = exports.ItemSelectCard = function (_Card2) {
       var options = [];
 
       Object.keys(_player2.default.items).map(function (k) {
-        options.push({
-          label: k,
-          effect: _player2.default.items[k].effect,
-          callback: function callback() {
-            stack.pop();
-            stack.unshift(new TargetCard({
-              range: _player2.default.items[k].target,
-              effect: _player2.default.items[k].callback
-            }));
-          }
-        });
+        if (_player2.default.items[k].count > 0) {
+          options.push({
+            label: k,
+            effect: _player2.default.items[k].effect,
+            callback: function callback() {
+              stack.pop();
+              stack.unshift(new TargetCard({
+                range: _player2.default.items[k].range,
+                effect: _player2.default.items[k].callback
+              }));
+            }
+          });
+        }
       });
 
       return {
@@ -1206,6 +1209,24 @@ var TargetCard = exports.TargetCard = function (_Card3) {
           _this4.effect(_player2.default);
         }
       });
+
+      var _loop = function _loop(i) {
+        var c = stack.peek(i);
+        if (c.card.type === "creature") {
+          options.push({
+            label: c.card.creature.name,
+            effect: "",
+            callback: function callback() {
+              stack.pop();
+              _this4.effect(c.card.creature);
+            }
+          });
+        }
+      };
+
+      for (var i = 1; i <= this.range; i++) {
+        _loop(i);
+      }
 
       return {
         flavour: "Choose a target for " + this.item,

@@ -60,17 +60,19 @@ export class ItemSelectCard extends Card {
     let options = [];
     
     Object.keys(Player.items).map(k => {
-      options.push({
-        label: k,
-        effect: Player.items[k].effect,
-        callback: () => {
-          stack.pop();
-          stack.unshift(new TargetCard({
-            range: Player.items[k].target,
-            effect: Player.items[k].callback
-          }));
-        }
-      });
+      if (Player.items[k].count > 0) {
+        options.push({
+          label: k,
+          effect: Player.items[k].effect,
+          callback: () => {
+            stack.pop();
+            stack.unshift(new TargetCard({
+              range: Player.items[k].range,
+              effect: Player.items[k].callback
+            }));
+          }
+        });
+      }
     });
       
     return {
@@ -102,6 +104,20 @@ export class TargetCard extends Card {
         this.effect(Player); 
       }
     });
+    
+    for (let i = 1; i <= this.range; i++){
+      let c = stack.peek(i);
+      if (c.card.type === "creature") {
+        options.push({
+          label: c.card.creature.name,
+          effect: "",
+          callback: () => {
+            stack.pop();
+            this.effect(c.card.creature);
+          }
+        });
+      }
+    }
     
     return {
       flavour: `Choose a target for ${this.item}`,

@@ -12,7 +12,7 @@ const Player = {
   gold: 0,
   
   items: {
-    "Potion of Healing": { "count": 1, "effect": "Heal", "callback": (c) => { c.changeResource("health", 5); }, "target": 1 }
+    "Potion of Healing": { "count": 1, "effect": "Heal", "callback": (c) => { c.changeResource("health", 5); }, "range" : 1 }
   },
   
   changeResource: function(name, amount) {

@@ -38,8 +38,9 @@ export class EventList extends Hookable {
     this.reposition();
   }
   
-  peek () {
-   return this._events[0]; 
+  peek (idx) {
+    idx = idx || 0; 
+    return this._events[idx]; 
   }
   
   pop () {
