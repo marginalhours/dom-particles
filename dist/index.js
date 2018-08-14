@@ -1052,43 +1052,10 @@ var Card = exports.Card = function () {
   }
 
   _createClass(Card, [{
-    key: "enter",
+    key: 'enter',
     value: function enter(stack) {
       // method called on this card becoming the current one. Arguments are player state and stack of cards.
       var options = [];
-
-      // create button elements per option...
-      options.push({
-        label: "Default action",
-        effect: "Pop card from stack",
-        callback: function callback() {
-          stack.pop();
-        }
-      });
-
-      options.push({
-        label: "Gain 10 EXP",
-        effect: "Gain 10 EXP",
-        callback: function callback() {
-          _player2.default.changeResource('exp', 10);
-        }
-      });
-
-      options.push({
-        label: "Gain 5 Health",
-        effect: "Gain 5 Health",
-        callback: function callback() {
-          _player2.default.changeResource('health', 5);
-        }
-      });
-
-      options.push({
-        label: "Gain 2 Mana",
-        effect: "Gain 2 Mana",
-        callback: function callback() {
-          _player2.default.changeResource('mana', 2);
-        }
-      });
 
       return {
         flavour: this.flavour,
@@ -1096,7 +1063,7 @@ var Card = exports.Card = function () {
       };
     }
   }, {
-    key: "exit",
+    key: 'exit',
     value: function exit(player, stack) {
       // method called on card leaving stack. 
     }
@@ -1122,12 +1089,12 @@ var CreatureCard = exports.CreatureCard = function (_Card) {
   }
 
   _createClass(CreatureCard, [{
-    key: "enter",
+    key: 'enter',
     value: function enter(player, stack) {
       // duh
     }
   }, {
-    key: "exit",
+    key: 'exit',
     value: function exit(player, stack) {
       // and so on...
     }
