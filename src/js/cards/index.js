@@ -67,6 +67,7 @@ export class ItemSelectCard extends Card {
           callback: () => {
             stack.pop();
             stack.unshift(new TargetCard({
+              item: k,
               range: Player.items[k].range,
               effect: Player.items[k].callback
             }));

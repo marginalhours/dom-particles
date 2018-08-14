@@ -1159,6 +1159,7 @@ var ItemSelectCard = exports.ItemSelectCard = function (_Card2) {
             callback: function callback() {
               stack.pop();
               stack.unshift(new TargetCard({
+                item: k,
                 range: _player2.default.items[k].range,
                 effect: _player2.default.items[k].callback
               }));
