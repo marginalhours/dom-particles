@@ -55,6 +55,45 @@ export class CorpseCard extends Card {
   }
 }
 
+export class ItemSelectCard extends Card {
+  enter (stack) {
+    let options = [];
+    
+    Object.keys(Player.items).map(k => {
+      options.push({
+        label: k,
+        effect: Player.items[k].effect,
+        callback: () => {
+          stack.pop();
+          stack.unshift(new TargetCard({
+            range: Player.items[k].target,
+            effect: Player.items[k].callback
+          }));
+        }
+      });
+    });
+      
+    return {
+      flavour: "Choose an item",
+      options
+    }
+  }                     
+}
+
+export class TargetCard extends Card {
+  
+  constructor (options){
+    super(options);
+    
+    this.range = options.range;
+    this.effect = options.effect;
+  }
+                                  
+  enter (stack) {
+    
+  }
+}
+
 // For combat and such.
 export class CreatureCard extends Card { 
   constructor (options) {
@@ -76,10 +115,18 @@ export class CreatureCard extends Card {
         this.creature.health -= 5;
         
         if(this.creature.dead){
-          stack.addCard(new CorpseCard());
+          stack.unshift(new CorpseCard());
         } else {
-          stack.addCard(this); 
+          stack.unshift(this); 
         }
+      }
+    });
+    
+    options.push({
+      label: "Use item",
+      effect: "Open backpack",
+      callback: () => {
+        stack.unshift(new ItemSelectCard());
       }
     });
     

@@ -31,6 +31,13 @@ export class EventList extends Hookable {
     this.reposition();
   }
   
+  push (c) {
+    let e = new Event({ parent: this.container, position: this._events.length, card: c });
+    e.inner.classList.add('spin1');
+    this._events.unshift(e); 
+    this.reposition();
+  }
+  
   peek () {
    return this._events[0]; 
   }

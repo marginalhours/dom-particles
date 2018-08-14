@@ -11,6 +11,10 @@ const Player = {
   next_level: 1000,
   gold: 0,
   
+  items: {
+    "Potion of Healing": { "count": 1, "effect": "Heal", "callback": () => {}, "target": 1 }
+  },
+  
   changeResource: function(name, amount) {
     this[name] += amount;
     Bus.pub(`${name}-amount`, this[name]);
