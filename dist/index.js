@@ -243,9 +243,13 @@ _bus2.default.sub('health-amount', function (amount) {
 });
 
 _bus2.default.sub('mana-amount', function (amount) {
-  k.setText(_player2.default.mana + '/' + _player2.default.max_mana + ' HP');
+  k.setText(_player2.default.mana + '/' + _player2.default.max_mana + ' MP');
   k.setPercentage(100 * _player2.default.mana / _player2.default.max_mana);
 });
+
+_bus2.default.pub('exp-amount', 0);
+_bus2.default.pub('health-amount', 0);
+_bus2.default.pub('mana-amount', 0);
 
 /***/ }),
 /* 4 */

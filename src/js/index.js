@@ -32,6 +32,10 @@ Bus.sub('health-amount', (amount) => {
 });
 
 Bus.sub('mana-amount', (amount) => {
-  k.setText(`${Player.mana}/${Player.max_mana} HP`);
+  k.setText(`${Player.mana}/${Player.max_mana} MP`);
   k.setPercentage(100 * Player.mana / Player.max_mana);
 });
+
+Bus.pub('exp-amount', 0);
+Bus.pub('health-amount', 0);
+Bus.pub('mana-amount', 0);
