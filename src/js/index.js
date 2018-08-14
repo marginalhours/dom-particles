@@ -6,12 +6,12 @@ import { Bar } from './bar';
 import { EventList } from './event-list';
 import { Dialogue } from './dialogue'; 
 
-let h = new Bar({ parent: qs('body'), name: "health" });
-let k = new Bar({ parent: qs('body'), name: "mana" });
-let e = new Bar({ parent: qs('body'), name: "experience" });
+let h = new Bar({ parent: qs('.game'), name: "health" });
+let k = new Bar({ parent: qs('.game'), name: "mana" });
+let e = new Bar({ parent: qs('.game'), name: "experience" });
 
-let s = new EventList({ parent: qs('body') });
-let d = new Dialogue({ parent: qs('body') });
+let s = new EventList({ parent: qs('.game') });
+let d = new Dialogue({ parent: qs('.game') });
 
 s.add();
 s.add();
