@@ -5,6 +5,7 @@ import Player from './player';
 import { Bar } from './bar';
 import { EventList } from './event-list';
 import { Dialogue } from './dialogue'; 
+import { CharacterCard } from './cards';
 
 let h = new Bar({ parent: qs('.status-wrappers'), name: "health" });
 let k = new Bar({ parent: qs('.status-wrappers'), name: "mana" });
@@ -12,6 +13,12 @@ let e = new Bar({ parent: qs('.status-wrappers'), name: "experience" });
 
 let s = new EventList({ parent: qs('.game') });
 let d = new Dialogue({ parent: qs('.game') });
+
+qs('.player-image').addEventListener('click', () => {
+  if (!(s.peek().card instanceof CharacterCard)){
+    s.unshift(new CharacterCard());
+  }
+});
 
 s.add();
 

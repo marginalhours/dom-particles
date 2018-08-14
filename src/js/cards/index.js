@@ -174,3 +174,25 @@ export class CreatureCard extends Card {
   }
   
 }
+
+export class CharacterSheet extends Card {
+  constructor (options) {
+    super(options);
+  }
+  enter (stack) {
+    let options = [];
+    
+    options.add({
+      label: "OK",
+      effect: "",
+      callback: () => {
+        stack.pop();
+      }
+    });
+    
+    return {
+      flavour: "Yourself",
+      options: [],
+    }
+  }
+}
