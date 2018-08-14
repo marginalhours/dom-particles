@@ -160,7 +160,8 @@ export class CreatureCard extends Card {
   }
   
   enter (stack) {
-    // duh
+    // Combat! But there should be a penalty for using an item (creature gets free hit?)
+    // Worth bearing in mind for after the item targeting thing is cleared.
     let options = [];
     
     options.push({

@@ -456,7 +456,8 @@ var CreatureCard = exports.CreatureCard = function (_Card5) {
     value: function enter(stack) {
       var _this7 = this;
 
-      // duh
+      // Combat! But there should be a penalty for using an item (creature gets free hit?)
+      // Worth bearing in mind for after the item targeting thing is cleared.
       var options = [];
 
       options.push({
@@ -1264,6 +1265,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var event_types = ['monster', 'money', 'directions'];
+
+// Better to call it an event "loop", with a movable pointer to the current card.
 
 var EventList = exports.EventList = function (_Hookable) {
   _inherits(EventList, _Hookable);

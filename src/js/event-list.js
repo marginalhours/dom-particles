@@ -4,6 +4,8 @@ import { getCreature } from './creature';
 
 const event_types = ['monster', 'money', 'directions'];
 
+// Better to call it an event "loop", with a movable pointer to the current card.
+
 export class EventList extends Hookable {
   constructor (options) {
     const { parent } = options;
