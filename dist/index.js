@@ -213,7 +213,7 @@ var _bar = __webpack_require__(9);
 
 var _eventList = __webpack_require__(10);
 
-var _dialogue = __webpack_require__(12);
+var _dialogue = __webpack_require__(13);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -906,6 +906,8 @@ var _helpers = __webpack_require__(0);
 
 var _cards = __webpack_require__(11);
 
+var _creature = __webpack_require__(12);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -934,7 +936,7 @@ var EventList = exports.EventList = function (_Hookable) {
   _createClass(EventList, [{
     key: 'add',
     value: function add() {
-      var e = new Event({ parent: this.container, position: this._events.length, card: new _cards.Card() });
+      var e = new Event({ parent: this.container, position: this._events.length, card: new _cards.CreatureCard({ creature: (0, _creature.getCreature)() }) });
       e.inner.classList.add('spin1');
       this._events.push(e);
       this.reposition();
@@ -942,7 +944,7 @@ var EventList = exports.EventList = function (_Hookable) {
   }, {
     key: 'addAtIndex',
     value: function addAtIndex(index) {
-      var e = new Event({ parent: this.container, position: 1, card: new _cards.Card() });
+      var e = new Event({ parent: this.container, position: 1, card: new _cards.CreatureCard({ creature: (0, _creature.getCreature)() }) });
       e.inner.classList.add('spin1');
       this._events.splice(index, 0, e);
       this.reposition();
@@ -1091,7 +1093,23 @@ var CreatureCard = exports.CreatureCard = function (_Card) {
   _createClass(CreatureCard, [{
     key: 'enter',
     value: function enter(player, stack) {
+      var _this2 = this;
+
       // duh
+      var options = [];
+
+      options.push({
+        label: "Attack",
+        effect: "Deal damage to creature",
+        callback: function callback() {
+          _this2.creature.health -= 2;
+        }
+      });
+
+      return {
+        flavour: this.creature.description,
+        options: options
+      };
     }
   }, {
     key: 'exit',
@@ -1113,13 +1131,51 @@ var CreatureCard = exports.CreatureCard = function (_Card) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Creature = function () {
+  function Creature() {
+    _classCallCheck(this, Creature);
+
+    this.health = 20;
+    this.maxhealth = 20;
+    this.name = 'Goblin';
+  }
+
+  _createClass(Creature, [{
+    key: 'description',
+    get: function get() {
+      return this.health < this.maxhealth ? 'A Wounded ' + this.name : 'A ' + this.name;
+    }
+  }]);
+
+  return Creature;
+}();
+
+var getCreature = exports.getCreature = function getCreature() {
+  return new Creature();
+};
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.Dialogue = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _helpers = __webpack_require__(0);
 
-var _choice = __webpack_require__(13);
+var _choice = __webpack_require__(14);
 
 var _choice2 = _interopRequireDefault(_choice);
 
@@ -1154,12 +1210,12 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
     value: function hydrate(event) {
       var _this2 = this;
 
-      this.flavour.innerText = "A bonzo loaf";
-      this.choicelist.innerHTML = '';
-
       var _event$card$enter = event.card.enter(this.stack),
           flavour = _event$card$enter.flavour,
           options = _event$card$enter.options;
+
+      this.choicelist.innerHTML = '';
+      this.flavour.innerText = flavour;
 
       options.map(function (_ref) {
         var callback = _ref.callback,
@@ -1182,7 +1238,7 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
 }(_helpers.Hookable);
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

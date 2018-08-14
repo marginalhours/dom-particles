@@ -11,8 +11,8 @@ export class Card {
     let options = [];
     
     return {
-     flavour: this.flavour,
-     options 
+      flavour: this.flavour,
+      options 
     }
   }
   
@@ -31,9 +31,24 @@ export class CreatureCard extends Card {
   
   enter (player, stack) {
     // duh
+    let options = [];
+    
+    options.push({
+      label: "Attack",
+      effect: "Deal damage to creature",
+      callback: () => {
+        this.creature.health -= 2;
+      }
+    });
+    
+    return {
+      flavour: this.creature.description,
+      options
+    }
   }
   
   exit (player, stack) {
     // and so on...
   }
+  
 }
