@@ -25,6 +25,7 @@ export class TileLoop extends Hookable {
   next () {
     this.pointer += (this.direction * this.stride);  
     this.pointer = this.pointer % this._tiles.length;
+    this.reposition();
   }
   
   reverse () {
@@ -61,22 +62,23 @@ export class TileLoop extends Hookable {
   pop (idx) {
     // Removes tile at index (relative to current pointer)
     idx = idx || 0;
-    let m =  this._tiles.shift(); 
+    let m =  this._tiles.splice(this.pointer + idx, 1)[0];
     this.reposition();
     m.destroy();
     return m;
   }
   
   unshift (c) {
-    let e = new Tile({ parent: this.container, position: 0, card: c });
+    // Places a new tile under current pointer
+    let e = new Tile({ parent: this.container, position: this.pointer, card: c });
     e.inner.classList.add('spin1');
-    this._tiles.unshift(e); 
+    this._tiles.splice(this.pointer, 0, e);
     this.reposition();
   }
   
   reposition () {
     // call this to resync 
-    this._tiles.map((e, idx) => e.reposition(idx));
+    this._tiles.map((e, idx) => e.reposition(idx, this.pointer));
   }
 }
 
@@ -97,9 +99,9 @@ export class Tile extends Hookable {
     this.position = position;
   }
   
-  reposition (rank) {
+  reposition (rank, pointer) {
     
-    this.outer.style.transform = "translateX(" + rank * 48 + "px)";
+    this.outer.style.transform = "translateX(" + (rank - pointer) * 48 + "px)";
     if(this.position !== null && Math.abs(this.position - rank) > 1){
       this.inner.className = 'inner';
       

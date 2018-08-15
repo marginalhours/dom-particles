@@ -8,7 +8,7 @@ export default class CorridorCard extends Card {
       label: "OK",
       effect: "",
       callback: () => {
-        stack.pop();
+        stack.next();
       }
     });
     
