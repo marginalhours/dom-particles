@@ -157,9 +157,45 @@ exports.default = Bus;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: Unexpected token (25:20)\n\n  23 |     });\n  24 |     \n> 25 |                     <div class='flavour' data-hook='flavour'></div>\n     |                     ^\n  26 |                     <div class='choices-inner' data-hook='choicelist'></div>\n  27 |   }\n  28 |   \n");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _bus = __webpack_require__(1);
+
+var _bus2 = _interopRequireDefault(_bus);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Big dumb player object
+var Player = {
+  name: "",
+  health: 15,
+  max_health: 15,
+  mana: 15,
+  max_mana: 15,
+  exp: 0,
+  next_level: 1000,
+  gold: 0,
+
+  items: {
+    "Potion of Healing": { "count": 1, "effect": "Heal", "callback": function callback(c) {
+        c.changeResource("health", 5);
+      }, "range": 1 }
+  },
+
+  changeResource: function changeResource(name, amount) {
+    this[name] += amount;
+    _bus2.default.pub(name + "-amount", this[name]);
+  }
+};
+
+exports.default = Player;
 
 /***/ }),
 /* 3 */
@@ -168,7 +204,380 @@ throw new Error("Module build failed: SyntaxError: Unexpected token (25:20)\n\n 
 "use strict";
 
 
-__webpack_require__(4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CharacterSheet = exports.CreatureCard = exports.TargetCard = exports.ItemSelectCard = exports.CorpseCard = exports.CorridorCard = exports.Card = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _bus = __webpack_require__(1);
+
+var _bus2 = _interopRequireDefault(_bus);
+
+var _player = __webpack_require__(2);
+
+var _player2 = _interopRequireDefault(_player);
+
+var _choice = __webpack_require__(12);
+
+var _choice2 = _interopRequireDefault(_choice);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// Base card class (duh.)
+var Card = exports.Card = function () {
+  function Card(options) {
+    _classCallCheck(this, Card);
+
+    options = options || {};
+    this.flavour = options.flavour || "An empty card";
+  }
+
+  _createClass(Card, [{
+    key: 'buildContents',
+    value: function buildContents(stack, container) {
+      // Default contents implementation is some flavour text plus a number of choices. 
+
+      var _enter = this.enter(stack),
+          flavour = _enter.flavour,
+          options = _enter.options;
+
+      var flavourEl = document.createElement('div');
+      flavourEl.className = "flavour";
+      flavourEl.innerText = flavour;
+
+      var choiceList = document.createElement('div');
+      choiceList.className = "choices-inner";
+
+      options.map(function (_ref) {
+        var callback = _ref.callback,
+            label = _ref.label,
+            effect = _ref.effect;
+
+        new _choice2.default({
+          parent: choiceList,
+          handleClick: function handleClick() {
+            callback();_bus2.default.pub('tile-seen');
+          }, // default look at next tile
+          label: label,
+          effect: effect
+        });
+      });
+
+      container.innerHTML = '';
+      container.appendChild(flavourEl);
+      container.appendChild(choiceList);
+    }
+  }, {
+    key: 'enter',
+    value: function enter(stack) {
+      // method called on this card becoming the current one. Arguments are player state and stack of cards.
+      var options = [];
+
+      return {
+        flavour: this.flavour,
+        options: options
+      };
+    }
+  }, {
+    key: 'exit',
+    value: function exit(player, stack) {
+      // method called on card leaving stack. 
+    }
+  }]);
+
+  return Card;
+}();
+
+var CorridorCard = exports.CorridorCard = function (_Card) {
+  _inherits(CorridorCard, _Card);
+
+  function CorridorCard() {
+    _classCallCheck(this, CorridorCard);
+
+    return _possibleConstructorReturn(this, (CorridorCard.__proto__ || Object.getPrototypeOf(CorridorCard)).apply(this, arguments));
+  }
+
+  _createClass(CorridorCard, [{
+    key: 'enter',
+    value: function enter(stack) {
+      var options = [];
+
+      options.push({
+        label: "OK",
+        effect: "",
+        callback: function callback() {
+          stack.pop();
+        }
+      });
+
+      return {
+        flavour: "An empty corridor.",
+        options: options
+      };
+    }
+  }]);
+
+  return CorridorCard;
+}(Card);
+
+var CorpseCard = exports.CorpseCard = function (_Card2) {
+  _inherits(CorpseCard, _Card2);
+
+  function CorpseCard(options) {
+    _classCallCheck(this, CorpseCard);
+
+    return _possibleConstructorReturn(this, (CorpseCard.__proto__ || Object.getPrototypeOf(CorpseCard)).call(this, options));
+  }
+
+  _createClass(CorpseCard, [{
+    key: 'enter',
+    value: function enter(stack) {
+      var options = [];
+
+      options.push({
+        label: "Loot corpse",
+        effect: "Chance of treasure",
+        callback: function callback() {
+          stack.pop();
+          stack.unshift(new CorridorCard());
+          _player2.default.changeResource('gold', 5);
+        }
+      });
+
+      options.push({
+        label: "Respect the dead",
+        effect: "---",
+        callback: function callback() {
+          stack.pop();
+          stack.unshift(new CorridorCard());
+        }
+      });
+
+      return {
+        flavour: "A fallen foe",
+        options: options
+      };
+    }
+  }]);
+
+  return CorpseCard;
+}(Card);
+
+var ItemSelectCard = exports.ItemSelectCard = function (_Card3) {
+  _inherits(ItemSelectCard, _Card3);
+
+  function ItemSelectCard() {
+    _classCallCheck(this, ItemSelectCard);
+
+    return _possibleConstructorReturn(this, (ItemSelectCard.__proto__ || Object.getPrototypeOf(ItemSelectCard)).apply(this, arguments));
+  }
+
+  _createClass(ItemSelectCard, [{
+    key: 'enter',
+    value: function enter(stack) {
+      var options = [];
+
+      Object.keys(_player2.default.items).map(function (k) {
+        if (_player2.default.items[k].count > 0) {
+          options.push({
+            label: k,
+            effect: _player2.default.items[k].effect,
+            callback: function callback() {
+              stack.pop();
+              stack.unshift(new TargetCard({
+                item: k,
+                range: _player2.default.items[k].range,
+                effect: _player2.default.items[k].callback
+              }));
+            }
+          });
+        }
+      });
+
+      return {
+        flavour: "Choose an item",
+        options: options
+      };
+    }
+  }]);
+
+  return ItemSelectCard;
+}(Card);
+
+// Pick a target for an effect (or ranged weapon, or spell, at some point)
+
+
+var TargetCard = exports.TargetCard = function (_Card4) {
+  _inherits(TargetCard, _Card4);
+
+  function TargetCard(options) {
+    _classCallCheck(this, TargetCard);
+
+    var _this4 = _possibleConstructorReturn(this, (TargetCard.__proto__ || Object.getPrototypeOf(TargetCard)).call(this, options));
+
+    _this4.range = options.range;
+    _this4.effect = options.effect;
+    _this4.item = options.item;
+    return _this4;
+  }
+
+  _createClass(TargetCard, [{
+    key: 'enter',
+    value: function enter(stack) {
+      var _this5 = this;
+
+      var options = [];
+
+      options.push({
+        label: "You",
+        effect: "",
+        callback: function callback() {
+          stack.pop();
+          _this5.effect(_player2.default);
+        }
+      });
+
+      var _loop = function _loop(i) {
+        var c = stack.peek(i);
+        if (c.card.type === "creature") {
+          options.push({
+            label: c.card.creature.name,
+            effect: "",
+            callback: function callback() {
+              stack.pop();
+              _this5.effect(c.card.creature);
+            }
+          });
+        }
+      };
+
+      for (var i = 1; i <= this.range; i++) {
+        _loop(i);
+      }
+
+      return {
+        flavour: 'Choose a target for ' + this.item,
+        options: options
+      };
+    }
+  }]);
+
+  return TargetCard;
+}(Card);
+
+// For combat and such.
+
+
+var CreatureCard = exports.CreatureCard = function (_Card5) {
+  _inherits(CreatureCard, _Card5);
+
+  function CreatureCard(options) {
+    _classCallCheck(this, CreatureCard);
+
+    var _this6 = _possibleConstructorReturn(this, (CreatureCard.__proto__ || Object.getPrototypeOf(CreatureCard)).call(this, options));
+
+    _this6.creature = options.creature;
+    _this6.type = 'creature';
+    return _this6;
+  }
+
+  _createClass(CreatureCard, [{
+    key: 'enter',
+    value: function enter(stack) {
+      var _this7 = this;
+
+      // Combat! But there should be a penalty for using an item (creature gets free hit?)
+      // Worth bearing in mind for after the item targeting thing is cleared.
+      var options = [];
+
+      options.push({
+        label: "Attack",
+        effect: "Deal damage to creature",
+        callback: function callback() {
+          stack.pop();
+
+          _this7.creature.health -= 5;
+          _player2.default.changeResource('health', -2);
+
+          if (_this7.creature.dead) {
+            stack.unshift(new CorpseCard());
+          } else {
+            stack.unshift(_this7);
+          }
+        }
+      });
+
+      options.push({
+        label: "Use item",
+        effect: "Open backpack",
+        callback: function callback() {
+          stack.unshift(new ItemSelectCard());
+        }
+      });
+
+      return {
+        flavour: this.creature.description,
+        options: options
+      };
+    }
+  }, {
+    key: 'exit',
+    value: function exit(player, stack) {
+      // and so on...
+    }
+  }]);
+
+  return CreatureCard;
+}(Card);
+
+var CharacterSheet = exports.CharacterSheet = function (_Card6) {
+  _inherits(CharacterSheet, _Card6);
+
+  function CharacterSheet(options) {
+    _classCallCheck(this, CharacterSheet);
+
+    return _possibleConstructorReturn(this, (CharacterSheet.__proto__ || Object.getPrototypeOf(CharacterSheet)).call(this, options));
+  }
+
+  _createClass(CharacterSheet, [{
+    key: 'enter',
+    value: function enter(stack) {
+      var options = [];
+
+      options.push({
+        label: "OK",
+        effect: "",
+        callback: function callback() {
+          stack.pop();
+        }
+      });
+
+      return {
+        flavour: "Yourself",
+        options: options
+      };
+    }
+  }]);
+
+  return CharacterSheet;
+}(Card);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(5);
 
 var _helpers = __webpack_require__(0);
 
@@ -176,7 +585,7 @@ var _bus = __webpack_require__(1);
 
 var _bus2 = _interopRequireDefault(_bus);
 
-var _player = __webpack_require__(9);
+var _player = __webpack_require__(2);
 
 var _player2 = _interopRequireDefault(_player);
 
@@ -184,9 +593,9 @@ var _bar = __webpack_require__(10);
 
 var _eventList = __webpack_require__(11);
 
-var _dialogue = __webpack_require__(13);
+var _dialogue = __webpack_require__(14);
 
-var _cards = __webpack_require__(2);
+var _cards = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -231,13 +640,13 @@ _bus2.default.pub('health-amount', 0);
 _bus2.default.pub('mana-amount', 0);
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(5);
+var content = __webpack_require__(6);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -245,7 +654,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(7)(content, options);
+var update = __webpack_require__(8)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -262,10 +671,10 @@ if(false) {
 }
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(true);
+exports = module.exports = __webpack_require__(7)(true);
 // imports
 
 
@@ -276,7 +685,7 @@ exports.push([module.i, ".game {\n  width: 50%; }\n\n.header {\n  width: 100%;\n
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /*
@@ -358,7 +767,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -404,7 +813,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(8);
+var	fixUrls = __webpack_require__(9);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -717,7 +1126,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 
@@ -812,48 +1221,6 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _bus = __webpack_require__(1);
-
-var _bus2 = _interopRequireDefault(_bus);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Big dumb player object
-var Player = {
-  name: "",
-  health: 15,
-  max_health: 15,
-  mana: 15,
-  max_mana: 15,
-  exp: 0,
-  next_level: 1000,
-  gold: 0,
-
-  items: {
-    "Potion of Healing": { "count": 1, "effect": "Heal", "callback": function callback(c) {
-        c.changeResource("health", 5);
-      }, "range": 1 }
-  },
-
-  changeResource: function changeResource(name, amount) {
-    this[name] += amount;
-    _bus2.default.pub(name + "-amount", this[name]);
-  }
-};
-
-exports.default = Player;
-
-/***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -925,9 +1292,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _helpers = __webpack_require__(0);
 
-var _cards = __webpack_require__(2);
+var _cards = __webpack_require__(3);
 
-var _creature = __webpack_require__(12);
+var _creature = __webpack_require__(13);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1069,6 +1436,52 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _helpers = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Choice = function (_Hookable) {
+  _inherits(Choice, _Hookable);
+
+  function Choice(options) {
+    _classCallCheck(this, Choice);
+
+    var parent = options.parent,
+        handleClick = options.handleClick,
+        label = options.label,
+        effect = options.effect;
+
+    var _this = _possibleConstructorReturn(this, (Choice.__proto__ || Object.getPrototypeOf(Choice)).call(this, {
+      parent: parent,
+      template: '<button class=\'choice-button\' data-hook=\'container\'>\n                   <div class=\'label\'>' + label + '</div>\n                   <div class=\'effect\'>' + effect + '</div>\n                 </button>'
+    }));
+
+    _this.container.addEventListener('click', function () {
+      return handleClick();
+    });
+    return _this;
+  }
+
+  return Choice;
+}(_helpers.Hookable);
+
+exports.default = Choice;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1107,7 +1520,7 @@ var getCreature = exports.getCreature = function getCreature() {
 };
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1122,9 +1535,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _helpers = __webpack_require__(0);
 
-var _choice = __webpack_require__(14);
+var _bus = __webpack_require__(1);
 
-var _choice2 = _interopRequireDefault(_choice);
+var _bus2 = _interopRequireDefault(_bus);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1141,10 +1554,16 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
     _classCallCheck(this, Dialogue);
 
     var parent = options.parent;
-    return _possibleConstructorReturn(this, (Dialogue.__proto__ || Object.getPrototypeOf(Dialogue)).call(this, {
+
+    var _this = _possibleConstructorReturn(this, (Dialogue.__proto__ || Object.getPrototypeOf(Dialogue)).call(this, {
       parent: parent,
       template: '<div class=\'big-card\' data-hook=\'container\'>\n                  <div class=\'card-image\'>\n                    <div class=\'card-image-inner\'></div>\n                  </div>\n                  <div class=\'content\' data-hook=\'contents\'>\n                  </div>\n                 </div>\n                '
     }));
+
+    _bus2.default.sub('tile-seen', function () {
+      _this.hydrate(_this.stack.peek());
+    });
+    return _this;
   }
 
   _createClass(Dialogue, [{
@@ -1162,51 +1581,5 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
   return Dialogue;
 }(_helpers.Hookable);
 
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _helpers = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Choice = function (_Hookable) {
-  _inherits(Choice, _Hookable);
-
-  function Choice(options) {
-    _classCallCheck(this, Choice);
-
-    var parent = options.parent,
-        handleClick = options.handleClick,
-        label = options.label,
-        effect = options.effect;
-
-    var _this = _possibleConstructorReturn(this, (Choice.__proto__ || Object.getPrototypeOf(Choice)).call(this, {
-      parent: parent,
-      template: '<button class=\'choice-button\' data-hook=\'container\'>\n                   <div class=\'label\'>' + label + '</div>\n                   <div class=\'effect\'>' + effect + '</div>\n                 </button>'
-    }));
-
-    _this.container.addEventListener('click', function () {
-      return handleClick();
-    });
-    return _this;
-  }
-
-  return Choice;
-}(_helpers.Hookable);
-
-exports.default = Choice;
-
 /***/ })
-],[3]);
+],[4]);

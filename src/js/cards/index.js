@@ -1,4 +1,7 @@
+import Bus from '../bus';
 import Player from '../player';
+import Choice from '../choice';
+
 // Base card class (duh.)
 export class Card {
   constructor (options) {
@@ -7,23 +10,29 @@ export class Card {
   }
   
   buildContents (stack, container) {
-  // TODO move logic from dialogue into here, so that more complex cards can override this bit instead
+    // Default contents implementation is some flavour text plus a number of choices. 
+    
     let { flavour, options } = this.enter(stack);
     
-    this.choicelist.innerHTML = '';  
-    this.flavour.innerText = flavour;
+    let flavourEl = document.createElement('div');
+    flavourEl.className = "flavour";
+    flavourEl.innerText = flavour;
     
+    let choiceList = document.createElement('div');
+    choiceList.className = "choices-inner";
+     
     options.map(({ callback, label, effect }) => {
       new Choice ({
-        parent: this.choicelist,
-        handleClick: () => { callback(); this.hydrate(this.stack.peek()) }, // default look at next card
+        parent: choiceList,
+        handleClick: () => { callback(); Bus.pub('tile-seen'); }, // default look at next tile
         label,
         effect
       });
     });
     
-                    <div class='flavour' data-hook='flavour'></div>
-                    <div class='choices-inner' data-hook='choicelist'></div>
+    container.innerHTML = '';
+    container.appendChild(flavourEl);
+    container.appendChild(choiceList);
   }
   
   enter (stack) {

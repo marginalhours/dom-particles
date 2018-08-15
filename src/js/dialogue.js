@@ -1,5 +1,5 @@
 import { Hookable } from './helpers';
-import Choice from './choice';
+import Bus from './bus';
 
 export class Dialogue extends Hookable {
   constructor (options) {
@@ -15,6 +15,10 @@ export class Dialogue extends Hookable {
                   </div>
                  </div>
                 `
+    });
+    
+    Bus.sub('tile-seen', () => {
+      this.hydrate(this.stack.peek());  
     });
   }
   
