@@ -78,7 +78,7 @@ export class TileLoop extends Hookable {
   
   reposition () {
     // call this to resync 
-    this._tiles.map((e, idx) => e.reposition(idx, this.pointer));
+    this._tiles.map((e, idx) => e.reposition(idx, this.pointer, this._tiles.length));
   }
 }
 
@@ -99,9 +99,12 @@ export class Tile extends Hookable {
     this.position = position;
   }
   
-  reposition (rank, pointer) {
-    
-    this.outer.style.transform = "translateX(" + (rank - pointer) * 48 + "px)";
+  reposition (rank, pointer, size) {
+    let realIndex = rank - pointer;
+    if(realIndex < 0){
+      realIndex += size;  
+    }
+    this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
     if(this.position !== null && Math.abs(this.position - rank) > 1){
       this.inner.className = 'inner';
       

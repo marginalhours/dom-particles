@@ -1126,7 +1126,7 @@ var TileLoop = exports.TileLoop = function (_Hookable) {
 
       // call this to resync 
       this._tiles.map(function (e, idx) {
-        return e.reposition(idx, _this2.pointer);
+        return e.reposition(idx, _this2.pointer, _this2._tiles.length);
       });
     }
   }]);
@@ -1156,9 +1156,12 @@ var Tile = exports.Tile = function (_Hookable2) {
 
   _createClass(Tile, [{
     key: 'reposition',
-    value: function reposition(rank, pointer) {
-
-      this.outer.style.transform = "translateX(" + (rank - pointer) * 48 + "px)";
+    value: function reposition(rank, pointer, size) {
+      var realIndex = rank - pointer;
+      if (realIndex < 0) {
+        realIndex += size;
+      }
+      this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
       if (this.position !== null && Math.abs(this.position - rank) > 1) {
         this.inner.className = 'inner';
 
