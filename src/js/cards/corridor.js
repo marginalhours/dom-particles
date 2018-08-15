@@ -1,6 +1,6 @@
 import Card from '.';
 
-export class CorridorCard extends Card {
+export default class CorridorCard extends Card {
   enter (stack){
     let options = [];
     

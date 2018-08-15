@@ -1,7 +1,8 @@
 import Player from '../player';
 import Card from '.';
+import TargetCard from './target';
 
-export class ItemSelect extends Card {
+export default class ItemSelect extends Card {
   enter (stack) {
     let options = [];
     

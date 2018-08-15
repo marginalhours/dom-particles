@@ -1,8 +1,8 @@
-import { Card } from '.';
+import Card from '.';
 import Player from '../player';
 
 // Pick a target for an effect (or ranged weapon, or spell, at some point)
-export class TargetCard extends Card {
+export default class TargetCard extends Card {
   
   constructor (options){
     super(options);

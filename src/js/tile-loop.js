@@ -1,5 +1,6 @@
 import { Hookable } from './helpers';
-import { Card, CreatureCard } from './cards/';
+import Card from './cards/';
+import CreatureCard from './cards/creature';
 import { getCreature } from './creature';
 
 // Better to call it a tile "loop", with a movable pointer to the current card.
@@ -13,7 +14,7 @@ export class TileLoop extends Hookable {
           template: `<ul data-hook='container' class='event-list'></ul>`
     });
     
-    this._events = [];
+    this._tiles = [];
     
     this.index = 0; // current position in the stack
     this.direction = 1; // which way we're moving
@@ -22,6 +23,7 @@ export class TileLoop extends Hookable {
   
   next () {
     this.index += (this.direction * this.stride);  
+    this.index = this.index % this._tiles.length;
   }
   
   reverse () {
@@ -29,7 +31,7 @@ export class TileLoop extends Hookable {
   }
   
   add () { 
-    let e = new Tile({ parent: this.container, position: this._events.length, card: new CreatureCard({ creature: getCreature() }) });
+    let e = new Tile({ parent: this.container, position: this._tiles.length, card: new CreatureCard({ creature: getCreature() }) });
     e.inner.classList.add('spin1');
     this._events.push(e); 
     this.reposition();
@@ -38,14 +40,14 @@ export class TileLoop extends Hookable {
   addAtIndex (index) {
     let e = new Tile({ parent: this.container, position: 1, card: new CreatureCard({ creature: getCreature() }) });
     e.inner.classList.add('spin1');
-    this._events.splice(index, 0, e); 
+    this._tiles.splice(index, 0, e); 
     this.reposition();
   }
   
   push (c) {
     let e = new Tile({ parent: this.container, position: this._events.length, card: c });
     e.inner.classList.add('spin1');
-    this._events.unshift(e); 
+    this._tiles.unshift(e); 
     this.reposition();
   }
   

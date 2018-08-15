@@ -1,10 +1,10 @@
 import Player from '../player';
 import Card from '.';
-import { CorpseCard } from './corpse';
-import { ItemSelectCard } from './item-select';
+import CorpseCard from './corpse';
+import ItemSelectCard from './item-select';
 
 // For combat and such.
-export class CreatureCard extends Card { 
+export default class CreatureCard extends Card { 
   constructor (options) {
     super(options);
     this.creature = options.creature;

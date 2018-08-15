@@ -1,6 +1,6 @@
 import Card from '.';
 import Player from '../player';
-import { CorridorCard } from './corridor';
+import CorridorCard from './corridor';
 
 export class CorpseCard extends Card {
   constructor (options) {

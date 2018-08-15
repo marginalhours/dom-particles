@@ -1,6 +1,6 @@
 import Card from '.';
 
-export class CharacterSheet extends Card {
+export default class CharacterSheet extends Card {
   constructor (options) {
     super(options);
   }
