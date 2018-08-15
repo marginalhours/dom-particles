@@ -11,9 +11,7 @@ export class Dialogue extends Hookable {
                   <div class='card-image'>
                     <div class='card-image-inner'></div>
                   </div>
-                  <div class='choices'>
-                    <div class='flavour' data-hook='flavour'></div>
-                    <div class='choices-inner' data-hook='choicelist'></div>
+                  <div class='content' data-hook='contents'>
                   </div>
                  </div>
                 `
@@ -25,18 +23,6 @@ export class Dialogue extends Hookable {
   }
   
   hydrate (event) {
-    let { flavour, options } = event.card.enter(this.stack);
-    
-    this.choicelist.innerHTML = '';  
-    this.flavour.innerText = flavour;
-    
-    options.map(({ callback, label, effect }) => {
-      new Choice ({
-        parent: this.choicelist,
-        handleClick: () => { callback(); this.hydrate(this.stack.peek()) }, // default look at next card
-        label,
-        effect
-      });
-    });
+    event.card.buildContents(this.stack, this.contents);
   }
 }

@@ -6,8 +6,24 @@ export class Card {
     this.flavour = options.flavour || "An empty card";
   }
   
-  buildContents (stack) {
+  buildContents (stack, container) {
   // TODO move logic from dialogue into here, so that more complex cards can override this bit instead
+    let { flavour, options } = this.enter(stack);
+    
+    this.choicelist.innerHTML = '';  
+    this.flavour.innerText = flavour;
+    
+    options.map(({ callback, label, effect }) => {
+      new Choice ({
+        parent: this.choicelist,
+        handleClick: () => { callback(); this.hydrate(this.stack.peek()) }, // default look at next card
+        label,
+        effect
+      });
+    });
+    
+                    <div class='flavour' data-hook='flavour'></div>
+                    <div class='choices-inner' data-hook='choicelist'></div>
   }
   
   enter (stack) {
