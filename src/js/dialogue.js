@@ -18,15 +18,15 @@ export class Dialogue extends Hookable {
     });
     
     Bus.sub('tile-seen', () => {
-      this.hydrate(this.stack.peek());  
+      this.hydrate(this.loop.peek());  
     });
   }
   
-  setStack (q) {
-   this.stack = q; 
+  setLoop (q) {
+   this.loop = q; 
   }
   
-  hydrate (event) {
-    event.card.buildContents(this.stack, this.contents);
+  hydrate (tile) {
+    tile.card.buildContents(this.loop, this.contents);
   }
 }

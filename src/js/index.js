@@ -3,7 +3,7 @@ import { qs } from './helpers';
 import Bus from './bus';
 import Player from './player';
 import { Bar } from './bar';
-import { EventList } from './event-list';
+import { TileLoop } from './tile-loop';
 import { Dialogue } from './dialogue'; 
 import { CharacterSheet } from './cards';
 
@@ -11,7 +11,7 @@ let h = new Bar({ parent: qs('.status-wrappers'), name: "health" });
 let k = new Bar({ parent: qs('.status-wrappers'), name: "mana" });
 let e = new Bar({ parent: qs('.status-wrappers'), name: "experience" });
 
-let s = new EventList({ parent: qs('.game') });
+let s = new TileLoop({ parent: qs('.game') });
 let d = new Dialogue({ parent: qs('.game') });
 
 qs('.player-image').addEventListener('click', () => {
@@ -25,7 +25,7 @@ for(var i = 0; i < 5; i++){
   s.add();
 }
 
-d.setStack(s);
+d.setLoop(s);
 d.hydrate(s.peek());
 
 Bus.sub('exp-amount', (amount) => {

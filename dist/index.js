@@ -591,7 +591,7 @@ var _player2 = _interopRequireDefault(_player);
 
 var _bar = __webpack_require__(10);
 
-var _eventList = __webpack_require__(11);
+var _tileLoop = __webpack_require__(11);
 
 var _dialogue = __webpack_require__(14);
 
@@ -603,7 +603,7 @@ var h = new _bar.Bar({ parent: (0, _helpers.qs)('.status-wrappers'), name: "heal
 var k = new _bar.Bar({ parent: (0, _helpers.qs)('.status-wrappers'), name: "mana" });
 var e = new _bar.Bar({ parent: (0, _helpers.qs)('.status-wrappers'), name: "experience" });
 
-var s = new _eventList.EventList({ parent: (0, _helpers.qs)('.game') });
+var s = new _tileLoop.TileLoop({ parent: (0, _helpers.qs)('.game') });
 var d = new _dialogue.Dialogue({ parent: (0, _helpers.qs)('.game') });
 
 (0, _helpers.qs)('.player-image').addEventListener('click', function () {
@@ -617,7 +617,7 @@ for (var i = 0; i < 5; i++) {
   s.add();
 }
 
-d.setStack(s);
+d.setLoop(s);
 d.hydrate(s.peek());
 
 _bus2.default.sub('exp-amount', function (amount) {
@@ -1286,7 +1286,7 @@ var Bar = exports.Bar = function (_Hookable) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Event = exports.EventList = undefined;
+exports.Tile = exports.TileLoop = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1302,31 +1302,43 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var event_types = ['monster', 'money', 'directions'];
+// Better to call it a tile "loop", with a movable pointer to the current card.
 
-// Better to call it an event "loop", with a movable pointer to the current card.
+var TileLoop = exports.TileLoop = function (_Hookable) {
+  _inherits(TileLoop, _Hookable);
 
-var EventList = exports.EventList = function (_Hookable) {
-  _inherits(EventList, _Hookable);
-
-  function EventList(options) {
-    _classCallCheck(this, EventList);
+  function TileLoop(options) {
+    _classCallCheck(this, TileLoop);
 
     var parent = options.parent;
 
-    var _this = _possibleConstructorReturn(this, (EventList.__proto__ || Object.getPrototypeOf(EventList)).call(this, {
+    var _this = _possibleConstructorReturn(this, (TileLoop.__proto__ || Object.getPrototypeOf(TileLoop)).call(this, {
       parent: parent,
-      template: '<ul data-hook=\'container\' class=\'event-list\'>\n                    </ul>'
+      template: '<ul data-hook=\'container\' class=\'event-list\'></ul>'
     }));
 
     _this._events = [];
+
+    _this.index = 0; // current position in the stack
+    _this.direction = 1; // which way we're moving
+    _this.stride = 1; // how many steps we take per move
     return _this;
   }
 
-  _createClass(EventList, [{
+  _createClass(TileLoop, [{
+    key: 'next',
+    value: function next() {
+      this.index += this.direction * this.stride;
+    }
+  }, {
+    key: 'reverse',
+    value: function reverse() {
+      this.direction = -this.direction;
+    }
+  }, {
     key: 'add',
     value: function add() {
-      var e = new Event({ parent: this.container, position: this._events.length, card: new _cards.CreatureCard({ creature: (0, _creature.getCreature)() }) });
+      var e = new Tile({ parent: this.container, position: this._events.length, card: new _cards.CreatureCard({ creature: (0, _creature.getCreature)() }) });
       e.inner.classList.add('spin1');
       this._events.push(e);
       this.reposition();
@@ -1334,7 +1346,7 @@ var EventList = exports.EventList = function (_Hookable) {
   }, {
     key: 'addAtIndex',
     value: function addAtIndex(index) {
-      var e = new Event({ parent: this.container, position: 1, card: new _cards.CreatureCard({ creature: (0, _creature.getCreature)() }) });
+      var e = new Tile({ parent: this.container, position: 1, card: new _cards.CreatureCard({ creature: (0, _creature.getCreature)() }) });
       e.inner.classList.add('spin1');
       this._events.splice(index, 0, e);
       this.reposition();
@@ -1342,7 +1354,7 @@ var EventList = exports.EventList = function (_Hookable) {
   }, {
     key: 'push',
     value: function push(c) {
-      var e = new Event({ parent: this.container, position: this._events.length, card: c });
+      var e = new Tile({ parent: this.container, position: this._events.length, card: c });
       e.inner.classList.add('spin1');
       this._events.unshift(e);
       this.reposition();
@@ -1364,7 +1376,7 @@ var EventList = exports.EventList = function (_Hookable) {
   }, {
     key: 'unshift',
     value: function unshift(c) {
-      var e = new Event({ parent: this.container, position: 0, card: c });
+      var e = new Tile({ parent: this.container, position: 0, card: c });
       e.inner.classList.add('spin1');
       this._events.unshift(e);
       this.reposition();
@@ -1379,20 +1391,20 @@ var EventList = exports.EventList = function (_Hookable) {
     }
   }]);
 
-  return EventList;
+  return TileLoop;
 }(_helpers.Hookable);
 
-var Event = exports.Event = function (_Hookable2) {
-  _inherits(Event, _Hookable2);
+var Tile = exports.Tile = function (_Hookable2) {
+  _inherits(Tile, _Hookable2);
 
-  function Event(options) {
-    _classCallCheck(this, Event);
+  function Tile(options) {
+    _classCallCheck(this, Tile);
 
     var parent = options.parent,
         position = options.position,
         card = options.card;
 
-    var _this2 = _possibleConstructorReturn(this, (Event.__proto__ || Object.getPrototypeOf(Event)).call(this, {
+    var _this2 = _possibleConstructorReturn(this, (Tile.__proto__ || Object.getPrototypeOf(Tile)).call(this, {
       parent: parent,
       template: '<li data-hook=\'outer\'>\n                      <div data-hook=\'inner\' class=\'inner\'> \n                        <div data-hook=\'contents\' class=\'contents ' + card.type + '-card\'>\n                        </div>\n                      </div>\n                     </li>'
     }));
@@ -1402,7 +1414,7 @@ var Event = exports.Event = function (_Hookable2) {
     return _this2;
   }
 
-  _createClass(Event, [{
+  _createClass(Tile, [{
     key: 'reposition',
     value: function reposition(rank) {
 
@@ -1422,7 +1434,7 @@ var Event = exports.Event = function (_Hookable2) {
     }
   }]);
 
-  return Event;
+  return Tile;
 }(_helpers.Hookable);
 
 /***/ }),
@@ -1561,20 +1573,20 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
     }));
 
     _bus2.default.sub('tile-seen', function () {
-      _this.hydrate(_this.stack.peek());
+      _this.hydrate(_this.loop.peek());
     });
     return _this;
   }
 
   _createClass(Dialogue, [{
-    key: 'setStack',
-    value: function setStack(q) {
-      this.stack = q;
+    key: 'setLoop',
+    value: function setLoop(q) {
+      this.loop = q;
     }
   }, {
     key: 'hydrate',
-    value: function hydrate(event) {
-      event.card.buildContents(this.stack, this.contents);
+    value: function hydrate(tile) {
+      tile.card.buildContents(this.loop, this.contents);
     }
   }]);
 
