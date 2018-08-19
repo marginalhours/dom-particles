@@ -1515,7 +1515,10 @@ var ItemSelect = function (_Card) {
   function ItemSelect() {
     _classCallCheck(this, ItemSelect);
 
-    return _possibleConstructorReturn(this, (ItemSelect.__proto__ || Object.getPrototypeOf(ItemSelect)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (ItemSelect.__proto__ || Object.getPrototypeOf(ItemSelect)).call(this));
+
+    _this.type = "itemselect";
+    return _this;
   }
 
   _createClass(ItemSelect, [{

@@ -3,6 +3,11 @@ import Card from '.';
 import TargetCard from './target';
 
 export default class ItemSelect extends Card {
+  constructor () {
+    super();
+    this.type = "itemselect";
+  }
+  
   enter (stack) {
     let options = [];
     
