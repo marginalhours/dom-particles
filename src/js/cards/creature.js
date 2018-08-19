@@ -11,7 +11,7 @@ export default class CreatureCard extends Card {
     this.type = 'creature';
   }
   
-  enter (stack) {
+  enter (loop) {
     // Combat! But there should be a penalty for using an item (creature gets free hit?)
     // Worth bearing in mind for after the item targeting thing is cleared.
     let options = [];
@@ -20,18 +20,18 @@ export default class CreatureCard extends Card {
       label: "Attack",
       effect: "Deal damage to creature",
       callback: () => {
-        stack.pop();
+        loop.pop();
         Player.attack(this.creature);
         
         if (this.creature.dead) {
-          stack.unshift(new CorpseCard());
+          loop.unshift(new CorpseCard());
         } else {
-          stack.unshift(this.tile); 
+          loop.unshift(this.tile); 
         }
       }
     });
     
-    options.push(backpackOption(stack));
+    options.push(backpackOption(loop));
     
     return {
       flavour: this.creature.description,
@@ -39,10 +39,10 @@ export default class CreatureCard extends Card {
     }
   }
   
-  exit (stack) {
+  exit (loop) {
     if(!this.creature.dead){ this.creature.attack(Player); }
     // Call super.exit() to make sure we push the right cards...
-    super.exit();
+    super.exit(loop);
   }
   
 }

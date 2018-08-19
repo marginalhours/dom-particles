@@ -8,7 +8,7 @@ export default class ItemSelect extends Card {
     this.type = "itemselect";
   }
   
-  enter (stack) {
+  enter (loop) {
     let options = [];
     
     Object.keys(Player.items).map(k => {
@@ -17,8 +17,8 @@ export default class ItemSelect extends Card {
           label: k,
           effect: Player.items[k].effect,
           callback: () => {
-            stack.pop();
-            stack.unshift(new TargetCard({
+            loop.pop();
+            loop.unshift(new TargetCard({
               item: k,
               range: Player.items[k].range,
               effect: Player.items[k].callback

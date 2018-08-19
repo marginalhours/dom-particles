@@ -8,10 +8,10 @@ export default class CorridorCard extends Card {
     this.type = "corridor";
   }
   
-  enter (stack){
+  enter (loop){
     return {
       flavour: "An empty corridor.",
-      options: [forwardOption(stack), backpackOption(stack)]
+      options: [forwardOption(loop), backpackOption(loop)]
     }
   }
 }

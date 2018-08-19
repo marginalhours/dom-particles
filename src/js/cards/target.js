@@ -13,26 +13,26 @@ export default class TargetCard extends Card {
     this.item = options.item;
   }
                                   
-  enter (stack) {
+  enter (loop) {
     let options = [];
     
     options.push({
       label: "You",
       effect: "",
       callback: () => {
-        stack.pop();
+        loop.pop();
         this.effect(Player); 
       }
     });
     
     for (let i = 1; i <= this.range; i++){
-      let c = stack.peek(i);
+      let c = loop.peek(i);
       if (c.card.type === "creature") {
         options.push({
           label: c.card.creature.name,
           effect: "",
           callback: () => {
-            stack.pop();
+            loop.pop();
             this.effect(c.card.creature);
           }
         });

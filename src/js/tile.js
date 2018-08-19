@@ -1,5 +1,7 @@
 import { Hookable, qs } from './helpers';
 
+// A tile is a small UI element corresponding to a single card.
+
 export default class extends Hookable {
   constructor (options) {
     const { position, type, card } = options;

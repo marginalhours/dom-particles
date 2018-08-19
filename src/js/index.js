@@ -3,7 +3,7 @@ import { qs } from './helpers';
 import Bus from './bus';
 import Player from './player';
 import { Bar } from './bar';
-import { TileLoop } from './tile-loop';
+import { CardLoop } from './card-loop';
 import { Dialogue } from './dialogue'; 
 import { CharacterSheet } from './cards';
 
@@ -13,7 +13,7 @@ let h = new Bar({ parent: qs('.status-wrappers'), name: "health" });
 let k = new Bar({ parent: qs('.status-wrappers'), name: "mana" });
 let e = new Bar({ parent: qs('.status-wrappers'), name: "experience" });
 
-let s = new TileLoop({ parent: qs('.game') });
+let s = new CardLoop({ parent: qs('.game') });
 let d = new Dialogue({ parent: qs('.game') });
 
 qs('.player-image').addEventListener('click', () => {

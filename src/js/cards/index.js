@@ -12,11 +12,11 @@ export default class Card {
     this.flavour = options.flavour || "An empty card";
   }
   
-  buildContents (stack, container) {
+  buildContents (loop, container) {
     // Gets the expanded view
     // Default contents implementation is some flavour text plus a number of choices. 
     
-    let { flavour, options } = this.enter(stack);
+    let { flavour, options } = this.enter(loop);
     
     let flavourEl = document.createElement('div');
     flavourEl.className = "flavour";
@@ -28,7 +28,7 @@ export default class Card {
     options.map(({ callback, label, effect }) => {
       new Choice ({
         parent: choiceList,
-        handleClick: () => { callback(); this.exit(stack); },
+        handleClick: () => { callback(); this.exit(loop); },
         label,
         effect
       });
@@ -45,7 +45,11 @@ export default class Card {
     return this.tile;
   }
   
-  enter (stack) {
+  reposition (rank, pointer, size) {
+    this.tile.reposition(rank, pointer, size);
+  }
+  
+  enter (loop) {
     // method called on this card becoming the current one.
     let options = [];
     
@@ -55,7 +59,7 @@ export default class Card {
     }
   }
   
-  exit (player, stack) {
+  exit (loop) {
     // method called on card leaving stack. 
     Bus.pub('tile-seen');
   }

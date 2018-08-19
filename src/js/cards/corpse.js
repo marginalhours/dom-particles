@@ -7,15 +7,15 @@ export default class CorpseCard extends Card {
     super(options);
   }
   
-  enter (stack) {
+  enter (loop) {
    let options = []; 
   
    options.push({
      label: "Loot corpse",
      effect: "Chance of treasure",
      callback: () => {
-       stack.pop();
-       stack.unshift(new CorridorCard());
+       loop.pop();
+       loop.unshift(new CorridorCard());
        Player.changeResource('gold', 5);
      }
    });
@@ -24,8 +24,8 @@ export default class CorpseCard extends Card {
      label: "Respect the dead",
      effect: "---",
      callback: () => {
-       stack.pop();
-       stack.unshift(new CorridorCard());
+       loop.pop();
+       loop.unshift(new CorridorCard());
      }
    });
     
