@@ -10,6 +10,7 @@ export default class Card {
   }
   
   buildContents (stack, container) {
+    // Gets the expanded view
     // Default contents implementation is some flavour text plus a number of choices. 
     
     let { flavour, options } = this.enter(stack);
@@ -35,8 +36,12 @@ export default class Card {
     container.appendChild(choiceList);
   }
   
+  buildTile () {
+    // Get the "small" representation of this card, for putting in th
+  }
+  
   enter (stack) {
-    // method called on this card becoming the current one. Arguments are player state and stack of cards.
+    // method called on this card becoming the current one.
     let options = [];
     
     return {
