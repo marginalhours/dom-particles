@@ -25,10 +25,11 @@ $grow-duration: 500ms;
   }
   
   li {
-    width: 34px;
+    width: 38px;
     display: block;
     position: absolute;
-    top: -17px;
+    top: -19px;
+    border: 2px so
     transition: transform $animation-duration ease-in-out;
     
     .inner {
