@@ -9,7 +9,7 @@ export default class CorpseCard extends Card {
   
   enter (stack) {
    let options = []; 
- 
+  
    options.push({
      label: "Loot corpse",
      effect: "Chance of treasure",

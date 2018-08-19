@@ -1,6 +1,12 @@
 import Card from '.';
 
 export default class CorridorCard extends Card {
+  
+  constructor () {
+    super();
+    this.type = "corridor";
+  }
+  
   enter (stack){
     let options = [];
     

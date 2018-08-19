@@ -6,6 +6,7 @@ export default class TargetCard extends Card {
   
   constructor (options){
     super(options);
+    this.type = "target";
     
     this.range = options.range;
     this.effect = options.effect;
