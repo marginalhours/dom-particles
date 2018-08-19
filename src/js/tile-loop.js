@@ -116,5 +116,5 @@ export class Tile extends Hookable {
   
   destroy () {
    this.parent.removeChild(this.outer); 
-  } 
+  }   
 }
