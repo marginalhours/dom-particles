@@ -38,7 +38,7 @@ export default class TargetCard extends Card {
         });
       }
     }
-    
+  
     return {
       flavour: `Choose a target for ${this.item}`,
       options

@@ -25,7 +25,7 @@ export default class extends Hookable {
     if(realIndex < 0){
       realIndex += size;  
     }
-    this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
+    this.outer.style.transform = "translateX(" + realIndex * 52 + "px)";
     if(this.position !== null && Math.abs(this.position - rank) > 1){
       this.inner.className = 'inner';  
       let anim = (this.position < rank) ? 'upbounce' : 'downbounce';
