@@ -33,7 +33,11 @@ export class TileLoop extends Hookable {
   }
   
   push (c) {
-    this._tiles.unshift(c.buildTile()); 
+    let t = c.buildTile();
+    t.setPosition(this._tiles.length);
+    t.setParent(this.container);
+    t.inner.classList.add('spin1');
+    this._tiles.unshift(t); 
     this.reposition();
   }
   
@@ -52,14 +56,11 @@ export class TileLoop extends Hookable {
     return m;
   }
   
-  unshift (c) {
-    // Places a new tile under current pointer
-    let e = new Tile({ parent: this.container, position: this.pointer, card: c });
-    e.inner.classList.add('spin1');
-    this._tiles.splice(this.pointer, 0, e);
-    this.reposition();
+  unshift (t) {
+    // Adds a tile at the front of a card
+    this._tiles.unshift(t);
   }
-  
+   
   reposition () {
     // call this to resync 
     this._tiles.map((e, idx) => e.reposition(idx, this.pointer, this._tiles.length));

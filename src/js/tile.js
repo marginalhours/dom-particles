@@ -4,7 +4,7 @@ export default class extends Hookable {
   constructor (options) {
     const { position, type, card } = options;
     super ({
-          qs('body'), 
+          parent: qs('body'), 
           template: `<li data-hook='outer'>
                       <div data-hook='inner' class='inner'> 
                         <div data-hook='contents' class='contents ${card.type}-card'>
@@ -39,7 +39,11 @@ export default class extends Hookable {
   
   setParent (p) {
     this.parent = p;
-    this.parent.appendChild(this);
+    this.parent.appendChild(this.outer);
+  }
+  
+  setPosition (p) {
+    this.position = p;  
   }
   
   destroy () {

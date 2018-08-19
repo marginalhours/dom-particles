@@ -41,7 +41,7 @@ export default class Card {
   
   buildTile () {
     // Get the "small" representation of this card, for putting in the queue
-    this.tile = new Tile ({ card: this, position: -1 });
+    if(!this.tile) { this.tile = new Tile ({ card: this, position: -1 }); }
     return this.tile;
   }
   

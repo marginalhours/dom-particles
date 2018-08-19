@@ -26,7 +26,7 @@ export default class CreatureCard extends Card {
         if (this.creature.dead) {
           stack.unshift(new CorpseCard());
         } else {
-          stack.unshift(this); 
+          stack.unshift(this.tile); 
         }
       }
     });
