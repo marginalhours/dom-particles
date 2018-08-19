@@ -101,10 +101,14 @@ export class Tile extends Hookable {
   
   reposition (rank, pointer, size) {
     let realIndex = rank - pointer;
-    if(realIndex < 0){
+    if(realIndex < -3){
       realIndex += size;  
     }
-    this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
+    if (realIndex > 0){
+      this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
+    } else {
+      this.outer.style.transform = "translateY(" + -realIndex * 48 + "px)";
+    }
     if(this.position !== null && Math.abs(this.position - rank) > 1){
       this.inner.className = 'inner';
       

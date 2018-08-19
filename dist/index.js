@@ -1165,10 +1165,14 @@ var Tile = exports.Tile = function (_Hookable2) {
     key: 'reposition',
     value: function reposition(rank, pointer, size) {
       var realIndex = rank - pointer;
-      if (realIndex < 0) {
+      if (realIndex < -3) {
         realIndex += size;
       }
-      this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
+      if (realIndex > 0) {
+        this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
+      } else {
+        this.outer.style.transform = "translateY(" + -realIndex * 48 + "px)";
+      }
       if (this.position !== null && Math.abs(this.position - rank) > 1) {
         this.inner.className = 'inner';
 
@@ -1627,7 +1631,7 @@ var TargetCard = function (_Card) {
             label: c.card.creature.name,
             effect: "",
             callback: function callback() {
-              stack.next();
+              stack.pop();
               _this2.effect(c.card.creature);
             }
           });

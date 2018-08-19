@@ -32,7 +32,7 @@ export default class TargetCard extends Card {
           label: c.card.creature.name,
           effect: "",
           callback: () => {
-            stack.next();
+            stack.pop();
             this.effect(c.card.creature);
           }
         });
