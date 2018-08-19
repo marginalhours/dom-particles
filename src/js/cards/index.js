@@ -24,7 +24,7 @@ export default class Card {
     options.map(({ callback, label, effect }) => {
       new Choice ({
         parent: choiceList,
-        handleClick: () => { callback(); Bus.pub('tile-seen'); }, // default look at next tile
+        handleClick: () => { callback(); this.exit(stack); },
         label,
         effect
       });
@@ -46,6 +46,7 @@ export default class Card {
   }
   
   exit (player, stack) {
-   // method called on card leaving stack. 
+    // method called on card leaving stack. 
+    Bus.pub('tile-seen');
   }
 }

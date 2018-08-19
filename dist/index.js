@@ -39,6 +39,8 @@ var Card = function () {
   _createClass(Card, [{
     key: 'buildContents',
     value: function buildContents(stack, container) {
+      var _this = this;
+
       // Default contents implementation is some flavour text plus a number of choices. 
 
       var _enter = this.enter(stack),
@@ -60,8 +62,8 @@ var Card = function () {
         new _choice2.default({
           parent: choiceList,
           handleClick: function handleClick() {
-            callback();_bus2.default.pub('tile-seen');
-          }, // default look at next tile
+            callback();_this.exit(stack);
+          },
           label: label,
           effect: effect
         });
@@ -86,6 +88,7 @@ var Card = function () {
     key: 'exit',
     value: function exit(player, stack) {
       // method called on card leaving stack. 
+      _bus2.default.pub('tile-seen');
     }
   }]);
 
@@ -1239,6 +1242,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 var _player = __webpack_require__(1);
 
 var _player2 = _interopRequireDefault(_player);
@@ -1280,8 +1285,6 @@ var CreatureCard = function (_Card) {
   _createClass(CreatureCard, [{
     key: 'enter',
     value: function enter(stack) {
-      var _this2 = this;
-
       // Combat! But there should be a penalty for using an item (creature gets free hit?)
       // Worth bearing in mind for after the item targeting thing is cleared.
       var options = [];
@@ -1291,15 +1294,7 @@ var CreatureCard = function (_Card) {
         effect: "Deal damage to creature",
         callback: function callback() {
           stack.pop();
-
-          _this2.creature.health -= 5;
-          _player2.default.changeResource('health', -2);
-
-          if (_this2.creature.dead) {
-            stack.unshift(new _corpse2.default());
-          } else {
-            stack.unshift(_this2);
-          }
+          _player2.default.attack(creature);
         }
       });
 
@@ -1318,8 +1313,17 @@ var CreatureCard = function (_Card) {
     }
   }, {
     key: 'exit',
-    value: function exit(player, stack) {
-      // and so on...
+    value: function exit(stack) {
+      if (this.creature.dead) {
+        stack.unshift(new _corpse2.default());
+      } else {
+        // Attack the player...
+        this.creature.attack(_player2.default);
+        stack.unshift(this);
+      }
+
+      // Call super.exit() to make sure we push the right cards...
+      _get(CreatureCard.prototype.__proto__ || Object.getPrototypeOf(CreatureCard.prototype), 'exit', this).call(this);
     }
   }]);
 

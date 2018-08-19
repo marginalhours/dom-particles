@@ -21,15 +21,7 @@ export default class CreatureCard extends Card {
       effect: "Deal damage to creature",
       callback: () => {
         stack.pop();
-        
-        this.creature.health -= 5;
-        Player.changeResource('health', -2);
-        
-        if(this.creature.dead){
-          stack.unshift(new CorpseCard());
-        } else {
-          stack.unshift(this); 
-        }
+        Player.attack(this.creature);
       }
     });
     
@@ -47,8 +39,17 @@ export default class CreatureCard extends Card {
     }
   }
   
-  exit (player, stack) {
-    // and so on...
+  exit (stack) {
+    if(this.creature.dead){
+      stack.unshift(new CorpseCard());
+    } else {
+      // Attack the player...
+      this.creature.attack(Player);
+      stack.unshift(this); 
+    }
+    
+    // Call super.exit() to make sure we push the right cards...
+    super.exit();
   }
   
 }
