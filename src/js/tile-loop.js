@@ -32,24 +32,8 @@ export class TileLoop extends Hookable {
     this.direction = -this.direction;  
   }
   
-  add () { 
-    let e = new Tile({ parent: this.container, position: this._tiles.length, card: new CreatureCard({ creature: getCreature() }) });
-    e.inner.classList.add('spin1');
-    this._tiles.push(e); 
-    this.reposition();
-  }
-  
-  addAtIndex (index) {
-    let e = new Tile({ parent: this.container, position: 1, card: new CreatureCard({ creature: getCreature() }) });
-    e.inner.classList.add('spin1');
-    this._tiles.splice(index, 0, e); 
-    this.reposition();
-  }
-  
   push (c) {
-    let e = new Tile({ parent: this.container, position: this._tiles.length, card: c });
-    e.inner.classList.add('spin1');
-    this._tiles.unshift(e); 
+    this._tiles.unshift(c.buildTile()); 
     this.reposition();
   }
   
@@ -80,45 +64,4 @@ export class TileLoop extends Hookable {
     // call this to resync 
     this._tiles.map((e, idx) => e.reposition(idx, this.pointer, this._tiles.length));
   }
-}
-
-export class Tile extends Hookable {
-  constructor (options) {
-    const { parent, position, card } = options;
-    super ({
-          parent, 
-          template: `<li data-hook='outer'>
-                      <div data-hook='inner' class='inner'> 
-                        <div data-hook='contents' class='contents ${card.type}-card'>
-                        </div>
-                      </div>
-                     </li>`
-    });
-    
-    this.card = card;
-    this.position = position;
-  }
-  
-  reposition (rank, pointer, size) {
-    let realIndex = rank - pointer;
-    if(realIndex < -3){
-      realIndex += size;  
-    }
-    if (realIndex > 0){
-      this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
-    } else {
-      this.outer.style.transform = "translateY(" + -realIndex * 48 + "px)";
-    }
-    if(this.position !== null && Math.abs(this.position - rank) > 1){
-      this.inner.className = 'inner';
-      
-      let anim = (this.position < rank) ? 'upbounce' : 'downbounce';
-      this.inner.classList.add(anim);
-    }
-    this.position = rank;
-  }
-  
-  destroy () {
-   this.parent.removeChild(this.outer); 
-  }   
 }

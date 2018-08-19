@@ -1,8 +1,11 @@
 import Bus from '../bus';
 import Player from '../player';
 import Choice from '../choice';
+import Tile from '../tile';
 
 // Base card class (duh.)
+// A card has two views into it (contents and tile)
+// Plus functions that are called when it is entered / exited
 export default class Card {
   constructor (options) {
     options = options || {};
@@ -37,7 +40,9 @@ export default class Card {
   }
   
   buildTile () {
-    // Get the "small" representation of this card, for putting in th
+    // Get the "small" representation of this card, for putting in the queue
+    this.tile = new Tile ({ card: this, position: -1 });
+    return this.tile;
   }
   
   enter (stack) {
