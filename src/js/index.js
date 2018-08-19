@@ -7,6 +7,8 @@ import { TileLoop } from './tile-loop';
 import { Dialogue } from './dialogue'; 
 import { CharacterSheet } from './cards';
 
+import { makeLevel0 } from './levels/level0';
+
 let h = new Bar({ parent: qs('.status-wrappers'), name: "health" });
 let k = new Bar({ parent: qs('.status-wrappers'), name: "mana" });
 let e = new Bar({ parent: qs('.status-wrappers'), name: "experience" });
@@ -21,9 +23,8 @@ qs('.player-image').addEventListener('click', () => {
   }
 });
 
-for(var i = 0; i < 5; i++){
-  s.add();
-}
+// create level
+makeLevel0().map(c => s.push(c));
 
 d.setLoop(s);
 d.hydrate(s.peek());
