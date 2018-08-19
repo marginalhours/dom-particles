@@ -1,4 +1,5 @@
 import Card from '.';
+import { forwardOption, backpackOption } from './options-helper';
 
 export default class CorridorCard extends Card {
   
@@ -8,19 +9,9 @@ export default class CorridorCard extends Card {
   }
   
   enter (stack){
-    let options = [];
-    
-    options.push({
-      label: "OK",
-      effect: "",
-      callback: () => {
-        stack.next();
-      }
-    });
-    
     return {
       flavour: "An empty corridor.",
-      options
+      options: [forwardOption(stack), backpackOption(stack)]
     }
   }
 }

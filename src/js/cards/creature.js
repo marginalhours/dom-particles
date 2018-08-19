@@ -1,7 +1,7 @@
 import Player from '../player';
 import Card from '.';
 import CorpseCard from './corpse';
-import ItemSelectCard from './item-select';
+import { backpackOption } from './options-helper';
 
 // For combat and such.
 export default class CreatureCard extends Card { 
@@ -31,13 +31,7 @@ export default class CreatureCard extends Card {
       }
     });
     
-    options.push({
-      label: "Use item",
-      effect: "Open backpack",
-      callback: () => {
-        stack.unshift(new ItemSelectCard());
-      }
-    });
+    options.push(backpackOption(stack));
     
     return {
       flavour: this.creature.description,

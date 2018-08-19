@@ -19,7 +19,7 @@ var _player = __webpack_require__(1);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _choice = __webpack_require__(12);
+var _choice = __webpack_require__(13);
 
 var _choice2 = _interopRequireDefault(_choice);
 
@@ -307,7 +307,45 @@ exports.default = Bus;
 "use strict";
 
 
-__webpack_require__(5);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.forwardOption = exports.backpackOption = undefined;
+
+var _itemSelect = __webpack_require__(17);
+
+var _itemSelect2 = _interopRequireDefault(_itemSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var backpackOption = exports.backpackOption = function backpackOption(stack) {
+  return {
+    label: "Item",
+    effect: "Open backpack",
+    callback: function callback() {
+      stack.unshift(new _itemSelect2.default());
+    }
+  };
+};
+
+var forwardOption = exports.forwardOption = function forwardOption(stack) {
+  return {
+    label: "Forward!",
+    effect: "",
+    callback: function callback() {
+      stack.next();
+    }
+  };
+};
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(6);
 
 var _helpers = __webpack_require__(2);
 
@@ -319,11 +357,11 @@ var _player = __webpack_require__(1);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _bar = __webpack_require__(10);
+var _bar = __webpack_require__(11);
 
-var _tileLoop = __webpack_require__(11);
+var _tileLoop = __webpack_require__(12);
 
-var _dialogue = __webpack_require__(19);
+var _dialogue = __webpack_require__(20);
 
 var _cards = __webpack_require__(0);
 
@@ -370,13 +408,13 @@ _bus2.default.pub('health-amount', 0);
 _bus2.default.pub('mana-amount', 0);
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(6);
+var content = __webpack_require__(7);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -384,7 +422,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(8)(content, options);
+var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -401,10 +439,10 @@ if(false) {
 }
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(true);
+exports = module.exports = __webpack_require__(8)(true);
 // imports
 
 
@@ -415,7 +453,7 @@ exports.push([module.i, ".game {\n  width: 50%; }\n\n.header {\n  width: 100%;\n
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /*
@@ -497,7 +535,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -543,7 +581,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(9);
+var	fixUrls = __webpack_require__(10);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -856,7 +894,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 
@@ -951,7 +989,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1007,7 +1045,7 @@ var Bar = exports.Bar = function (_Hookable) {
 }(_helpers.Hookable);
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1026,11 +1064,11 @@ var _cards = __webpack_require__(0);
 
 var _cards2 = _interopRequireDefault(_cards);
 
-var _creature = __webpack_require__(13);
+var _creature = __webpack_require__(14);
 
 var _creature2 = _interopRequireDefault(_creature);
 
-var _creature3 = __webpack_require__(18);
+var _creature3 = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1192,7 +1230,7 @@ var Tile = exports.Tile = function (_Hookable2) {
 }(_helpers.Hookable);
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1238,7 +1276,7 @@ var Choice = function (_Hookable) {
 exports.default = Choice;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1260,13 +1298,11 @@ var _ = __webpack_require__(0);
 
 var _2 = _interopRequireDefault(_);
 
-var _corpse = __webpack_require__(14);
+var _corpse = __webpack_require__(15);
 
 var _corpse2 = _interopRequireDefault(_corpse);
 
-var _itemSelect = __webpack_require__(16);
-
-var _itemSelect2 = _interopRequireDefault(_itemSelect);
+var _optionsHelper = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1314,13 +1350,7 @@ var CreatureCard = function (_Card) {
         }
       });
 
-      options.push({
-        label: "Use item",
-        effect: "Open backpack",
-        callback: function callback() {
-          stack.unshift(new _itemSelect2.default());
-        }
-      });
+      options.push((0, _optionsHelper.backpackOption)(stack));
 
       return {
         flavour: this.creature.description,
@@ -1344,7 +1374,7 @@ var CreatureCard = function (_Card) {
 exports.default = CreatureCard;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1364,7 +1394,7 @@ var _player = __webpack_require__(1);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _corridor = __webpack_require__(15);
+var _corridor = __webpack_require__(16);
 
 var _corridor2 = _interopRequireDefault(_corridor);
 
@@ -1422,7 +1452,7 @@ var CorpseCard = function (_Card) {
 exports.default = CorpseCard;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1437,6 +1467,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _ = __webpack_require__(0);
 
 var _2 = _interopRequireDefault(_);
+
+var _optionsHelper = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1459,21 +1491,11 @@ var CorridorCard = function (_Card) {
   }
 
   _createClass(CorridorCard, [{
-    key: "enter",
+    key: 'enter',
     value: function enter(stack) {
-      var options = [];
-
-      options.push({
-        label: "OK",
-        effect: "",
-        callback: function callback() {
-          stack.next();
-        }
-      });
-
       return {
         flavour: "An empty corridor.",
-        options: options
+        options: [(0, _optionsHelper.forwardOption)(stack), (0, _optionsHelper.backpackOption)(stack)]
       };
     }
   }]);
@@ -1484,7 +1506,7 @@ var CorridorCard = function (_Card) {
 exports.default = CorridorCard;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1504,7 +1526,7 @@ var _ = __webpack_require__(0);
 
 var _2 = _interopRequireDefault(_);
 
-var _target = __webpack_require__(17);
+var _target = __webpack_require__(18);
 
 var _target2 = _interopRequireDefault(_target);
 
@@ -1563,7 +1585,7 @@ var ItemSelect = function (_Card) {
 exports.default = ItemSelect;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1655,7 +1677,7 @@ var TargetCard = function (_Card) {
 exports.default = TargetCard;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1708,7 +1730,7 @@ var getCreature = exports.getCreature = function getCreature() {
 };
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1770,4 +1792,4 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
 }(_helpers.Hookable);
 
 /***/ })
-],[4]);
+],[5]);
