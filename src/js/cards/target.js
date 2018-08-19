@@ -27,13 +27,13 @@ export default class TargetCard extends Card {
     
     for (let i = 1; i <= this.range; i++){
       let c = loop.peek(i);
-      if (c.card.type === "creature") {
+      if (c.type === "creature") {
         options.push({
-          label: c.card.creature.name,
+          label: c.creature.name,
           effect: "",
           callback: () => {
             loop.pop();
-            this.effect(c.card.creature);
+            this.effect(c.creature);
           }
         });
       }

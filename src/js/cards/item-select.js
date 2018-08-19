@@ -21,7 +21,7 @@ export default class ItemSelect extends Card {
             loop.unshift(new TargetCard({
               item: k,
               range: Player.items[k].range,
-              effect: Player.items[k].callback
+              effect: () => { Player.items[k]--; Player.items[k].callback() 
             }));
           }
         });

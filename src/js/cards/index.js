@@ -63,4 +63,9 @@ export default class Card {
     // method called on card leaving stack. 
     Bus.pub('tile-seen');
   }
+  
+  destroy () {
+    // clean up tile from DOM
+    this.tile.destroy();  
+  }
 }

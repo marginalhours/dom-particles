@@ -24,7 +24,7 @@ export class CardLoop extends Hookable {
   
   next () {
     this.pointer += (this.direction * this.stride);  
-    this.pointer = this.pointer % this._tiles.length;
+    this.pointer = this.pointer % this._cards.length;
     this.reposition();
   }
   
@@ -60,7 +60,14 @@ export class CardLoop extends Hookable {
   
   unshift (c) {
     // Adds a card under the current index
-    this._cards.unshift(c);
+    this._cards.splice(this.pointer, 0, c);
+    
+    let t = c.buildTile();
+    t.setPosition(0);
+    t.setParent(this.container);
+    t.inner.classList.add('spin1');
+    
+    this.reposition();
   }
    
   reposition () {

@@ -26,7 +26,7 @@ export class Dialogue extends Hookable {
    this.loop = q; 
   }
   
-  hydrate (tile) {
-    tile.card.buildContents(this.loop, this.contents);
+  hydrate (card) {
+    card.buildContents(this.loop, this.contents);
   }
 }
