@@ -5,6 +5,7 @@ import CorridorCard from './corridor';
 export default class CorpseCard extends Card {
   constructor (options) {
     super(options);
+    this.type = "corpse";
   }
   
   enter (loop) {

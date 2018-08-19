@@ -29,7 +29,6 @@ $grow-duration: 500ms;
     display: block;
     position: absolute;
     top: -19px;
-    border: 2px so
     transition: transform $animation-duration ease-in-out;
     
     .inner {
@@ -37,11 +36,12 @@ $grow-duration: 500ms;
     }
     
     div {
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       box-sizing:border-box;
       text-align: center;
       background-color: #fff;
+      border-radius: 3px;
     }
   }
 }

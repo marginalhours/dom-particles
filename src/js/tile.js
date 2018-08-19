@@ -22,23 +22,18 @@ export default class extends Hookable {
   
   reposition (rank, pointer, size) {
     let realIndex = rank - pointer;
-    if(realIndex < -3){
+    if(realIndex < 0){
       realIndex += size;  
     }
-    if (realIndex > 0){
-      this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
-    } else {
-      this.outer.style.transform = "translateY(" + -realIndex * 48 + "px)";
-    }
+    this.outer.style.transform = "translateX(" + realIndex * 48 + "px)";
     if(this.position !== null && Math.abs(this.position - rank) > 1){
-      this.inner.className = 'inner';
-      
+      this.inner.className = 'inner';  
       let anim = (this.position < rank) ? 'upbounce' : 'downbounce';
       this.inner.classList.add(anim);
     }
     this.position = rank;
   }
-  
+
   setParent (p) {
     this.parent = p;
     this.parent.appendChild(this.outer);
