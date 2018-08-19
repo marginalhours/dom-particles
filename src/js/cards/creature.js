@@ -22,6 +22,12 @@ export default class CreatureCard extends Card {
       callback: () => {
         stack.pop();
         Player.attack(this.creature);
+        
+        if (this.creature.dead) {
+          stack.unshift(new CorpseCard());
+        } else {
+          stack.unshift(this); 
+        }
       }
     });
     
@@ -40,14 +46,7 @@ export default class CreatureCard extends Card {
   }
   
   exit (stack) {
-    if(this.creature.dead){
-      stack.unshift(new CorpseCard());
-    } else {
-      // Attack the player...
-      this.creature.attack(Player);
-      stack.unshift(this); 
-    }
-    
+    if(!this.creature.dead){ this.creature.attack(Player); }
     // Call super.exit() to make sure we push the right cards...
     super.exit();
   }

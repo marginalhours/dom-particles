@@ -18,6 +18,10 @@ const Player = {
   changeResource: function(name, amount) {
     this[name] += amount;
     Bus.pub(`${name}-amount`, this[name]);
+  },
+  
+  attack: function(creature) {
+    creature.health -=  1 + Math.floor(5 * Math.random());
   }
 };
 

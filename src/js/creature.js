@@ -16,6 +16,10 @@ class Creature {
   changeResource(res, val){
     this[res] += val;
   }
+  
+  attack (player) {
+    player.changeResource("health", -1 - Math.floor(3 * Math.random()));  
+  }
 }
 
 

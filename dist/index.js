@@ -134,6 +134,10 @@ var Player = {
   changeResource: function changeResource(name, amount) {
     this[name] += amount;
     _bus2.default.pub(name + "-amount", this[name]);
+  },
+
+  attack: function attack(creature) {
+    creature.health -= 1 + Math.floor(5 * Math.random());
   }
 };
 
@@ -1285,6 +1289,8 @@ var CreatureCard = function (_Card) {
   _createClass(CreatureCard, [{
     key: 'enter',
     value: function enter(stack) {
+      var _this2 = this;
+
       // Combat! But there should be a penalty for using an item (creature gets free hit?)
       // Worth bearing in mind for after the item targeting thing is cleared.
       var options = [];
@@ -1294,7 +1300,13 @@ var CreatureCard = function (_Card) {
         effect: "Deal damage to creature",
         callback: function callback() {
           stack.pop();
-          _player2.default.attack(creature);
+          _player2.default.attack(_this2.creature);
+
+          if (_this2.creature.dead) {
+            stack.unshift(new _corpse2.default());
+          } else {
+            stack.unshift(_this2);
+          }
         }
       });
 
@@ -1314,14 +1326,9 @@ var CreatureCard = function (_Card) {
   }, {
     key: 'exit',
     value: function exit(stack) {
-      if (this.creature.dead) {
-        stack.unshift(new _corpse2.default());
-      } else {
-        // Attack the player...
+      if (!this.creature.dead) {
         this.creature.attack(_player2.default);
-        stack.unshift(this);
       }
-
       // Call super.exit() to make sure we push the right cards...
       _get(CreatureCard.prototype.__proto__ || Object.getPrototypeOf(CreatureCard.prototype), 'exit', this).call(this);
     }
@@ -1660,17 +1667,22 @@ var Creature = function () {
   }
 
   _createClass(Creature, [{
-    key: 'changeResource',
+    key: "changeResource",
     value: function changeResource(res, val) {
       this[res] += val;
     }
   }, {
-    key: 'description',
-    get: function get() {
-      return this.health < this.maxhealth ? 'A Wounded ' + this.name + ' (' + this.health + '/' + this.maxhealth + ' HP)' : 'A ' + this.name;
+    key: "attack",
+    value: function attack(player) {
+      player.changeResource("health", -1 - Math.floor(3 * Math.random()));
     }
   }, {
-    key: 'dead',
+    key: "description",
+    get: function get() {
+      return this.health < this.maxhealth ? "A Wounded " + this.name + " (" + this.health + "/" + this.maxhealth + " HP)" : "A " + this.name;
+    }
+  }, {
+    key: "dead",
     get: function get() {
       return this.health <= 0;
     }
