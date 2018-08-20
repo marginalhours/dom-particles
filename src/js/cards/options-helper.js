@@ -1,21 +1,31 @@
 import ItemSelectCard from './item-select';
 
-export const backpackOption = (stack) => {
+export const backpackOption = (loop) => {
    return {
       label: "Item",
       effect: "Open backpack",
       callback: () => {
-        stack.unshift(new ItemSelectCard());
+        loop.unshift(new ItemSelectCard());
       }
     } 
 }
 
-export const forwardOption = (stack) => {
+export const forwardOption = (loop) => {
   return {
     label: "Forward!",
     effect: "",
     callback: () => {
-      stack.next();
+      loop.next();
     }  
+  }
+}
+
+export const cancelOption = (loop) => {
+  return {
+    label: "Cancel",
+    effect: "",
+    callback: () => {
+      loop.pop();
+    }
   }
 }

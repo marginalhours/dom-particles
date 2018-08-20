@@ -1,5 +1,5 @@
 import Card from '.';
-import { forwardOption, backpackOption } from './options-helper';
+import { forwardOption, backpackOption, retreatOption } from './options-helper';
 
 export default class CorridorCard extends Card {
   
@@ -11,7 +11,7 @@ export default class CorridorCard extends Card {
   enter (loop){
     return {
       flavour: "An empty corridor.",
-      options: [forwardOption(loop), backpackOption(loop)]
+      options: [forwardOption(loop), backpackOption(loop), retreatOption(loop)]
     }
   }
 }

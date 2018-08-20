@@ -357,6 +357,54 @@ exports.default = Bus;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.cancelOption = exports.forwardOption = exports.backpackOption = undefined;
+
+var _itemSelect = __webpack_require__(19);
+
+var _itemSelect2 = _interopRequireDefault(_itemSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var backpackOption = exports.backpackOption = function backpackOption(loop) {
+  return {
+    label: "Item",
+    effect: "Open backpack",
+    callback: function callback() {
+      loop.unshift(new _itemSelect2.default());
+    }
+  };
+};
+
+var forwardOption = exports.forwardOption = function forwardOption(loop) {
+  return {
+    label: "Forward!",
+    effect: "",
+    callback: function callback() {
+      loop.next();
+    }
+  };
+};
+
+var cancelOption = exports.cancelOption = function cancelOption(loop) {
+  return {
+    label: "Cancel",
+    effect: "",
+    callback: function callback() {
+      loop.pop();
+    }
+  };
+};
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -374,7 +422,7 @@ var _corpse = __webpack_require__(18);
 
 var _corpse2 = _interopRequireDefault(_corpse);
 
-var _optionsHelper = __webpack_require__(6);
+var _optionsHelper = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -424,6 +472,14 @@ var CreatureCard = function (_Card) {
 
       options.push((0, _optionsHelper.backpackOption)(loop));
 
+      options.push({
+        label: "Retreat",
+        effect: "",
+        callback: function callback() {
+          loop.previous();
+        }
+      });
+
       return {
         flavour: this.creature.description,
         options: options
@@ -446,7 +502,7 @@ var CreatureCard = function (_Card) {
 exports.default = CreatureCard;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -462,7 +518,7 @@ var _ = __webpack_require__(1);
 
 var _2 = _interopRequireDefault(_);
 
-var _optionsHelper = __webpack_require__(6);
+var _optionsHelper = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -489,7 +545,7 @@ var CorridorCard = function (_Card) {
     value: function enter(loop) {
       return {
         flavour: "An empty corridor.",
-        options: [(0, _optionsHelper.forwardOption)(loop), (0, _optionsHelper.backpackOption)(loop)]
+        options: [(0, _optionsHelper.forwardOption)(loop), (0, _optionsHelper.backpackOption)(loop), (0, _optionsHelper.retreatOption)(loop)]
       };
     }
   }]);
@@ -498,44 +554,6 @@ var CorridorCard = function (_Card) {
 }(_2.default);
 
 exports.default = CorridorCard;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.forwardOption = exports.backpackOption = undefined;
-
-var _itemSelect = __webpack_require__(19);
-
-var _itemSelect2 = _interopRequireDefault(_itemSelect);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var backpackOption = exports.backpackOption = function backpackOption(stack) {
-  return {
-    label: "Item",
-    effect: "Open backpack",
-    callback: function callback() {
-      stack.unshift(new _itemSelect2.default());
-    }
-  };
-};
-
-var forwardOption = exports.forwardOption = function forwardOption(stack) {
-  return {
-    label: "Forward!",
-    effect: "",
-    callback: function callback() {
-      stack.next();
-    }
-  };
-};
 
 /***/ }),
 /* 7 */
@@ -1319,7 +1337,7 @@ var _cards = __webpack_require__(1);
 
 var _cards2 = _interopRequireDefault(_cards);
 
-var _creature = __webpack_require__(4);
+var _creature = __webpack_require__(5);
 
 var _creature2 = _interopRequireDefault(_creature);
 
@@ -1361,7 +1379,14 @@ var CardLoop = exports.CardLoop = function (_Hookable) {
     key: 'next',
     value: function next() {
       this.pointer += this.direction * this.stride;
-      this.pointer = this.pointer % this._cards.length;
+      this.pointer = (this._cards.length + this.pointer) % this._cards.length;
+      this.reposition();
+    }
+  }, {
+    key: 'previous',
+    value: function previous() {
+      this.pointer -= this.direction * this.stride;
+      this.pointer = (this._cards.length + this.pointer) % this._cards.length;
       this.reposition();
     }
   }, {
@@ -1575,7 +1600,7 @@ var _player = __webpack_require__(2);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _corridor = __webpack_require__(5);
+var _corridor = __webpack_require__(6);
 
 var _corridor2 = _interopRequireDefault(_corridor);
 
@@ -1660,6 +1685,8 @@ var _target = __webpack_require__(20);
 
 var _target2 = _interopRequireDefault(_target);
 
+var _optionsHelper = __webpack_require__(4);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1687,11 +1714,10 @@ var ItemSelect = function (_Card) {
 
       Object.keys(_player2.default.items).map(function (k) {
         if (_player2.default.items[k].count > 0) {
-
           if (_player2.default.items[k].range > 0) {
             // case where it's targetable
             options.push({
-              label: k,
+              label: k + (' (' + _player2.default.items[k].count + ')'),
               effect: _player2.default.items[k].effect,
               callback: function callback() {
                 loop.pop();
@@ -1699,7 +1725,7 @@ var ItemSelect = function (_Card) {
                   item: k,
                   range: _player2.default.items[k].range,
                   effect: function effect(args) {
-                    _player2.default.items[k]--;_player2.default.items[k].callback(args);
+                    _player2.default.items[k].count--;_player2.default.items[k].callback(args);
                   }
                 }));
               }
@@ -1707,16 +1733,19 @@ var ItemSelect = function (_Card) {
           } else {
             // not a targetable item
             options.push({
-              label: k,
+              label: k + (' (' + _player2.default.items[k].count + ')'),
               effect: _player2.default.items[k].effect,
               callback: function callback() {
                 loop.pop();
+                _player2.default.items[k].count--;
                 _player2.default.items[k].callback(_player2.default);
               }
             });
           }
         }
       });
+
+      options.push((0, _optionsHelper.cancelOption)(loop));
 
       return {
         flavour: "Choose an item",
@@ -1898,11 +1927,11 @@ exports.makeLevel0 = undefined;
 
 var _helpers = __webpack_require__(0);
 
-var _creature = __webpack_require__(4);
+var _creature = __webpack_require__(5);
 
 var _creature2 = _interopRequireDefault(_creature);
 
-var _corridor = __webpack_require__(5);
+var _corridor = __webpack_require__(6);
 
 var _corridor2 = _interopRequireDefault(_corridor);
 

@@ -33,6 +33,14 @@ export default class CreatureCard extends Card {
     
     options.push(backpackOption(loop));
     
+    options.push({
+      label: "Retreat",
+      effect: "",
+      callback: () => {
+        loop.previous ();  
+      }
+    });
+    
     return {
       flavour: this.creature.description,
       options

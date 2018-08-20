@@ -24,7 +24,13 @@ export class CardLoop extends Hookable {
   
   next () {
     this.pointer += (this.direction * this.stride);  
-    this.pointer = this.pointer % this._cards.length;
+    this.pointer = (this._cards.length + this.pointer) % this._cards.length;
+    this.reposition();
+  }
+  
+  previous () {
+    this.pointer -= (this.direction * this.stride);  
+    this.pointer = (this._cards.length + this.pointer) % this._cards.length;
     this.reposition();
   }
   
