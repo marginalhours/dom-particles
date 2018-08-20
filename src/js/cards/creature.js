@@ -1,7 +1,7 @@
 import Player from '../player';
 import Card from '.';
 import CorpseCard from './corpse';
-import { backpackOption } from './options-helper';
+import { backpackOption, retreatOption } from './options-helper';
 
 // For combat and such.
 export default class CreatureCard extends Card { 
@@ -31,15 +31,16 @@ export default class CreatureCard extends Card {
       }
     });
     
-    options.push(backpackOption(loop));
-    
     options.push({
-      label: "Retreat",
-      effect: "",
+      label: "Rush past",
+      effect: "Attempt to rush past the creature",
       callback: () => {
-        loop.previous ();  
+        loop.next();        
       }
     });
+    options.push(backpackOption(loop));
+    options.push(retreatOption(loop));
+
     
     return {
       flavour: this.creature.description,

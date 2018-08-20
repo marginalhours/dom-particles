@@ -357,7 +357,7 @@ exports.default = Bus;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.cancelOption = exports.forwardOption = exports.backpackOption = undefined;
+exports.cancelOption = exports.retreatOption = exports.forwardOption = exports.backpackOption = undefined;
 
 var _itemSelect = __webpack_require__(19);
 
@@ -381,6 +381,16 @@ var forwardOption = exports.forwardOption = function forwardOption(loop) {
     effect: "",
     callback: function callback() {
       loop.next();
+    }
+  };
+};
+
+var retreatOption = exports.retreatOption = function retreatOption(loop) {
+  return {
+    label: "Retreat",
+    effect: "",
+    callback: function callback() {
+      loop.previous();
     }
   };
 };
@@ -470,15 +480,15 @@ var CreatureCard = function (_Card) {
         }
       });
 
-      options.push((0, _optionsHelper.backpackOption)(loop));
-
       options.push({
-        label: "Retreat",
-        effect: "",
+        label: "Rush past",
+        effect: "Attempt to rush past the creature",
         callback: function callback() {
-          loop.previous();
+          loop.next();
         }
       });
+      options.push((0, _optionsHelper.backpackOption)(loop));
+      options.push((0, _optionsHelper.retreatOption)(loop));
 
       return {
         flavour: this.creature.description,
@@ -1945,7 +1955,7 @@ var makeLevel0 = exports.makeLevel0 = function makeLevel0() {
     cards.push(new _creature2.default({ creature: (0, _creature3.getCreature)() }));
   }
 
-  for (var _i = 0; _i < 12; _i++) {
+  for (var _i = 0; _i < 24; _i++) {
     cards.push(new _corridor2.default());
   }
 

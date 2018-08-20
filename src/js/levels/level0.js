@@ -10,7 +10,7 @@ export const makeLevel0 = () => {
     cards.push(new CreatureCard({ creature: getCreature() })); 
   }
   
-  for(let i = 0; i < 12; i++){
+  for(let i = 0; i < 24; i++){
     cards.push(new CorridorCard());  
   }
   

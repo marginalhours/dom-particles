@@ -20,6 +20,16 @@ export const forwardOption = (loop) => {
   }
 }
 
+export const retreatOption = (loop) => {
+  return {
+      label: "Retreat",
+      effect: "",
+      callback: () => {
+        loop.previous ();  
+      }
+    }
+}
+
 export const cancelOption = (loop) => {
   return {
     label: "Cancel",
