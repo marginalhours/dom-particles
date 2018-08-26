@@ -1,6 +1,10 @@
 Blah
 ----
 
+- Combinations and throw leftmost card away each time
+- Creatures come back if you slip past them (let them fall off to the left)
+
+
 - Flesh out content a lot, cleanup, modularize loops (per dungeon floor?)
 - Think about cards that appear from nowhere (like, a level-up, or when you die, separate to traditional mechanism)
 - come up with more animations to apply to tiles and use them a bit more
