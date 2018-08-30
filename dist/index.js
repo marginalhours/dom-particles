@@ -653,6 +653,7 @@ var h = new _bar.Bar({ parent: (0, _helpers.qs)('.status-wrappers'), name: "heal
 var k = new _bar.Bar({ parent: (0, _helpers.qs)('.status-wrappers'), name: "mana" });
 var e = new _bar.Bar({ parent: (0, _helpers.qs)('.status-wrappers'), name: "experience" });
 
+var a = new _cardLoop.CardLoop({ parent: (0, _helpers.qs)('.game') });
 var s = new _cardLoop.CardLoop({ parent: (0, _helpers.qs)('.game') });
 var d = new _dialogue.Dialogue({ parent: (0, _helpers.qs)('.game') });
 
