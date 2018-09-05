@@ -1981,7 +1981,7 @@ var Log = function (_Hookable) {
       template: '<div class=\'log-outer\' data-hook=\'container\'></div>'
     }));
 
-    _bus2.default.sub('message-pub', function (msg) {
+    _bus2.default.sub('log-message', function (msg) {
       _this.addMessage(msg);
     });
     return _this;

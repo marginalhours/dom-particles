@@ -10,7 +10,7 @@ export default class Log extends Hookable {
       template: `<div class='log-outer' data-hook='container'></div>`
     });
     
-    Bus.sub('message-pub', (msg) => {
+    Bus.sub('log-message', (msg) => {
       this.addMessage(msg);  
     });
   }
