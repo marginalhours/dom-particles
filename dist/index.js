@@ -1919,6 +1919,7 @@ var Dialogue = function (_Hookable) {
     }));
 
     _bus2.default.sub('tile-seen', function () {
+      _bus2.default.pub("log-message", { html: "a new adventure" });
       _this.hydrate(_this.loop.peek());
     });
     return _this;

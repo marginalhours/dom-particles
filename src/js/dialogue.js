@@ -18,7 +18,7 @@ export default class Dialogue extends Hookable {
     });
     
     Bus.sub('tile-seen', () => {
-      Bus.pub("log-message", "
+      Bus.pub("log-message", { html: "a new adventure"});
       this.hydrate(this.loop.peek());  
     });
   }
