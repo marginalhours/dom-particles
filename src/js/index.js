@@ -2,10 +2,11 @@ import '../scss/style.scss';
 import { qs } from './helpers';
 import Bus from './bus';
 import Player from './player';
-import { Bar } from './bar';
-import { CardLoop } from './card-loop';
-import { Dialogue } from './dialogue'; 
-import { CharacterSheet } from './cards';
+import Bar from './bar';
+import CardLoop from './card-loop';
+import Dialogue from './dialogue'; 
+import Log from './log';
+import CharacterSheet from './cards/character-sheet';
 
 import { makeLevel0 } from './levels/level0';
 
@@ -16,6 +17,8 @@ let e = new Bar({ parent: qs('.status-wrappers'), name: "experience" });
 let a = new CardLoop({ parent: qs('.game') });
 let s = new CardLoop({ parent: qs('.game') });
 let d = new Dialogue({ parent: qs('.game') });
+
+let l = new Log({ parent: qs('.game') });
 
 qs('.player-image').addEventListener('click', () => {
   if (!(s.peek().card instanceof CharacterSheet)){

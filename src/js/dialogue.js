@@ -1,7 +1,7 @@
 import { Hookable } from './helpers';
 import Bus from './bus';
 
-export class Dialogue extends Hookable {
+export default class Dialogue extends Hookable {
   constructor (options) {
     const { parent } = options;
     

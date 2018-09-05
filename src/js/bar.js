@@ -1,6 +1,6 @@
 import { Hookable } from './helpers';
 
-export class Bar extends Hookable {
+export default class Bar extends Hookable {
   constructor (options) {
     const { parent, name } = options;
 

@@ -639,27 +639,41 @@ var _player2 = _interopRequireDefault(_player);
 
 var _bar = __webpack_require__(14);
 
+var _bar2 = _interopRequireDefault(_bar);
+
 var _cardLoop = __webpack_require__(15);
+
+var _cardLoop2 = _interopRequireDefault(_cardLoop);
 
 var _dialogue = __webpack_require__(21);
 
-var _cards = __webpack_require__(1);
+var _dialogue2 = _interopRequireDefault(_dialogue);
 
-var _level = __webpack_require__(22);
+var _log = __webpack_require__(22);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _characterSheet = __webpack_require__(23);
+
+var _characterSheet2 = _interopRequireDefault(_characterSheet);
+
+var _level = __webpack_require__(24);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var h = new _bar.Bar({ parent: (0, _helpers.qs)('.status-wrappers'), name: "health" });
-var k = new _bar.Bar({ parent: (0, _helpers.qs)('.status-wrappers'), name: "mana" });
-var e = new _bar.Bar({ parent: (0, _helpers.qs)('.status-wrappers'), name: "experience" });
+var h = new _bar2.default({ parent: (0, _helpers.qs)('.status-wrappers'), name: "health" });
+var k = new _bar2.default({ parent: (0, _helpers.qs)('.status-wrappers'), name: "mana" });
+var e = new _bar2.default({ parent: (0, _helpers.qs)('.status-wrappers'), name: "experience" });
 
-var a = new _cardLoop.CardLoop({ parent: (0, _helpers.qs)('.game') });
-var s = new _cardLoop.CardLoop({ parent: (0, _helpers.qs)('.game') });
-var d = new _dialogue.Dialogue({ parent: (0, _helpers.qs)('.game') });
+var a = new _cardLoop2.default({ parent: (0, _helpers.qs)('.game') });
+var s = new _cardLoop2.default({ parent: (0, _helpers.qs)('.game') });
+var d = new _dialogue2.default({ parent: (0, _helpers.qs)('.game') });
+
+var l = new _log2.default({ parent: (0, _helpers.qs)('.game') });
 
 (0, _helpers.qs)('.player-image').addEventListener('click', function () {
-  if (!(s.peek().card instanceof _cards.CharacterSheet)) {
-    s.unshift(new _cards.CharacterSheet());
+  if (!(s.peek().card instanceof _characterSheet2.default)) {
+    s.unshift(new _characterSheet2.default());
     d.hydrate(s.peek());
   }
 });
@@ -1282,7 +1296,6 @@ module.exports = function (css) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Bar = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1294,7 +1307,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Bar = exports.Bar = function (_Hookable) {
+var Bar = function (_Hookable) {
   _inherits(Bar, _Hookable);
 
   function Bar(options) {
@@ -1328,6 +1341,8 @@ var Bar = exports.Bar = function (_Hookable) {
   return Bar;
 }(_helpers.Hookable);
 
+exports.default = Bar;
+
 /***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -1338,7 +1353,6 @@ var Bar = exports.Bar = function (_Hookable) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CardLoop = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1365,7 +1379,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // Better to call it a card "loop", with a movable pointer to the current card.
 // This changes what operations we need to support.
 
-var CardLoop = exports.CardLoop = function (_Hookable) {
+var CardLoop = function (_Hookable) {
   _inherits(CardLoop, _Hookable);
 
   function CardLoop(options) {
@@ -1461,6 +1475,8 @@ var CardLoop = exports.CardLoop = function (_Hookable) {
 
   return CardLoop;
 }(_helpers.Hookable);
+
+exports.default = CardLoop;
 
 /***/ }),
 /* 16 */
@@ -1872,7 +1888,6 @@ exports.default = TargetCard;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Dialogue = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1890,7 +1905,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Dialogue = exports.Dialogue = function (_Hookable) {
+var Dialogue = function (_Hookable) {
   _inherits(Dialogue, _Hookable);
 
   function Dialogue(options) {
@@ -1924,8 +1939,129 @@ var Dialogue = exports.Dialogue = function (_Hookable) {
   return Dialogue;
 }(_helpers.Hookable);
 
+exports.default = Dialogue;
+
 /***/ }),
 /* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _helpers = __webpack_require__(0);
+
+var _bus = __webpack_require__(3);
+
+var _bus2 = _interopRequireDefault(_bus);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Log = function (_Hookable) {
+  _inherits(Log, _Hookable);
+
+  function Log(options) {
+    _classCallCheck(this, Log);
+
+    var parent = options.parent;
+
+    var _this = _possibleConstructorReturn(this, (Log.__proto__ || Object.getPrototypeOf(Log)).call(this, {
+      parent: parent,
+      template: '<div class=\'log-outer\' data-hook=\'container\'></div>'
+    }));
+
+    _bus2.default.sub('message-pub', function (msg) {
+      _this.addMessage(msg);
+    });
+    return _this;
+  }
+
+  _createClass(Log, [{
+    key: 'addMessage',
+    value: function addMessage(msg) {
+      var m = document.createElement("p");
+      m.innerHTML = msg.html;
+      this.container.appendChild(m);
+    }
+  }]);
+
+  return Log;
+}(_helpers.Hookable);
+
+exports.default = Log;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ = __webpack_require__(1);
+
+var _2 = _interopRequireDefault(_);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CharacterSheet = function (_Card) {
+  _inherits(CharacterSheet, _Card);
+
+  function CharacterSheet(options) {
+    _classCallCheck(this, CharacterSheet);
+
+    return _possibleConstructorReturn(this, (CharacterSheet.__proto__ || Object.getPrototypeOf(CharacterSheet)).call(this, options));
+  }
+
+  _createClass(CharacterSheet, [{
+    key: "enter",
+    value: function enter(stack) {
+      var options = [];
+
+      options.push({
+        label: "OK",
+        effect: "",
+        callback: function callback() {
+          stack.pop();
+        }
+      });
+
+      return {
+        flavour: "Yourself",
+        options: options
+      };
+    }
+  }]);
+
+  return CharacterSheet;
+}(_2.default);
+
+exports.default = CharacterSheet;
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

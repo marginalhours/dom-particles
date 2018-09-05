@@ -6,7 +6,7 @@ import { getCreature } from './creature';
 // Better to call it a card "loop", with a movable pointer to the current card.
 // This changes what operations we need to support.
 
-export class CardLoop extends Hookable {
+export default class CardLoop extends Hookable {
   constructor (options) {
     const { parent } = options;
 
