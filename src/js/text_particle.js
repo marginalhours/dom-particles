@@ -23,7 +23,7 @@ export default class TextParticle {
     } = { ...DEFAULT_PARTICLE_OPTIONS, ...options };
     
     this.el = el;
-    this.el.innerText = text;
+    this.setText(text);
     this.position = position;
     this.heading = heading;
     this.velocity = velocity;
@@ -51,6 +51,8 @@ export default class TextParticle {
   
   setText (text) {
     this.el.innerText = text;
+    let r = this.el.getBoundingClientRect();
+    this.
   }
   
   lerp (a, b, f) {

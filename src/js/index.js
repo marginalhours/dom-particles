@@ -24,13 +24,12 @@ document.querySelector('button').addEventListener('click', () => {
   // });
   t.createParticle({
     position: {x: 125, y: 10},
-    text: '-',
+    text: 'A',
     ttl: 2000,
-    velocity: { x: 10, y: 0 },
     onUpdate: (p) => {
       p.index = p.index || 0;
       let k = Math.floor(p.index / 10);
-      p.setText(['-', '\\', '|', '/'][k % 4]); 
+      p.el.style.fontSize = `${p.lerp(18, 12, p.lifeFrac)}px`;
       p.index++;
     }
   });

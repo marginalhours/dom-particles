@@ -100,13 +100,12 @@ document.querySelector('button').addEventListener('click', function () {
   // });
   t.createParticle({
     position: { x: 125, y: 10 },
-    text: '-',
+    text: 'A',
     ttl: 2000,
-    velocity: { x: 10, y: 0 },
     onUpdate: function onUpdate(p) {
       p.index = p.index || 0;
       var k = Math.floor(p.index / 10);
-      p.setText(['-', '\\', '|', '/'][k % 4]);
+      p.el.style.fontSize = p.lerp(18, 12, p.lifeFrac) + 'px';
       p.index++;
     }
   });
@@ -346,7 +345,7 @@ var TextParticle = function () {
         onUpdate = _DEFAULT_PARTICLE_OPT.onUpdate;
 
     this.el = el;
-    this.el.innerText = text;
+    this.setText(text);
     this.position = position;
     this.heading = heading;
     this.velocity = velocity;
@@ -369,6 +368,9 @@ var TextParticle = function () {
     key: 'setText',
     value: function setText(text) {
       this.el.innerText = text;
+      var r = this.el.getBoundingClientRect();
+      this.width = r.width;
+      this.height = r.height;
     }
   }, {
     key: 'lerp',
