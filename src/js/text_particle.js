@@ -11,34 +11,13 @@ const DEFAULT_PARTICLE_OPTIONS = {
 
 export default class TextParticle {
   constructor (options) {
-    let { 
-      position, 
-      velocity, 
-      acceleration, 
-      heading,
-      ttl, 
-      el, 
-      text, 
-      onCreate, 
-      onUpdate,
-      scale
-    } = { ...DEFAULT_PARTICLE_OPTIONS, ...options };
-    
-    this.el = el;
-    this.position = position;
-    this.heading = heading;
-    this.velocity = velocity;
-    this.acceleration = acceleration;
-    this.scale = scale;
+    Object.defineProperties(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options });
     
     this.elapsed = 0;
-    this.ttl = ttl;
-    
-    this.setText(text);
+    this.setText(this.text);
     this.updateTransform();
     this.el.style.opacity = 1;
-    onCreate(this);
-    this.onUpdate = onUpdate;
+    this.onCreate(this);
   }
   
   get alive () {

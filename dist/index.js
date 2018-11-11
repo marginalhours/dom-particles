@@ -327,33 +327,13 @@ var TextParticle = function () {
   function TextParticle(options) {
     _classCallCheck(this, TextParticle);
 
-    var _DEFAULT_PARTICLE_OPT = _extends({}, DEFAULT_PARTICLE_OPTIONS, options),
-        position = _DEFAULT_PARTICLE_OPT.position,
-        velocity = _DEFAULT_PARTICLE_OPT.velocity,
-        acceleration = _DEFAULT_PARTICLE_OPT.acceleration,
-        heading = _DEFAULT_PARTICLE_OPT.heading,
-        ttl = _DEFAULT_PARTICLE_OPT.ttl,
-        el = _DEFAULT_PARTICLE_OPT.el,
-        text = _DEFAULT_PARTICLE_OPT.text,
-        onCreate = _DEFAULT_PARTICLE_OPT.onCreate,
-        onUpdate = _DEFAULT_PARTICLE_OPT.onUpdate,
-        scale = _DEFAULT_PARTICLE_OPT.scale;
-
-    this.el = el;
-    this.position = position;
-    this.heading = heading;
-    this.velocity = velocity;
-    this.acceleration = acceleration;
-    this.scale = scale;
+    Object.defineProperties(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
 
     this.elapsed = 0;
-    this.ttl = ttl;
-
-    this.setText(text);
+    this.setText(this.text);
     this.updateTransform();
     this.el.style.opacity = 1;
-    onCreate(this);
-    this.onUpdate = onUpdate;
+    this.onCreate(this);
   }
 
   _createClass(TextParticle, [{
@@ -423,46 +403,34 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var DEFAULT_EMITTER_OPTIONS = {
+  emitEvery: 500,
+  getParticleTTL: function getParticleTTL() {
+    return 1000;
+  },
+  getText: function getText() {
+    return '.';
+  },
+  getVelocity: function getVelocity() {
+    return { x: 0, y: -10 };
+  },
+  getAcceleration: function getAcceleration() {
+    return { x: 0, y: 0 };
+  },
+  onCreate: function onCreate() {},
+  onUpdate: function onUpdate() {}
+
+};
+
 var TextParticleEmitter = function () {
   function TextParticleEmitter(options) {
     _classCallCheck(this, TextParticleEmitter);
 
-    var manager = options.manager,
-        emitEvery = options.emitEvery,
-        ttl = options.ttl,
-        maxEmissions = options.maxEmissions,
-        getParticleTTL = options.getParticleTTL,
-        getText = options.getText,
-        getPosition = options.getPosition,
-        getVelocity = options.getVelocity,
-        getAcceleration = options.getAcceleration,
-        onCreate = options.onCreate,
-        onUpdate = options.onUpdate;
-
-    this.manager = manager;
-    // lifecycle
-    this.ttl = ttl;
+    Object.defineProperties(this, _extends({}, DEFAULT_EMITTER_OPTIONS, { options: options }));
+    this.manager = options.manager;
     this.totalElapsed = 0;
-    this.elapsed = emitEvery;
-    this.emitEvery = emitEvery || 500;
+    this.elapsed = this.emitEvery;
     this.emitted = 0;
-    this.maxEmissions = maxEmissions;
-    this.position = position;
-    // particle creation
-    this.getParticleTTL = getParticleTTL || function () {
-      return 2000;
-    };
-    this.getText = getText || function () {
-      return '.';
-    };
-    this.getVelocity = getVelocity || function () {
-      return { x: 0, y: -10 };
-    };
-    this.getAcceleration = getAcceleration || function () {
-      return { x: 0, y: 0 };
-    };
-    this.onCreate = onCreate || function () {};
-    this.onUpdate = onUpdate || function () {};
   }
 
   _createClass(TextParticleEmitter, [{
@@ -475,7 +443,7 @@ var TextParticleEmitter = function () {
         this.emitted++;
         // emit particle
         this.manager.createParticle({
-          position: _extends({}, this.position),
+          position: this.getPosition(this),
           velocity: this.getVelocity(this),
           acceleration: this.getAcceleration(this),
           ttl: this.getParticleTTL(this),

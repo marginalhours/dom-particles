@@ -18,7 +18,6 @@ module.exports = {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '',
-    libraryTarget: 'universal'
   },
   module: {
     rules: [

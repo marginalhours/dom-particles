@@ -1,34 +1,21 @@
+const DEFAULT_EMITTER_OPTIONS = {
+  emitEvery: 500,
+  getParticleTTL: () => 1000,
+  getText: () => '.',
+  getVelocity: () => ({ x: 0, y: -10}),
+  getAcceleration: () => ({ x: 0, y: 0}),
+  onCreate: () => {},
+  onUpdate: () => {},
+
+}
+
 export default class TextParticleEmitter {
   constructor (options) {
-    const { 
-      manager,
-      emitEvery, 
-      ttl, 
-      maxEmissions,
-      getParticleTTL,
-      getText,
-      getPosition,
-      getVelocity,
-      getAcceleration,
-      onCreate,
-      onUpdate
-    } = options;
-    this.manager = manager;
-    // lifecycle
-    this.ttl = ttl;
+    Object.defineProperties(this, {...DEFAULT_EMITTER_OPTIONS, options});
+    this.manager = options.manager;
     this.totalElapsed = 0;
-    this.elapsed = emitEvery;
-    this.emitEvery = emitEvery || 500;
+    this.elapsed = this.emitEvery;
     this.emitted = 0;
-    this.maxEmissions = maxEmissions;
-    this.position = position;
-    // particle creation
-    this.getParticleTTL = getParticleTTL || (() => 2000);
-    this.getText = getText || (() => '.');
-    this.getVelocity = getVelocity || (() => ({x: 0, y: -10}));
-    this.getAcceleration = getAcceleration || (() => ({x: 0, y: 0}));
-    this.onCreate = onCreate || (() => {});
-    this.onUpdate = onUpdate || (() => {});
   }
   
   get alive () {
@@ -49,7 +36,7 @@ export default class TextParticleEmitter {
       this.emitted++;
       // emit particle
       this.manager.createParticle({
-        position: {...this.position},
+        position: this.getPosition(this),
         velocity: this.getVelocity(this),
         acceleration: this.getAcceleration(this),
         ttl: this.getParticleTTL(this),
