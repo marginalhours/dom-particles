@@ -81,20 +81,20 @@ var t = new _text_particle_manager2.default();
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     manager: undefined,
-    maxEmissions: 10,
-    emitEvery: 200,
+    maxEmissions: 50,
+    emitEvery: 10,
     getParticleTTL: function getParticleTTL() {
-      return 2000;
+      return 1000 + 1000 * Math.random();
     },
     getText: function getText() {
       return '▓';
     },
     getPosition: function getPosition() {
-      var k = 125 + 50 * (Math.random() - 0.5);
+      var k = 125 + 100 * (Math.random() - 0.5);
       return { x: k, y: 80 };
     },
     getVelocity: function getVelocity() {
-      return { x: 0, y: -10 };
+      return { x: 0, y: -20 };
     },
     onCreate: function onCreate(p) {
       p.setStyle({ fontSize: 14, color: '#aaa' });
@@ -123,10 +123,314 @@ requestAnimationFrame(loop);
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: SyntaxError: Unexpected token (6:2)\n\n  4 | \n  5 | const DEFAULT_TPM_OPTIONS = {\n> 6 |   { max: 100, preallocate: 10, tagName: 'span' }\n    |   ^\n  7 | };\n  8 | \n  9 | export default class TextParticleManager {\n");
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _text_particle = __webpack_require__(3);
+
+var _text_particle2 = _interopRequireDefault(_text_particle);
+
+var _text_particle_emitter = __webpack_require__(4);
+
+var _text_particle_emitter2 = _interopRequireDefault(_text_particle_emitter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var DEFAULT_TPM_OPTIONS = {
+  max: 100,
+  preallocate: 10,
+  tagName: 'span'
+};
+
+var TextParticleManager = function () {
+  function TextParticleManager(options) {
+    _classCallCheck(this, TextParticleManager);
+
+    Object.assign(this, _extends({}, DEFAULT_TPM_OPTIONS, options));
+
+    this._pool = [];
+    this.particles = [];
+    this.emitters = [];
+
+    this.foldElement = document.createElement('div');
+    this.foldElement.className = 'text-particle-manager-reservoir';
+    Object.assign(this.foldElement.style, { width: 0, height: 0 });
+    document.body.appendChild(this.foldElement);
+  }
+
+  _createClass(TextParticleManager, [{
+    key: 'createParticle',
+    value: function createParticle(options) {
+      if (this.particles.length < this.max) {
+        this.particles.push(new _text_particle2.default(_extends({}, options, { el: this.pop() })));
+      }
+    }
+  }, {
+    key: 'createEmitter',
+    value: function createEmitter(options) {
+      this.emitters.push(new _text_particle_emitter2.default(_extends({}, options, { manager: this })));
+    }
+  }, {
+    key: 'update',
+    value: function update(dt) {
+      var _this = this;
+
+      var f = dt / 1000;
+      this.particles = this.particles.filter(function (p) {
+        p.update(f);
+        if (p.alive) {
+          return true;
+        }
+
+        // disappear and return to pool
+        p.el.style.opacity = 0;
+        _this.push(p.el);
+        return false;
+      });
+
+      this.emitters = this.emitters.filter(function (e) {
+        e.update(f);
+        if (e.alive) {
+          return true;
+        }
+        return false;
+      });
+    }
+  }, {
+    key: 'push',
+    value: function push(el) {
+      this._pool.push(el);
+    }
+  }, {
+    key: 'pop',
+    value: function pop(el) {
+      if (this._pool.length > 0) {
+        return this._pool.pop();
+      } else {
+        return this.create();
+      }
+    }
+  }, {
+    key: 'create',
+    value: function create() {
+      var el = document.createElement(this.tagName);
+
+      Object.assign(el.style, {
+        display: 'block',
+        position: 'absolute',
+        pointerEvents: 'none',
+        transform: 'translate3d(0,0,0)',
+        opacity: 0
+      });
+
+      this.foldElement.appendChild(el);
+      return el;
+    }
+  }, {
+    key: 'allocate',
+    value: function allocate(n) {
+      if (this._pool.length < n) {
+        for (var i = this._pool.length; i < n; i++) {
+          this.push(this.create());
+        }
+      }
+    }
+  }]);
+
+  return TextParticleManager;
+}();
+
+exports.default = TextParticleManager;
+
+/***/ }),
+/* 2 */,
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var DEFAULT_PARTICLE_OPTIONS = {
+  velocity: { x: 0, y: 0 },
+  acceleration: { x: 0, y: 0 },
+  ttl: 1000,
+  text: '.',
+  onCreate: function onCreate() {},
+  onUpdate: function onUpdate() {},
+  heading: 0,
+  scale: { x: 1, y: 1 }
+};
+
+var TextParticle = function () {
+  function TextParticle(options) {
+    _classCallCheck(this, TextParticle);
+
+    Object.assign(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
+
+    this.elapsed = 0;
+    this.setText(this.text);
+    this.updateTransform();
+    this.el.style.opacity = 1;
+    this.onCreate(this);
+  }
+
+  _createClass(TextParticle, [{
+    key: 'setStyle',
+    value: function setStyle(styleObject) {
+      Object.assign(this.el.style, styleObject);
+    }
+  }, {
+    key: 'setText',
+    value: function setText(text) {
+      this.el.innerText = text;
+    }
+  }, {
+    key: 'lerp',
+    value: function lerp(a, b) {
+      return a + (b - a) * this.lifeFrac;
+    }
+  }, {
+    key: 'updateTransform',
+    value: function updateTransform() {
+      this.el.style.transform = 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
+    }
+  }, {
+    key: 'update',
+    value: function update(f) {
+      this.elapsed += f * 1000;
+      this.velocity.x += this.acceleration.x * f;
+      this.velocity.y += this.acceleration.y * f;
+      this.position.x += this.velocity.x * f;
+      this.position.y += this.velocity.y * f;
+
+      this.onUpdate(this);
+
+      this.updateTransform();
+    }
+  }, {
+    key: 'alive',
+    get: function get() {
+      return this.elapsed < this.ttl;
+    }
+  }, {
+    key: 'lifeFrac',
+    get: function get() {
+      return this.elapsed / this.ttl;
+    }
+  }]);
+
+  return TextParticle;
+}();
+
+exports.default = TextParticle;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var DEFAULT_EMITTER_OPTIONS = {
+  emitEvery: 500,
+  getParticleTTL: function getParticleTTL() {
+    return 1000;
+  },
+  getText: function getText() {
+    return '.';
+  },
+  getVelocity: function getVelocity() {
+    return { x: 0, y: -10 };
+  },
+  getAcceleration: function getAcceleration() {
+    return { x: 0, y: 0 };
+  },
+  onCreate: function onCreate() {},
+  onUpdate: function onUpdate() {}
+
+};
+
+var TextParticleEmitter = function () {
+  function TextParticleEmitter(options) {
+    _classCallCheck(this, TextParticleEmitter);
+
+    Object.assign(this, _extends({}, DEFAULT_EMITTER_OPTIONS, options));
+
+    this.manager = options.manager;
+    this.totalElapsed = 0;
+    this.elapsed = this.emitEvery;
+    this.emitted = 0;
+  }
+
+  _createClass(TextParticleEmitter, [{
+    key: 'update',
+    value: function update(f) {
+      this.elapsed += f * 1000;
+      this.totalElapsed += f * 1000;
+      if (this.elapsed > this.emitEvery) {
+        this.elapsed = 0;
+        this.emitted++;
+        // emit particle
+        this.manager.createParticle({
+          position: this.getPosition(this),
+          velocity: this.getVelocity(this),
+          acceleration: this.getAcceleration(this),
+          ttl: this.getParticleTTL(this),
+          text: this.getText(this),
+          onCreate: this.onCreate,
+          onUpdate: this.onUpdate
+        });
+      }
+    }
+  }, {
+    key: 'alive',
+    get: function get() {
+      if (this.maxEmissions && this.emitted >= this.maxEmissions) {
+        return false;
+      }
+      if (this.ttl && this.totalElapsed >= this.ttl) {
+        return false;
+      }
+      return true;
+    }
+  }]);
+
+  return TextParticleEmitter;
+}();
+
+exports.default = TextParticleEmitter;
 
 /***/ })
 /******/ ]);

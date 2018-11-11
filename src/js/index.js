@@ -5,15 +5,15 @@ let t = new TextParticleManager();
 document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     manager: this,
-    maxEmissions: 10,
-    emitEvery: 200,
-    getParticleTTL: () => 2000,
+    maxEmissions: 50,
+    emitEvery: 10,
+    getParticleTTL: () => 1000 + 1000 * Math.random(),
     getText: () => '▓',
     getPosition: () => {
-      let k = 125 + 50 * (Math.random() - 0.5);
+      let k = 125 + 100 * (Math.random() - 0.5);
       return {x: k, y: 80}
     },
-    getVelocity: () => ({x: 0, y: -10}),
+    getVelocity: () => ({x: 0, y: -20}),
     onCreate: (p) => {
      p.setStyle({ fontSize: 14, color: '#aaa' }); 
     },
