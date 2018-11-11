@@ -36,7 +36,7 @@ export default class Pool {
       opacity: 0
     });
     
-    document.body.appendChild(el);
+    this.container.appendChild(el);
     return el;
   }
   

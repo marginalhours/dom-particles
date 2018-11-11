@@ -8,8 +8,9 @@ export default class TextParticleManager {
     this.max = max;
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
-    this.foldElement.style.display = 'none';
-    this.pool = new Pool({ tagName: 'span', preallocate, parent: this.foldElement });
+    Object.assign(this.foldElement.style, { width: 0, height: 0 });
+    document.body.appendChild(this.foldElement);
+    this.pool = new Pool({ tagName: 'span', preallocate, container: this.foldElement });
     this.particles = [];
     this.emitters = [];
   }
