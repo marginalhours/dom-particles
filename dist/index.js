@@ -102,11 +102,11 @@ document.querySelector('button').addEventListener('click', function () {
     position: { x: 125, y: 10 },
     text: 'A',
     ttl: 2000,
+    onCreate: function onCreate(p) {
+      // p.setStyle({ border: '1px solid #000' }); 
+    },
     onUpdate: function onUpdate(p) {
-      p.index = p.index || 0;
-      var k = Math.floor(p.index / 10);
-      p.el.style.fontSize = p.lerp(18, 12, p.lifeFrac) + 'px';
-      p.index++;
+      p.scale = { x: p.lerp(1, 0), y: p.lerp(1, 0.5) };
     }
   });
 });
@@ -326,7 +326,8 @@ var DEFAULT_PARTICLE_OPTIONS = {
   text: '.',
   onCreate: function onCreate() {},
   onUpdate: function onUpdate() {},
-  heading: 0
+  heading: 0,
+  scale: { x: 1, y: 1 }
 };
 
 var TextParticle = function () {
@@ -342,17 +343,20 @@ var TextParticle = function () {
         el = _DEFAULT_PARTICLE_OPT.el,
         text = _DEFAULT_PARTICLE_OPT.text,
         onCreate = _DEFAULT_PARTICLE_OPT.onCreate,
-        onUpdate = _DEFAULT_PARTICLE_OPT.onUpdate;
+        onUpdate = _DEFAULT_PARTICLE_OPT.onUpdate,
+        scale = _DEFAULT_PARTICLE_OPT.scale;
 
     this.el = el;
-    this.setText(text);
     this.position = position;
     this.heading = heading;
     this.velocity = velocity;
     this.acceleration = acceleration;
+    this.scale = scale;
+
     this.elapsed = 0;
     this.ttl = ttl;
 
+    this.setText(text);
     this.updateTransform();
     this.el.style.opacity = 1;
     onCreate(this);
@@ -368,19 +372,16 @@ var TextParticle = function () {
     key: 'setText',
     value: function setText(text) {
       this.el.innerText = text;
-      var r = this.el.getBoundingClientRect();
-      this.width = r.width;
-      this.height = r.height;
     }
   }, {
     key: 'lerp',
-    value: function lerp(a, b, f) {
-      return a + (b - a) * f;
+    value: function lerp(a, b) {
+      return a + (b - a) * this.lifeFrac;
     }
   }, {
     key: 'updateTransform',
     value: function updateTransform() {
-      this.el.style.transform = 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad)';
+      this.el.style.transform = 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
     }
   }, {
     key: 'update',

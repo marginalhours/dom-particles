@@ -26,11 +26,11 @@ document.querySelector('button').addEventListener('click', () => {
     position: {x: 125, y: 10},
     text: 'A',
     ttl: 2000,
+    onCreate: (p) => {
+     // p.setStyle({ border: '1px solid #000' }); 
+    },
     onUpdate: (p) => {
-      p.index = p.index || 0;
-      let k = Math.floor(p.index / 10);
-      p.el.style.fontSize = `${p.lerp(18, 12, p.lifeFrac)}px`;
-      p.index++;
+      p.scale = { x: p.lerp(1, 0), y: p.lerp(1, 0.5) }
     }
   });
 });

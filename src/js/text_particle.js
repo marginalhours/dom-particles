@@ -5,7 +5,8 @@ const DEFAULT_PARTICLE_OPTIONS = {
   text: '.',
   onCreate: () => {},
   onUpdate: () => {},
-  heading: 0
+  heading: 0,
+  scale: { x: 1, y: 1 }
 }
 
 export default class TextParticle {
@@ -19,18 +20,21 @@ export default class TextParticle {
       el, 
       text, 
       onCreate, 
-      onUpdate 
+      onUpdate,
+      scale
     } = { ...DEFAULT_PARTICLE_OPTIONS, ...options };
     
     this.el = el;
-    this.setText(text);
     this.position = position;
     this.heading = heading;
     this.velocity = velocity;
     this.acceleration = acceleration;
+    this.scale = scale;
+    
     this.elapsed = 0;
     this.ttl = ttl;
     
+    this.setText(text);
     this.updateTransform();
     this.el.style.opacity = 1;
     onCreate(this);
@@ -51,16 +55,14 @@ export default class TextParticle {
   
   setText (text) {
     this.el.innerText = text;
-    let r = this.el.getBoundingClientRect();
-    this.
   }
   
-  lerp (a, b, f) {
-    return a + ((b - a) * f);  
+  lerp (a, b) {
+    return a + ((b - a) * this.lifeFrac);  
   }
   
   updateTransform () {
-    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad)`;
+    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
   }
     
   update (f) {
