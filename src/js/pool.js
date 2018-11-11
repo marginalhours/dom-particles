@@ -13,7 +13,7 @@ export default class Pool {
     if (el.tagName.toLowerCase() === this.tagName){
       this._pool.push(el);
     } else {
-      throw `${el.tagName} is not of type ${this.tagName}!`
+      throw `${el.tagName} is not a ${this.tagName}`
     }
   }
   

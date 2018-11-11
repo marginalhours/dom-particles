@@ -1,1 +1,1 @@
-Basic webpack/babel/scss setup for quick iteration of webapps
+Unicode (or just string!) particle effects for the DOM
