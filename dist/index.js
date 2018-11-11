@@ -99,7 +99,16 @@ document.querySelector('button').addEventListener('click', function () {
   //   }
   // });
   t.createParticle({
-    position: { x: 125, y: 10 }
+    position: { x: 125, y: 10 },
+    text: '-',
+    ttl: 2000,
+    velocity: { x: 10, y: 0 },
+    onUpdate: function onUpdate(p) {
+      p.index = p.index || 0;
+      var k = Math.floor(p.index / 10);
+      p.setText(['-', '\\', '|', '/'][k % 4]);
+      p.index++;
+    }
   });
 });
 
@@ -325,16 +334,16 @@ var TextParticle = function () {
   function TextParticle(options) {
     _classCallCheck(this, TextParticle);
 
-    var _options$DEFAULT_PART = _extends({}, options, DEFAULT_PARTICLE_OPTIONS),
-        position = _options$DEFAULT_PART.position,
-        velocity = _options$DEFAULT_PART.velocity,
-        acceleration = _options$DEFAULT_PART.acceleration,
-        heading = _options$DEFAULT_PART.heading,
-        ttl = _options$DEFAULT_PART.ttl,
-        el = _options$DEFAULT_PART.el,
-        text = _options$DEFAULT_PART.text,
-        onCreate = _options$DEFAULT_PART.onCreate,
-        onUpdate = _options$DEFAULT_PART.onUpdate;
+    var _DEFAULT_PARTICLE_OPT = _extends({}, DEFAULT_PARTICLE_OPTIONS, options),
+        position = _DEFAULT_PARTICLE_OPT.position,
+        velocity = _DEFAULT_PARTICLE_OPT.velocity,
+        acceleration = _DEFAULT_PARTICLE_OPT.acceleration,
+        heading = _DEFAULT_PARTICLE_OPT.heading,
+        ttl = _DEFAULT_PARTICLE_OPT.ttl,
+        el = _DEFAULT_PARTICLE_OPT.el,
+        text = _DEFAULT_PARTICLE_OPT.text,
+        onCreate = _DEFAULT_PARTICLE_OPT.onCreate,
+        onUpdate = _DEFAULT_PARTICLE_OPT.onUpdate;
 
     this.el = el;
     this.el.innerText = text;

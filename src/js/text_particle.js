@@ -20,7 +20,7 @@ export default class TextParticle {
       text, 
       onCreate, 
       onUpdate 
-    } = {...options, ...DEFAULT_PARTICLE_OPTIONS};
+    } = { ...DEFAULT_PARTICLE_OPTIONS, ...options };
     
     this.el = el;
     this.el.innerText = text;
