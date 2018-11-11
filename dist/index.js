@@ -79,32 +79,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var t = new _text_particle_manager2.default();
 
 document.querySelector('button').addEventListener('click', function () {
-  t.createEmitter({
-    manager: undefined,
-    position: { x: 125, y: 80 },
-    maxEmissions: 1,
-    emitEvery: 200,
-    getParticleTTL: function getParticleTTL() {
-      return 500;
-    },
-    getVelocity: function getVelocity() {
-      return { x: 0, y: -100 };
-    },
-    getText: function getText(emitter) {
-      return 'HELLO';
-    },
-    onCreate: function onCreate(p) {
-      p.setStyle({
-        fontSize: '18px',
-        fontFamily: 'monospace',
-        fontWeight: 'bold',
-        color: '#fff',
-        textShadow: '1px 1px 1px #f00'
-      });
-    },
-    onUpdate: function onUpdate(p) {
-      p.el.style.fontSize = p.lerp(18, 1, p.lifeFrac) + 'px';
-    }
+  // t.createEmitter({
+  //   manager: this,
+  //   position: { x: 125, y: 80 },
+  //   maxEmissions: 1,
+  //   emitEvery: 200,
+  //   getParticleTTL: () => 500,
+  //   getVelocity: () => ({x: 0, y: -100}),
+  //   getText: (emitter) => '+1',
+  //   onCreate: (p) => {
+  //     p.setStyle({
+  //       fontSize: '18px',
+  //       fontFamily: 'monospace',
+  //       fontWeight: 'bold'
+  //     });
+  //   },
+  //   onUpdate: (p) => {
+  //     // p.el.style.fontSize = `${p.lerp(18, 1, p.lifeFrac)}px`;
+  //   }
+  // });
+  t.createParticle({
+    position: { x: 125, y: 10 }
   });
 });
 
@@ -310,57 +305,74 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var DEFAULT_PARTICLE_OPTIONS = {
+  velocity: { x: 0, y: 0 },
+  acceleration: { x: 0, y: 0 },
+  ttl: 1000,
+  text: '.',
+  onCreate: function onCreate() {},
+  onUpdate: function onUpdate() {},
+  heading: 0
+};
 
 var TextParticle = function () {
   function TextParticle(options) {
     _classCallCheck(this, TextParticle);
 
-    var position = options.position,
-        velocity = options.velocity,
-        acceleration = options.acceleration,
-        ttl = options.ttl,
-        el = options.el,
-        text = options.text,
-        onCreate = options.onCreate,
-        onUpdate = options.onUpdate;
-
+    var _options$DEFAULT_PART = _extends({}, options, DEFAULT_PARTICLE_OPTIONS),
+        position = _options$DEFAULT_PART.position,
+        velocity = _options$DEFAULT_PART.velocity,
+        acceleration = _options$DEFAULT_PART.acceleration,
+        heading = _options$DEFAULT_PART.heading,
+        ttl = _options$DEFAULT_PART.ttl,
+        el = _options$DEFAULT_PART.el,
+        text = _options$DEFAULT_PART.text,
+        onCreate = _options$DEFAULT_PART.onCreate,
+        onUpdate = _options$DEFAULT_PART.onUpdate;
 
     this.el = el;
     this.el.innerText = text;
     this.position = position;
-    this.heading = 0;
-    this.el.style.transform = "translate3d(" + this.position.x + "px, " + this.position.y + "px, 0) rotateZ(" + this.heading + "rad)";
-
-    this.velocity = velocity || { x: 0, y: 0 };
-    this.acceleration = acceleration || { x: 0, y: 0 };
+    this.heading = heading;
+    this.velocity = velocity;
+    this.acceleration = acceleration;
     this.elapsed = 0;
     this.ttl = ttl;
-    // lifecycle functions
+
+    this.updateTransform();
     this.el.style.opacity = 1;
     onCreate(this);
-    this.onUpdate = onUpdate || function () {};
+    this.onUpdate = onUpdate;
   }
 
   _createClass(TextParticle, [{
-    key: "setStyle",
+    key: 'setStyle',
     value: function setStyle(styleObject) {
       Object.assign(this.el.style, styleObject);
     }
   }, {
-    key: "setText",
+    key: 'setText',
     value: function setText(text) {
       this.el.innerText = text;
     }
   }, {
-    key: "lerp",
+    key: 'lerp',
     value: function lerp(a, b, f) {
       return a + (b - a) * f;
     }
   }, {
-    key: "update",
+    key: 'updateTransform',
+    value: function updateTransform() {
+      this.el.style.transform = 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad)';
+    }
+  }, {
+    key: 'update',
     value: function update(f) {
       this.elapsed += f * 1000;
       this.velocity.x += this.acceleration.x * f;
@@ -370,15 +382,15 @@ var TextParticle = function () {
 
       this.onUpdate(this);
 
-      this.el.style.transform = "translate3d(" + this.position.x + "px, " + this.position.y + "px, 0) rotateZ(" + this.heading + "rad)";
+      this.updateTransform();
     }
   }, {
-    key: "alive",
+    key: 'alive',
     get: function get() {
       return this.elapsed < this.ttl;
     }
   }, {
-    key: "lifeFrac",
+    key: 'lifeFrac',
     get: function get() {
       return this.elapsed / this.ttl;
     }

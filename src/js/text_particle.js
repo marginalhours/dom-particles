@@ -1,30 +1,40 @@
+const DEFAULT_PARTICLE_OPTIONS = {
+  velocity: { x: 0, y: 0}, 
+  acceleration: { x: 0, y: 0 },
+  ttl: 1000,
+  text: '.',
+  onCreate: () => {},
+  onUpdate: () => {},
+  heading: 0
+}
+
 export default class TextParticle {
   constructor (options) {
     let { 
       position, 
       velocity, 
       acceleration, 
+      heading,
       ttl, 
       el, 
       text, 
       onCreate, 
       onUpdate 
-    } = options;
+    } = {...options, ...DEFAULT_PARTICLE_OPTIONS};
     
     this.el = el;
     this.el.innerText = text;
     this.position = position;
-    this.heading = 0;
-    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad)`;
-    
-    this.velocity = velocity || { x : 0, y: 0 };
-    this.acceleration = acceleration || { x: 0, y: 0 };
+    this.heading = heading;
+    this.velocity = velocity;
+    this.acceleration = acceleration;
     this.elapsed = 0;
     this.ttl = ttl;
-    // lifecycle functions
+    
+    this.updateTransform();
     this.el.style.opacity = 1;
     onCreate(this);
-    this.onUpdate = onUpdate || (() => {});
+    this.onUpdate = onUpdate;
   }
   
   get alive () {
@@ -46,6 +56,10 @@ export default class TextParticle {
   lerp (a, b, f) {
     return a + ((b - a) * f);  
   }
+  
+  updateTransform () {
+    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad)`;
+  }
     
   update (f) {
     this.elapsed += f * 1000;
@@ -56,6 +70,6 @@ export default class TextParticle {
     
     this.onUpdate(this);
     
-    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad)`;
+    this.updateTransform();
   }
 }
