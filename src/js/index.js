@@ -1,6 +1,28 @@
-import TextParticleEmitter from './text_particle_emitter';
+import TextParticleManager from './text_particle_manager';
 
-let t = 
+let t = new TextParticleManager();
+
+document.querySelector('button').addEventListener('click', () => {
+  t.createEmitter({
+    manager: this,
+    position: { x: 125, y: 80 },
+    maxEmissions: 1,
+    emitEvery: 200,
+    getParticleTTL: () => 500,
+    getVelocity: () => ({x: 0, y: -100}),
+    getText: (emitter) => '-1',
+    onCreate: (p) => {
+      p.el.style.fontSize = '18px';
+      p.el.style.fontFamily = 'monospace';
+      p.el.style.fontWeight = 'bold';
+      p.el.style.color = '#fff';
+      p.el.style.textShadow = '1px 1px 1px #f00';
+    },
+    onUpdate: (p) => {
+      p.el.style.fontSize = `${p.lerp(18, 1, p.lifeFrac)}px`;
+    }
+  });
+});
 
 let render = (dt) => {
   t.update(dt);

@@ -4,9 +4,9 @@ import TextParticleEmitter from './text_particle_emitter';
 
 export default class TextParticleManager {
   constructor (options) {
-    let { max, preallocate } = options;
+    let { max, preallocate } = options || { max: 100, preallocate: 100 };
     this.max = max;
-    this.pool = new Pool({ tagName: 'span', className: 'particle' , preallocate });
+    this.pool = new Pool({ tagName: 'span', preallocate });
     this.particles = [];
     this.emitters = [];
   }

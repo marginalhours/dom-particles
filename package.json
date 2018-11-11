@@ -4,8 +4,9 @@
   "description": "a webpack template for glitch",
   "main": "server.js",
   "scripts": {
-    "start": "npm run build && node server.js",
-    "build": "webpack"
+    "start": "bash start.sh",
+    "serve": "node server.js",
+    "build": "webpack --watch"
   },
   "dependencies": {
     "babel-core": "^6.26.3",

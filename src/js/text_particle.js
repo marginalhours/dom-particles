@@ -38,6 +38,10 @@ export default class TextParticle {
   setText (text) {
     this.el.innerText = text;
   }
+  
+  lerp (a, b, f) {
+    return a + ((b - a) * f);  
+  }
     
   update (f) {
     this.elapsed += f * 1000;
