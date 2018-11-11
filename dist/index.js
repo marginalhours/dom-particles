@@ -91,14 +91,16 @@ document.querySelector('button').addEventListener('click', function () {
       return { x: 0, y: -100 };
     },
     getText: function getText(emitter) {
-      return '-1';
+      return 'HELLO';
     },
     onCreate: function onCreate(p) {
-      p.el.style.fontSize = '18px';
-      p.el.style.fontFamily = 'monospace';
-      p.el.style.fontWeight = 'bold';
-      p.el.style.color = '#fff';
-      p.el.style.textShadow = '1px 1px 1px #f00';
+      p.setStyle({
+        fontSize: '18px',
+        fontFamily: 'monospace',
+        fontWeight: 'bold',
+        color: '#fff',
+        textShadow: '1px 1px 1px #f00'
+      });
     },
     onUpdate: function onUpdate(p) {
       p.el.style.fontSize = p.lerp(18, 1, p.lifeFrac) + 'px';
@@ -162,7 +164,10 @@ var TextParticleManager = function () {
         preallocate = _ref.preallocate;
 
     this.max = max;
-    this.pool = new _pool2.default({ tagName: 'span', preallocate: preallocate });
+    this.foldElement = document.createElement('div');
+    this.foldElement.className = 'text-particle-manager-reservoir';
+    this.foldElement.style.display = 'none';
+    this.pool = new _pool2.default({ tagName: 'span', preallocate: preallocate, parent: this.foldElement });
     this.particles = [];
     this.emitters = [];
   }
@@ -232,10 +237,12 @@ var Pool = function () {
     _classCallCheck(this, Pool);
 
     var tagName = options.tagName,
-        preallocate = options.preallocate;
+        preallocate = options.preallocate,
+        container = options.container;
 
 
     this.tagName = tagName.toLowerCase();
+    this.container = container;
 
     this._pool = [];
     this.allocate(preallocate || 10);
@@ -263,13 +270,14 @@ var Pool = function () {
     key: 'create',
     value: function create() {
       var el = document.createElement(this.tagName);
-      el.className = this.className;
 
-      el.style.display = 'block';
-      el.style.position = 'absolute';
-      el.style.pointerEvents = 'none';
-      el.style.transform = 'translate3d(0, 0, 0)';
-      el.style.opacity = 0;
+      Object.assign(el.style, {
+        display: 'block',
+        position: 'absolute',
+        pointerEvents: 'none',
+        transform: 'translate3d(0,0,0)',
+        opacity: 0
+      });
 
       document.body.appendChild(el);
       return el;
@@ -336,6 +344,11 @@ var TextParticle = function () {
   }
 
   _createClass(TextParticle, [{
+    key: "setStyle",
+    value: function setStyle(styleObject) {
+      Object.assign(this.el.style, styleObject);
+    }
+  }, {
     key: "setText",
     value: function setText(text) {
       this.el.innerText = text;

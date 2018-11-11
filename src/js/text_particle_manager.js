@@ -6,7 +6,10 @@ export default class TextParticleManager {
   constructor (options) {
     let { max, preallocate } = options || { max: 100, preallocate: 100 };
     this.max = max;
-    this.pool = new Pool({ tagName: 'span', preallocate });
+    this.foldElement = document.createElement('div');
+    this.foldElement.className = 'text-particle-manager-reservoir';
+    this.foldElement.style.display = 'none';
+    this.pool = new Pool({ tagName: 'span', preallocate, parent: this.foldElement });
     this.particles = [];
     this.emitters = [];
   }

@@ -1,8 +1,9 @@
 export default class Pool {
   constructor (options) {
-    const { tagName, preallocate } = options;
+    const { tagName, preallocate, container } = options;
     
     this.tagName = tagName.toLowerCase();
+    this.container = container;
     
     this._pool = [];
     this.allocate(preallocate || 10);
@@ -26,13 +27,14 @@ export default class Pool {
   
   create () {
     let el = document.createElement(this.tagName);
-    el.className = this.className;
     
-    el.style.display = 'block';
-    el.style.position = 'absolute';
-    el.style.pointerEvents = 'none';
-    el.style.transform = 'translate3d(0, 0, 0)';
-    el.style.opacity = 0;
+    Object.assign(el.style, { 
+      display: 'block', 
+      position: 'absolute', 
+      pointerEvents: 'none', 
+      transform: 'translate3d(0,0,0)',
+      opacity: 0
+    });
     
     document.body.appendChild(el);
     return el;

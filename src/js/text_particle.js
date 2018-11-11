@@ -35,6 +35,10 @@ export default class TextParticle {
     return this.elapsed / this.ttl;
   }
   
+  setStyle(styleObject) {
+    Object.assign(this.el.style, styleObject);  
+  }
+  
   setText (text) {
     this.el.innerText = text;
   }
