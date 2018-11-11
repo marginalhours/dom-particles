@@ -84,19 +84,20 @@ document.querySelector('button').addEventListener('click', function () {
     maxEmissions: 10,
     emitEvery: 200,
     getParticleTTL: function getParticleTTL() {
-      return 1000;
+      return 2000;
     },
-    getText: function getText(emitter) {
+    getText: function getText() {
       return '▓';
     },
     getPosition: function getPosition() {
-      return { x: 125, y: 80 };
+      var k = 125 + 50 * (Math.random() - 0.5);
+      return { x: k, y: 80 };
     },
     getVelocity: function getVelocity() {
       return { x: 0, y: -10 };
     },
     onCreate: function onCreate(p) {
-      p.setStyle({ fontSize: 14 });
+      p.setStyle({ fontSize: 14, color: '#aaa' });
     },
     onUpdate: function onUpdate(p) {
       p.setText(['░', '▒', '▓'][Math.floor(p.lerp(3, 0))]);
@@ -155,7 +156,7 @@ var TextParticleManager = function () {
   function TextParticleManager(options) {
     _classCallCheck(this, TextParticleManager);
 
-    var _ref = options || { max: 100, preallocate: 100 },
+    var _ref = options || { max: 100, preallocate: 10 },
         max = _ref.max,
         preallocate = _ref.preallocate;
 
@@ -327,7 +328,7 @@ var TextParticle = function () {
   function TextParticle(options) {
     _classCallCheck(this, TextParticle);
 
-    Object.defineProperties(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
+    Object.assign(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
 
     this.elapsed = 0;
     this.setText(this.text);
@@ -426,7 +427,8 @@ var TextParticleEmitter = function () {
   function TextParticleEmitter(options) {
     _classCallCheck(this, TextParticleEmitter);
 
-    Object.defineProperties(this, _extends({}, DEFAULT_EMITTER_OPTIONS, { options: options }));
+    Object.assign(this, _extends({}, DEFAULT_EMITTER_OPTIONS, options));
+
     this.manager = options.manager;
     this.totalElapsed = 0;
     this.elapsed = this.emitEvery;

@@ -11,7 +11,8 @@ const DEFAULT_EMITTER_OPTIONS = {
 
 export default class TextParticleEmitter {
   constructor (options) {
-    Object.defineProperties(this, {...DEFAULT_EMITTER_OPTIONS, options});
+    Object.assign(this, {...DEFAULT_EMITTER_OPTIONS, ...options});
+    
     this.manager = options.manager;
     this.totalElapsed = 0;
     this.elapsed = this.emitEvery;

@@ -4,7 +4,7 @@ import TextParticleEmitter from './text_particle_emitter';
 
 export default class TextParticleManager {
   constructor (options) {
-    let { max, preallocate } = options || { max: 100, preallocate: 100 };
+    let { max, preallocate } = options || { max: 100, preallocate: 10 };
     this.max = max;
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';

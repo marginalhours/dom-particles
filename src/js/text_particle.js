@@ -11,7 +11,7 @@ const DEFAULT_PARTICLE_OPTIONS = {
 
 export default class TextParticle {
   constructor (options) {
-    Object.defineProperties(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options });
+    Object.assign(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options });
     
     this.elapsed = 0;
     this.setText(this.text);

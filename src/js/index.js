@@ -7,12 +7,15 @@ document.querySelector('button').addEventListener('click', () => {
     manager: this,
     maxEmissions: 10,
     emitEvery: 200,
-    getParticleTTL: () => 1000,
-    getText: (emitter) => '▓',
-    getPosition: () => ({x: 125, y: 80}),
+    getParticleTTL: () => 2000,
+    getText: () => '▓',
+    getPosition: () => {
+      let k = 125 + 50 * (Math.random() - 0.5);
+      return {x: k, y: 80}
+    },
     getVelocity: () => ({x: 0, y: -10}),
     onCreate: (p) => {
-     p.setStyle({ fontSize: 14 }); 
+     p.setStyle({ fontSize: 14, color: '#aaa' }); 
     },
     onUpdate: (p) => {
       p.setText(['░', '▒' ,'▓'][Math.floor(p.lerp(3, 0))]);
