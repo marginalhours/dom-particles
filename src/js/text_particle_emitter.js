@@ -2,12 +2,12 @@ export default class TextParticleEmitter {
   constructor (options) {
     const { 
       manager,
-      position,
       emitEvery, 
       ttl, 
       maxEmissions,
       getParticleTTL,
       getText,
+      getPosition,
       getVelocity,
       getAcceleration,
       onCreate,

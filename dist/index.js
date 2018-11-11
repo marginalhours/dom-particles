@@ -79,34 +79,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var t = new _text_particle_manager2.default();
 
 document.querySelector('button').addEventListener('click', function () {
-  // t.createEmitter({
-  //   manager: this,
-  //   position: { x: 125, y: 80 },
-  //   maxEmissions: 1,
-  //   emitEvery: 200,
-  //   getParticleTTL: () => 500,
-  //   getVelocity: () => ({x: 0, y: -100}),
-  //   getText: (emitter) => '+1',
-  //   onCreate: (p) => {
-  //     p.setStyle({
-  //       fontSize: '18px',
-  //       fontFamily: 'monospace',
-  //       fontWeight: 'bold'
-  //     });
-  //   },
-  //   onUpdate: (p) => {
-  //     // p.el.style.fontSize = `${p.lerp(18, 1, p.lifeFrac)}px`;
-  //   }
-  // });
-  t.createParticle({
-    position: { x: 125, y: 10 },
-    text: 'A',
-    ttl: 2000,
+  t.createEmitter({
+    manager: undefined,
+    maxEmissions: 10,
+    emitEvery: 200,
+    getParticleTTL: function getParticleTTL() {
+      return 1000;
+    },
+    getText: function getText(emitter) {
+      return '▓';
+    },
+    getPosition: function getPosition() {
+      return { x: 125, y: 80 };
+    },
+    getVelocity: function getVelocity() {
+      return { x: 0, y: -10 };
+    },
     onCreate: function onCreate(p) {
-      // p.setStyle({ border: '1px solid #000' }); 
+      p.setStyle({ fontSize: 14 });
     },
     onUpdate: function onUpdate(p) {
-      p.scale = { x: p.lerp(1, 0), y: p.lerp(1, 0.5) };
+      p.setText(['░', '▒', '▓'][Math.floor(p.lerp(3, 0))]);
     }
   });
 });
@@ -435,12 +428,12 @@ var TextParticleEmitter = function () {
     _classCallCheck(this, TextParticleEmitter);
 
     var manager = options.manager,
-        position = options.position,
         emitEvery = options.emitEvery,
         ttl = options.ttl,
         maxEmissions = options.maxEmissions,
         getParticleTTL = options.getParticleTTL,
         getText = options.getText,
+        getPosition = options.getPosition,
         getVelocity = options.getVelocity,
         getAcceleration = options.getAcceleration,
         onCreate = options.onCreate,
