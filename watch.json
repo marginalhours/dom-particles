@@ -1,0 +1,14 @@
+{
+  "install": {
+    "include": [
+      "^package\\.json$",
+      "^\\.env$"
+    ]
+  },
+  "restart": {
+    "include": [
+      "^.trigger-rebuild$"
+    ]
+  },
+  "throttle": 100
+}
