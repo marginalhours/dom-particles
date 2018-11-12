@@ -136,11 +136,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _text_particle = __webpack_require__(3);
+var _text_particle = __webpack_require__(2);
 
 var _text_particle2 = _interopRequireDefault(_text_particle);
 
-var _text_particle_emitter = __webpack_require__(4);
+var _text_particle_emitter = __webpack_require__(3);
 
 var _text_particle_emitter2 = _interopRequireDefault(_text_particle_emitter);
 
@@ -255,8 +255,7 @@ var TextParticleManager = function () {
 exports.default = TextParticleManager;
 
 /***/ }),
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -347,7 +346,7 @@ var TextParticle = function () {
 exports.default = TextParticle;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
