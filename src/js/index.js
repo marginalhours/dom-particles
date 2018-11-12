@@ -2,13 +2,18 @@ import TextParticleManager from './text_particle_manager';
 
 let t = new TextParticleManager();
 
+let p = document.querySelector('p');
+
 document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     manager: this,
     maxEmissions: 50,
     emitEvery: 10,
     getParticleTTL: () => 1000 + 1000 * Math.random(),
-    getText: () => '▓',
+    getText: () => {
+      let k = p.innerText[0];
+      let 
+    },
     getPosition: () => {
       let k = 125 + 100 * (Math.random() - 0.5);
       return {x: k, y: 80}
