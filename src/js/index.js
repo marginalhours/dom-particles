@@ -7,23 +7,28 @@ let p = document.querySelector('p');
 document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     manager: this,
-    maxEmissions: 50,
+    maxEmissions: 200,
     emitEvery: 10,
-    getParticleTTL: () => 1000 + 1000 * Math.random(),
+    getParticleTTL: () => 2000 + 1000 * Math.random(),
     getText: () => {
-      let k = p.innerText[0];
-      let 
+      let k = p.innerText[p.innerText.length / 2];
+      p.innerText = p.innerText.slice(0, p.innerText.length / 2) + p.innerText.slice(p.innerText.length / 2 + 1);
+      return k;
     },
     getPosition: () => {
-      let k = 125 + 100 * (Math.random() - 0.5);
-      return {x: k, y: 80}
+      return { x: 100, y: 90}
     },
-    getVelocity: () => ({x: 0, y: -20}),
+    getVelocity: () => {
+      let k = 50 + 50 * Math.random();  
+      let theta = (3/2) * Math.PI + ((1/6) * Math.PI * (Math.random() - 0.5));
+      return {x: k * Math.cos(theta), y: k * Math.sin(theta)};
+    },
+    getAcceleration: () => ({x: 0, y: 50}),
     onCreate: (p) => {
-     p.setStyle({ fontSize: 14, color: '#aaa' }); 
+     p.setStyle({ fontSize: 14, color: '#333' }); 
     },
     onUpdate: (p) => {
-      p.setText(['░', '▒' ,'▓'][Math.floor(p.lerp(3, 0))]);
+      p.setStyle({ opacity: p.lerp(1, 0)});
     }
   });
 });
