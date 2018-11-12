@@ -83,22 +83,22 @@ var p = document.querySelector('p');
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     manager: undefined,
-    maxEmissions: 200,
+    maxEmissions: p.innerText.length,
     emitEvery: 10,
     getParticleTTL: function getParticleTTL() {
       return 2000 + 1000 * Math.random();
     },
     getText: function getText() {
-      var k = p.innerText[p.innerText.length / 2];
-      p.innerText = p.innerText.slice(0, p.innerText.length / 2) + p.innerText.slice(p.innerText.length / 2 + 1);
+      var k = p.innerText[0];
+      p.innerText = p.innerText.slice(1);
       return k;
     },
     getPosition: function getPosition() {
-      return { x: 100, y: 90 };
+      return { x: 110, y: 90 };
     },
     getVelocity: function getVelocity() {
       var k = 50 + 50 * Math.random();
-      var theta = 3 / 2 * Math.PI + 1 / 6 * Math.PI * (Math.random() - 0.5);
+      var theta = 2 / 2 * Math.PI + 2 / 6 * Math.PI * (Math.random() - 0.5);
       return { x: k * Math.cos(theta), y: k * Math.sin(theta) };
     },
     getAcceleration: function getAcceleration() {
