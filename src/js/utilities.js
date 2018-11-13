@@ -2,8 +2,8 @@ export const colourFromRGBA = (r, g, b, a) => `rgba(${r}, ${g}, ${b}, ${a || 1.0
 
 export const lerp = (a, b, frac) => a + ((b - a) * frac);
 
-export const rgbaToNumbers = (rgba) => {
-  if   
+export const rgbToNumbers = (rgba) => {
+  
 }
 
 export const hexToNumbers = (hex) => {
