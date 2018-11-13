@@ -52,6 +52,10 @@ export default class TextParticle {
     return this.lerp(array[idx], array[nextIdx]);
   }
   
+  colourFromRGBA(r, g, b, a){
+    return `rgba(${r}, ${g}, ${b}, ${a || 1.0}`  
+  }
+  
   updateTransform () {
     this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
   }

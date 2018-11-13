@@ -34,9 +34,13 @@ document.querySelector('button').addEventListener('click', () => {
       let k = 50 + 50 * Math.random();
       return { x: k * Math.cos(h), y: k * Math.sin(h) }
     },
-    getParticleStyle: () => { fontSize: 14, color: '#fff', width: '12px' }),
+    getParticleStyle: () => ({ fontSize: 14, color: '#fff', width: '12px' }),
     onParticleUpdate: (p) => {
-      p.setStyle({ opacity: p.arrayLerp([1, 0, 1, 0, 1, 0, 1, 0])});
+      p.setStyle({ color: p.colourFromRGBA(
+                                p.arrayLerp([254, 254, 255]),
+                                p.arrayLerp([254, 254, 253]),
+                                p.arrayLerp([254, 200, 148]))
+        });
       if (p.frameNumber % 10 === 0){
         p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
       }

@@ -57,6 +57,7 @@ export default class TextParticleEmitter {
         acceleration: this.getParticleAcceleration(this),
         ttl: this.getParticleTTL(this),
         text: this.getParticleText(this),
+        style: this.getParticleStyle(this),
         onCreate: this.onParticleCreate,
         onUpdate: this.onParticleUpdate
       });

@@ -1,4 +1,3 @@
-
 import TextParticle from './text_particle';
 import TextParticleEmitter from './text_particle_emitter';
 
