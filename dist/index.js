@@ -78,31 +78,38 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var t = new _text_particle_manager2.default();
 
+var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
+var GRAVITY = 0.01;
+
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     manager: undefined,
     maxEmissions: 500,
     emitEvery: 10,
     getParticleTTL: function getParticleTTL() {
-      return 2000 + 1000 * Math.random();
+      return 60000 + 1000 * Math.random();
     },
     getText: function getText() {
       return ['#', '!', ',', '.', '$', '%'][Math.floor(6 * Math.random())];
     },
     getPosition: function getPosition() {
-      return { x: 30, y: document.body.clientHeight / 2 };
+      return { x: 100, y: document.body.clientHeight / 2 };
     },
     getVelocity: function getVelocity() {
-      var k = 50 + 50 * Math.random();
-      var theta = 2 / 6 * Math.PI * (Math.random() - 0.5);
+      var k = 150 + 50 * Math.random();
+      var theta = 1 / 6 * Math.PI * (Math.random() - 0.5);
       return { x: k * Math.cos(theta), y: k * Math.sin(theta) };
     },
     // getAcceleration: () => ({x: 0, y: 50}),
     onCreate: function onCreate(p) {
-      p.setStyle({ fontSize: 14, color: '#fff', width: '12px', border: '1px solid #eee' });
+      p.setStyle({ fontSize: 14, color: '#aaa', width: '12px' });
     },
     onUpdate: function onUpdate(p) {
       // p.setStyle({ opacity: p.lerp(1, 0)});
+      var h = Math.atan2(c.y - p.position.y, c.x - p.position.x);
+      var k = Math.sqrt((c.x - p.position.x) * (c.x - p.position.x) + (c.y - p.position.y) * (c.y - p.position.y));
+
+      p.acceleration = { x: -GRAVITY * k * Math.cos(h), y: -GRAVITY * k * Math.sin(h) };
     }
   });
 });
