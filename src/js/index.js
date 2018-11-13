@@ -28,18 +28,15 @@ document.querySelector('button').addEventListener('click', () => {
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
     emitEvery: 10,
     getParticleTTL: () => 4000 + 1000 * Math.random(),
-    getParticleVelocity: (emitter) => {
-      let k = 150 + 50 * Math.random();  
-      let h = Math.atan2(c.y - emitter.position.y, c.x - emitter.position.x);
-      h += (1/12) * Math.PI * (Math.random() - 0.5);
-      return {x: k * Math.cos(h), y: k * Math.sin(h)};
+    getParticleVelocity: () => {
+      let h = (3/2) * Math.PI;
+      h += (1/6) * Math.PI * (Math.random() - 0.5);
+      let k = 50 + 50 * Math.random();
+      return { x: k * Math.cos(h), y: k * Math.sin(h) }
     },
-    getParticleText: () => ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())],
-    onParticleCreate: (p) => {
-     p.setStyle({ fontSize: 14, color: '#fff', width: '12px' }); 
-    },
+    getParticleStyle: () => { fontSize: 14, color: '#fff', width: '12px' }),
     onParticleUpdate: (p) => {
-      p.setStyle({ opacity: p.lerp(1, 0)});
+      p.setStyle({ opacity: p.arrayLerp([1, 0, 1, 0, 1, 0, 1, 0])});
       if (p.frameNumber % 10 === 0){
         p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
       }

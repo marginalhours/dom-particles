@@ -3,6 +3,7 @@ const DEFAULT_PARTICLE_OPTIONS = {
   acceleration: { x: 0, y: 0 },
   ttl: 1000,
   text: '.',
+  style: {},
   onCreate: () => {},
   onUpdate: () => {},
   heading: 0,
@@ -11,10 +12,11 @@ const DEFAULT_PARTICLE_OPTIONS = {
 
 export default class TextParticle {
   constructor (options) {
-    Object.assign(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options });
+    Object.assign(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options});
     
     this.elapsed = 0;
     this.setText(this.text);
+    this.setStyle(this.style);
     this.updateTransform();
     this.el.style.opacity = 1;
     this.frameNumber = 0;
@@ -41,11 +43,13 @@ export default class TextParticle {
     return a + ((b - a) * this.lifeFrac);  
   }
   
-  colourWarp(colours){
-      let frac = 1 / colours.length;
-      let idx = this.lifeFrac / frac;
+  arrayLerp(array, cycle) {
+    cycle = cycle || false;
+    let idxFrac = 1 / array.length;
+    let idx = Math.round(this.lifeFrac / idxFrac);
+    let nextIdx = (idx === array.length - 1) ? (cycle ? 0 : idx) : idx + 1;
     
-      
+    return this.lerp(array[idx], array[nextIdx]);
   }
   
   updateTransform () {

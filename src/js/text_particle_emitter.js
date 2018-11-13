@@ -10,6 +10,7 @@ const DEFAULT_EMITTER_OPTIONS = {
   getParticlePosition: (emitter) => ({...emitter.position}),
   getParticleVelocity: () => ({ x: 0, y: -10}),
   getParticleAcceleration: () => ({ x: 0, y: 0}),
+  getParticleStyle: () => ({}),
   onParticleCreate: () => {},
   onParticleUpdate: () => {},
 }
