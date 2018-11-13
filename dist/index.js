@@ -81,6 +81,22 @@ var t = new _text_particle_manager2.default({ max: 10000 });
 var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
 var GRAVITY = 0.1;
 
+var HEAT_COLORS = [[0, 0, 0], // we're out
+[31, 0, 0], // even fainter
+[61, 12, 8], // faint red
+[98, 12, 11], // blood red
+[167, 18, 14], // dark cherry
+[220, 25, 21], // medium cherry 
+[232, 39, 24], // cherry
+[255, 54, 28], // bright cherry
+[255, 72, 24], // salmon
+[255, 105, 16], // dark orange
+[255, 166, 36], // orange
+[255, 246, 79], // lemon
+[255, 253, 148], // light yellow
+[254, 254, 200], // white
+[254, 254, 254]];
+
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 },
@@ -94,12 +110,17 @@ document.querySelector('button').addEventListener('click', function () {
       h += 1 / 12 * Math.PI * (Math.random() - 0.5);
       return { x: k * Math.cos(h), y: k * Math.sin(h) };
     },
-    // getAcceleration: () => ({x: 0, y: 50}),
+    getParticleText: function getParticleText() {
+      return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())];
+    },
     onParticleCreate: function onParticleCreate(p) {
-      p.setStyle({ fontSize: 14, color: '#333', width: '12px', border: '1px solid #eee' });
+      p.setStyle({ fontSize: 14, color: '#fff', width: '12px' });
     },
     onParticleUpdate: function onParticleUpdate(p) {
       p.setStyle({ opacity: p.lerp(1, 0) });
+      if (p.frameNumber % 10 === 0) {
+        p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+      }
     }
   });
 });
@@ -291,6 +312,7 @@ var TextParticle = function () {
     this.setText(this.text);
     this.updateTransform();
     this.el.style.opacity = 1;
+    this.frameNumber = 0;
     this.onCreate(this);
   }
 
@@ -310,6 +332,12 @@ var TextParticle = function () {
       return a + (b - a) * this.lifeFrac;
     }
   }, {
+    key: 'colourWarp',
+    value: function colourWarp(colours) {
+      var frac = 1 / colours.length;
+      var idx = this.lifeFrac / frac;
+    }
+  }, {
     key: 'updateTransform',
     value: function updateTransform() {
       this.el.style.transform = 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
@@ -318,6 +346,8 @@ var TextParticle = function () {
     key: 'update',
     value: function update(f) {
       this.elapsed += f * 1000;
+      this.frameNumber++;
+
       this.velocity.x += this.acceleration.x * f;
       this.velocity.y += this.acceleration.y * f;
       this.position.x += this.velocity.x * f;

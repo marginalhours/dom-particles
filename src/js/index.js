@@ -5,6 +5,24 @@ let t = new TextParticleManager({ max: 10000 });
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 const GRAVITY = 0.1;
 
+const HEAT_COLORS = [
+  [0, 0, 0], // we're out
+  [31, 0, 0,], // even fainter
+  [61, 12, 8], // faint red
+  [98, 12, 11], // blood red
+  [167, 18, 14], // dark cherry
+  [220, 25, 21], // medium cherry 
+  [232, 39, 24], // cherry
+  [255, 54, 28], // bright cherry
+  [255, 72, 24], // salmon
+  [255, 105, 16], // dark orange
+  [255, 166, 36], // orange
+  [255, 246, 79], // lemon
+  [255, 253, 148], // light yellow
+  [254, 254, 200], // white
+  [254, 254, 254], // white
+]
+
 document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
@@ -16,12 +34,15 @@ document.querySelector('button').addEventListener('click', () => {
       h += (1/12) * Math.PI * (Math.random() - 0.5);
       return {x: k * Math.cos(h), y: k * Math.sin(h)};
     },
-    // getAcceleration: () => ({x: 0, y: 50}),
+    getParticleText: () => ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())],
     onParticleCreate: (p) => {
-     p.setStyle({ fontSize: 14, color: '#333', width: '12px', border: '1px solid #eee' }); 
+     p.setStyle({ fontSize: 14, color: '#fff', width: '12px' }); 
     },
     onParticleUpdate: (p) => {
       p.setStyle({ opacity: p.lerp(1, 0)});
+      if (p.frameNumber % 10 === 0){
+        p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+      }
     }
   });
 });

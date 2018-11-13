@@ -17,6 +17,7 @@ export default class TextParticle {
     this.setText(this.text);
     this.updateTransform();
     this.el.style.opacity = 1;
+    this.frameNumber = 0;
     this.onCreate(this);
   }
   
@@ -40,12 +41,21 @@ export default class TextParticle {
     return a + ((b - a) * this.lifeFrac);  
   }
   
+  colourWarp(colours){
+      let frac = 1 / colours.length;
+      let idx = this.lifeFrac / frac;
+    
+      
+  }
+  
   updateTransform () {
     this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
   }
     
   update (f) {
     this.elapsed += f * 1000;
+    this.frameNumber ++;
+    
     this.velocity.x += this.acceleration.x * f;
     this.velocity.y += this.acceleration.y * f;
     this.position.x += this.velocity.x * f;
