@@ -1,6 +1,6 @@
 import TextParticleManager from './text_particle_manager';
 
-let t = new TextParticleManager();
+let t = new TextParticleManager({ max: 10000 });
 
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 const GRAVITY = 0.1;
@@ -9,7 +9,7 @@ document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
     emitEvery: 10,
-    getParticleTTL: () => 2000 + 1000 * Math.random(),
+    getParticleTTL: () => 4000 + 1000 * Math.random(),
     getParticleVelocity: (emitter) => {
       let k = 150 + 50 * Math.random();  
       let h = Math.atan2(c.y - emitter.position.y, c.x - emitter.position.x);

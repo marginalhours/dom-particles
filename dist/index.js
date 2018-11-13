@@ -76,7 +76,7 @@ var _text_particle_manager2 = _interopRequireDefault(_text_particle_manager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var t = new _text_particle_manager2.default();
+var t = new _text_particle_manager2.default({ max: 10000 });
 
 var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
 var GRAVITY = 0.1;
@@ -86,7 +86,7 @@ document.querySelector('button').addEventListener('click', function () {
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 },
     emitEvery: 10,
     getParticleTTL: function getParticleTTL() {
-      return 2000 + 1000 * Math.random();
+      return 4000 + 1000 * Math.random();
     },
     getParticleVelocity: function getParticleVelocity(emitter) {
       var k = 150 + 50 * Math.random();
