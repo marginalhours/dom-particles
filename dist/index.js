@@ -289,6 +289,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+// Colour, backgroundColour also as particle options? (take string or array, if array, lerp, etc)
+
 var DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0 },
   acceleration: { x: 0, y: 0 },

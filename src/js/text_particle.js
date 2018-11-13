@@ -1,3 +1,5 @@
+// Colour, backgroundColour also as particle options? (take string or array, if array, lerp, etc)
+
 const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0}, 
   acceleration: { x: 0, y: 0 },
