@@ -1,11 +1,13 @@
 const DEFAULT_EMITTER_OPTIONS = {
   emitEvery: 500,
-  getParticleTTL: () => 1000,
-  getText: () => '.',
-  getVelocity: () => ({ x: 0, y: -10}),
-  getAcceleration: () => ({ x: 0, y: 0}),
   onCreate: () => {},
   onUpdate: () => {},
+  getParticleTTL: () => 1000,
+  getParticleText: () => '.',
+  getParticleVelocity: () => ({ x: 0, y: -10}),
+  getParticleAcceleration: () => ({ x: 0, y: 0}),
+  onParticleCreate: () => {},
+  onParticleUpdate: () => {},
 
 }
 
@@ -17,6 +19,8 @@ export default class TextParticleEmitter {
     this.totalElapsed = 0;
     this.elapsed = this.emitEvery;
     this.emitted = 0;
+    
+    this.onCreate(this);
   }
   
   get alive () {
@@ -42,9 +46,11 @@ export default class TextParticleEmitter {
         acceleration: this.getAcceleration(this),
         ttl: this.getParticleTTL(this),
         text: this.getText(this),
-        onCreate: this.onCreate,
-        onUpdate: this.onUpdate
+        onCreate: this.onParticleCreate,
+        onUpdate: this.onParticleUpdate
       });
     }
+    
+    this.onUpdate(this);
   }
 }

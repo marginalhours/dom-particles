@@ -79,7 +79,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var t = new _text_particle_manager2.default();
 
 var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
-var GRAVITY = 0.01;
+var GRAVITY = 0.1;
 
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
@@ -87,7 +87,7 @@ document.querySelector('button').addEventListener('click', function () {
     maxEmissions: 500,
     emitEvery: 10,
     getParticleTTL: function getParticleTTL() {
-      return 60000 + 1000 * Math.random();
+      return 5000 + 1000 * Math.random();
     },
     getText: function getText() {
       return ['#', '!', ',', '.', '$', '%'][Math.floor(6 * Math.random())];
@@ -97,14 +97,14 @@ document.querySelector('button').addEventListener('click', function () {
     },
     getVelocity: function getVelocity() {
       var k = 150 + 50 * Math.random();
-      var theta = 1 / 6 * Math.PI * (Math.random() - 0.5);
+      var theta = 2 / 6 * Math.PI * (Math.random() - 0.5);
       return { x: k * Math.cos(theta), y: k * Math.sin(theta) };
     },
     // getAcceleration: () => ({x: 0, y: 50}),
-    onCreate: function onCreate(p) {
+    onParticleCreate: function onParticleCreate(p) {
       p.setStyle({ fontSize: 14, color: '#aaa', width: '12px' });
     },
-    onUpdate: function onUpdate(p) {
+    onParticleUpdate: function onParticleUpdate(p) {
       // p.setStyle({ opacity: p.lerp(1, 0)});
       var h = Math.atan2(c.y - p.position.y, c.x - p.position.x);
       var k = Math.sqrt((c.x - p.position.x) * (c.x - p.position.x) + (c.y - p.position.y) * (c.y - p.position.y));
@@ -373,20 +373,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var DEFAULT_EMITTER_OPTIONS = {
   emitEvery: 500,
+  onCreate: function onCreate() {},
+  onUpdate: function onUpdate() {},
   getParticleTTL: function getParticleTTL() {
     return 1000;
   },
-  getText: function getText() {
+  getParticleText: function getParticleText() {
     return '.';
   },
-  getVelocity: function getVelocity() {
+  getParticleVelocity: function getParticleVelocity() {
     return { x: 0, y: -10 };
   },
-  getAcceleration: function getAcceleration() {
+  getParticleAcceleration: function getParticleAcceleration() {
     return { x: 0, y: 0 };
   },
-  onCreate: function onCreate() {},
-  onUpdate: function onUpdate() {}
+  onParticleCreate: function onParticleCreate() {},
+  onParticleUpdate: function onParticleUpdate() {}
 
 };
 
@@ -400,6 +402,8 @@ var TextParticleEmitter = function () {
     this.totalElapsed = 0;
     this.elapsed = this.emitEvery;
     this.emitted = 0;
+
+    this.onCreate(this);
   }
 
   _createClass(TextParticleEmitter, [{
@@ -417,10 +421,12 @@ var TextParticleEmitter = function () {
           acceleration: this.getAcceleration(this),
           ttl: this.getParticleTTL(this),
           text: this.getText(this),
-          onCreate: this.onCreate,
-          onUpdate: this.onUpdate
+          onCreate: this.onParticleCreate,
+          onUpdate: this.onParticleUpdate
         });
       }
+
+      this.onUpdate(this);
     }
   }, {
     key: 'alive',
