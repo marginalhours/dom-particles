@@ -5,11 +5,11 @@ const DEFAULT_EMITTER_OPTIONS = {
   acceleration: { x: 0, y: 0},
   onCreate: () => {},
   onUpdate: () => {},
-  getTTL: () => 1000,
-  getText: () => '.',
-  getPosition: (emitter) => ({...emitter.position}),
-  getVelocity: () => ({ x: 0, y: -10}),
-  getAcceleration: () => ({ x: 0, y: 0}),
+  getParticleTTL: () => 1000,
+  getParticleText: () => '.',
+  getParticlePosition: (emitter) => ({...emitter.position}),
+  getParticleVelocity: () => ({ x: 0, y: -10}),
+  getParticleAcceleration: () => ({ x: 0, y: 0}),
   onParticleCreate: () => {},
   onParticleUpdate: () => {},
 }
@@ -37,6 +37,13 @@ export default class TextParticleEmitter {
   }
   
   update (f) {
+    // position update
+    this.velocity.x += this.acceleration.x * f;
+    this.velocity.y += this.acceleration.y * f;
+    this.position.x += this.velocity.x * f;
+    this.position.y += this.velocity.y * f;
+    
+    // emission update
     this.elapsed += f * 1000;
     this.totalElapsed += f * 1000;
     if (this.elapsed > this.emitEvery) {
@@ -44,16 +51,17 @@ export default class TextParticleEmitter {
       this.emitted++;
       // emit particle
       this.manager.createParticle({
-        position: this.getPosition(this),
-        velocity: this.getVelocity(this),
-        acceleration: this.getAcceleration(this),
+        position: this.getParticlePosition(this),
+        velocity: this.getParticleVelocity(this),
+        acceleration: this.getParticleAcceleration(this),
         ttl: this.getParticleTTL(this),
-        text: this.getText(this),
+        text: this.getParticleText(this),
         onCreate: this.onParticleCreate,
         onUpdate: this.onParticleUpdate
       });
     }
     
+    // user-provided update
     this.onUpdate(this);
   }
 }

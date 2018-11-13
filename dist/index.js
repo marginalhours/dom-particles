@@ -84,14 +84,15 @@ var GRAVITY = 0.1;
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     position: { x: 100, y: document.body.clientHeight / 2 },
+    velocity: { x: 0, y: 100 },
     emitEvery: 10,
     getParticleTTL: function getParticleTTL() {
-      return 5000 + 1000 * Math.random();
+      return 2000 + 1000 * Math.random();
     },
-    getText: function getText() {
+    getParticleText: function getParticleText() {
       return ['#', '!', ',', '.', '$', '%'][Math.floor(6 * Math.random())];
     },
-    getVelocity: function getVelocity() {
+    getParticleVelocity: function getParticleVelocity() {
       var k = 150 + 50 * Math.random();
       var theta = 2 / 6 * Math.PI * (Math.random() - 0.5);
       return { x: k * Math.cos(theta), y: k * Math.sin(theta) };
@@ -374,19 +375,19 @@ var DEFAULT_EMITTER_OPTIONS = {
   acceleration: { x: 0, y: 0 },
   onCreate: function onCreate() {},
   onUpdate: function onUpdate() {},
-  getTTL: function getTTL() {
+  getParticleTTL: function getParticleTTL() {
     return 1000;
   },
-  getText: function getText() {
+  getParticleText: function getParticleText() {
     return '.';
   },
-  getPosition: function getPosition(emitter) {
+  getParticlePosition: function getParticlePosition(emitter) {
     return _extends({}, emitter.position);
   },
-  getVelocity: function getVelocity() {
+  getParticleVelocity: function getParticleVelocity() {
     return { x: 0, y: -10 };
   },
-  getAcceleration: function getAcceleration() {
+  getParticleAcceleration: function getParticleAcceleration() {
     return { x: 0, y: 0 };
   },
   onParticleCreate: function onParticleCreate() {},
@@ -410,6 +411,13 @@ var TextParticleEmitter = function () {
   _createClass(TextParticleEmitter, [{
     key: 'update',
     value: function update(f) {
+      // position update
+      this.velocity.x += this.acceleration.x * f;
+      this.velocity.y += this.acceleration.y * f;
+      this.position.x += this.velocity.x * f;
+      this.position.y += this.velocity.y * f;
+
+      // emission update
       this.elapsed += f * 1000;
       this.totalElapsed += f * 1000;
       if (this.elapsed > this.emitEvery) {
@@ -417,16 +425,17 @@ var TextParticleEmitter = function () {
         this.emitted++;
         // emit particle
         this.manager.createParticle({
-          position: this.getPosition(this),
-          velocity: this.getVelocity(this),
-          acceleration: this.getAcceleration(this),
+          position: this.getParticlePosition(this),
+          velocity: this.getParticleVelocity(this),
+          acceleration: this.getParticleAcceleration(this),
           ttl: this.getParticleTTL(this),
-          text: this.getText(this),
+          text: this.getParticleText(this),
           onCreate: this.onParticleCreate,
           onUpdate: this.onParticleUpdate
         });
       }
 
+      // user-provided update
       this.onUpdate(this);
     }
   }, {

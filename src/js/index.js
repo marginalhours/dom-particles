@@ -8,12 +8,11 @@ const GRAVITY = 0.1;
 document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     position: { x: 100, y: document.body.clientHeight / 2},
+    velocity: { x: 0, y: 100 },
     emitEvery: 10,
-    getParticleTTL: () => 5000 + 1000 * Math.random(),
-    getText: () => {
-      return ['#', '!', ',', '.', '$', '%'][Math.floor(6 * Math.random())];
-    },
-    getVelocity: () => {
+    getParticleTTL: () => 2000 + 1000 * Math.random(),
+    getParticleText: () => ['#', '!', ',', '.', '$', '%'][Math.floor(6 * Math.random())],
+    getParticleVelocity: () => {
       let k = 150 + 50 * Math.random();  
       let theta = ((2/6) * Math.PI * (Math.random() - 0.5));
       return {x: k * Math.cos(theta), y: k * Math.sin(theta)};
