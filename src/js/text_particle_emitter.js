@@ -1,14 +1,17 @@
 const DEFAULT_EMITTER_OPTIONS = {
   emitEvery: 500,
+  position: { x: 0, y: 0 },
+  velocity: { x: 0, y: 0 },
+  acceleration: { x: 0, y: 0},
   onCreate: () => {},
   onUpdate: () => {},
-  getParticleTTL: () => 1000,
-  getParticleText: () => '.',
-  getParticleVelocity: () => ({ x: 0, y: -10}),
-  getParticleAcceleration: () => ({ x: 0, y: 0}),
+  getTTL: () => 1000,
+  getText: () => '.',
+  getPosition: (emitter) => ({...emitter.position}),
+  getVelocity: () => ({ x: 0, y: -10}),
+  getAcceleration: () => ({ x: 0, y: 0}),
   onParticleCreate: () => {},
   onParticleUpdate: () => {},
-
 }
 
 export default class TextParticleEmitter {

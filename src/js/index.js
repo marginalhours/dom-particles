@@ -7,15 +7,11 @@ const GRAVITY = 0.1;
 
 document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
-    manager: this,
-    maxEmissions: 500,
+    position: { x: 100, y: document.body.clientHeight / 2},
     emitEvery: 10,
     getParticleTTL: () => 5000 + 1000 * Math.random(),
     getText: () => {
       return ['#', '!', ',', '.', '$', '%'][Math.floor(6 * Math.random())];
-    },
-    getPosition: () => {
-      return { x: 100, y: document.body.clientHeight / 2}
     },
     getVelocity: () => {
       let k = 150 + 50 * Math.random();  

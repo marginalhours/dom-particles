@@ -83,17 +83,13 @@ var GRAVITY = 0.1;
 
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
-    manager: undefined,
-    maxEmissions: 500,
+    position: { x: 100, y: document.body.clientHeight / 2 },
     emitEvery: 10,
     getParticleTTL: function getParticleTTL() {
       return 5000 + 1000 * Math.random();
     },
     getText: function getText() {
       return ['#', '!', ',', '.', '$', '%'][Math.floor(6 * Math.random())];
-    },
-    getPosition: function getPosition() {
-      return { x: 100, y: document.body.clientHeight / 2 };
     },
     getVelocity: function getVelocity() {
       var k = 150 + 50 * Math.random();
@@ -365,31 +361,36 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var DEFAULT_EMITTER_OPTIONS = {
   emitEvery: 500,
+  position: { x: 0, y: 0 },
+  velocity: { x: 0, y: 0 },
+  acceleration: { x: 0, y: 0 },
   onCreate: function onCreate() {},
   onUpdate: function onUpdate() {},
-  getParticleTTL: function getParticleTTL() {
+  getTTL: function getTTL() {
     return 1000;
   },
-  getParticleText: function getParticleText() {
+  getText: function getText() {
     return '.';
   },
-  getParticleVelocity: function getParticleVelocity() {
+  getPosition: function getPosition(emitter) {
+    return _extends({}, emitter.position);
+  },
+  getVelocity: function getVelocity() {
     return { x: 0, y: -10 };
   },
-  getParticleAcceleration: function getParticleAcceleration() {
+  getAcceleration: function getAcceleration() {
     return { x: 0, y: 0 };
   },
   onParticleCreate: function onParticleCreate() {},
   onParticleUpdate: function onParticleUpdate() {}
-
 };
 
 var TextParticleEmitter = function () {
