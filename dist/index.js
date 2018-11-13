@@ -84,18 +84,9 @@ var GRAVITY = 0.1;
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 },
-    velocity: { x: 0, y: 100 },
     emitEvery: 10,
-    onUpdate: function onUpdate(emitter) {
-      var h = Math.atan2(c.y - emitter.position.y, c.x - emitter.position.x);
-      var k = 100;
-      emitter.acceleration = { x: k * Math.cos(h), y: k * Math.sin(h) };
-    },
     getParticleTTL: function getParticleTTL() {
       return 2000 + 1000 * Math.random();
-    },
-    getParticleText: function getParticleText() {
-      return ['#', '!', ',', '.', '$', '%'][Math.floor(6 * Math.random())];
     },
     getParticleVelocity: function getParticleVelocity(emitter) {
       var k = 150 + 50 * Math.random();
@@ -105,7 +96,7 @@ document.querySelector('button').addEventListener('click', function () {
     },
     // getAcceleration: () => ({x: 0, y: 50}),
     onParticleCreate: function onParticleCreate(p) {
-      p.setStyle({ fontSize: 14, color: '#aaa', width: '12px' });
+      p.setStyle({ fontSize: 14, color: '#333', width: '12px', border: '1px solid #eee' });
     },
     onParticleUpdate: function onParticleUpdate(p) {
       p.setStyle({ opacity: p.lerp(1, 0) });
