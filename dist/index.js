@@ -78,37 +78,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var t = new _text_particle_manager2.default();
 
-var p = document.querySelector('p');
-
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     manager: undefined,
-    maxEmissions: p.innerText.length,
+    maxEmissions: 500,
     emitEvery: 10,
     getParticleTTL: function getParticleTTL() {
       return 2000 + 1000 * Math.random();
     },
     getText: function getText() {
-      var k = p.innerText[0];
-      p.innerText = p.innerText.slice(1);
-      return k;
+      return ['#', '!', ',', '.', '$', '%'][Math.floor(6 * Math.random())];
     },
     getPosition: function getPosition() {
-      return { x: 110, y: 90 };
+      return { x: 30, y: document.body.clientHeight / 2 };
     },
     getVelocity: function getVelocity() {
       var k = 50 + 50 * Math.random();
-      var theta = 2 / 2 * Math.PI + 2 / 6 * Math.PI * (Math.random() - 0.5);
+      var theta = 2 / 6 * Math.PI * (Math.random() - 0.5);
       return { x: k * Math.cos(theta), y: k * Math.sin(theta) };
     },
-    getAcceleration: function getAcceleration() {
-      return { x: 0, y: 50 };
-    },
+    // getAcceleration: () => ({x: 0, y: 50}),
     onCreate: function onCreate(p) {
-      p.setStyle({ fontSize: 14, color: '#333' });
+      p.setStyle({ fontSize: 14, color: '#fff', width: '12px', border: '1px solid #eee' });
     },
     onUpdate: function onUpdate(p) {
-      p.setStyle({ opacity: p.lerp(1, 0) });
+      // p.setStyle({ opacity: p.lerp(1, 0)});
     }
   });
 });
