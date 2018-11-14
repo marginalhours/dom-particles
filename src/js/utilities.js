@@ -4,6 +4,8 @@ const RGBA_PATTERN = /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([01](?:\.\d+
 const HEX_PATTERN = /#([0-9a-f]{1,2})([0-9a-f]{1,2})([0-9a-f]{1,2})/;
 const NUMBER_AND_UNIT_PATTERN = /(\d+|\d+\.\d+)([a-z]+)/;
 
+/* CSS to internal format import / export */
+
 export const rgbToNumbers = (string) => {
   try {
     let [_, r, g, b] = RGB_PATTERN.exec(string);
@@ -39,13 +41,22 @@ export const extractNumberAndUnit = (string) => {
   return [parseInt(num), unit]
 }
 
+export const tryGetValue = (string) => {
+  switch(string[0]){
+    case '#':
+      return hexToNumbers(string);
+    case 'r':
+      return (string[3] === 'a' ? rgbaToNumbers : rgbToNumbers)(string);
+    default:
+      return extractNumberAndUnit(string);
+  }
+}
 
-/* Take a colour array, turn it back into CSS */
 export const colourToCSSString = ([r, g, b, a]) => `rgba(${r}, ${g}, ${b}, ${a})`;
+export const valueToCSSString = ([val, unit]) => `${val}${unit}`;
 
 /* Easing functions */
 export const lerp = (a, b, frac) => a + ((b - a) * frac);
-
 
 export const easeArray = (array, easeFn, frac) => {
     let idxFrac = 1 / array.length;

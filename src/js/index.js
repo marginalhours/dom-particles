@@ -37,11 +37,6 @@ document.querySelector('button').addEventListener('click', () => {
       },
       style: { fontSize: 14, color: '#fff', width: '16px', height: '16px', borderRadius: '16px' },
       onUpdate: (p) => {
-        p.setStyle({ backgroundColor: p.colourFromRGBA(
-                              p.arrayLerp(HEAT_COLORS.map(i => i[0])),
-                              p.arrayLerp(HEAT_COLORS.map(i => i[1])),
-                              p.arrayLerp(HEAT_COLORS.map(i => i[2])))
-        });
         if (p.frameNumber % 30 === 0){
           // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
         }

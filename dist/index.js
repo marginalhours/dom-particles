@@ -245,14 +245,6 @@ document.querySelector('button').addEventListener('click', function () {
       },
       style: { fontSize: 14, color: '#fff', width: '16px', height: '16px', borderRadius: '16px' },
       onUpdate: function onUpdate(p) {
-        p.setStyle({ backgroundColor: p.colourFromRGBA(p.arrayLerp(HEAT_COLORS.map(function (i) {
-            return i[0];
-          })), p.arrayLerp(HEAT_COLORS.map(function (i) {
-            return i[1];
-          })), p.arrayLerp(HEAT_COLORS.map(function (i) {
-            return i[2];
-          })))
-        });
         if (p.frameNumber % 30 === 0) {
           // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
         }
