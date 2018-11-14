@@ -2,7 +2,7 @@
 // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
 // an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
 
-import { tryGetValue, easeArray, lerp } from './utilities';
+import { tryGetValue, easeArray, lerp, transpose, valueToCSSString, colourToCSSString } from './utilities';
 
 export const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0}, 
@@ -56,7 +56,7 @@ export default class TextParticle {
         if (k[0].length === 2){
           dynamicStyles[styleKey] = { unit: k[0][1], values: k.map(v => v[0])};  
         } else {
-          dynamicStyles[styleKey] = { unit: '', values: [k }  
+          dynamicStyles[styleKey] = { unit: '', values: transpose(k) }  
         }
       } else if (typeof styleValue === 'object') {
         // I guess...?           
@@ -79,17 +79,18 @@ export default class TextParticle {
   
   updateDynamicStyles () {
     let lifeFrac = this.lifeFrac;
-    let styleSnapShot = Object.keys(this.dynamicStyles)
+    let styleSnapshot = Object.keys(this.dynamicStyles)
       .reduce((a, b) => {
         let style = this.dynamicStyles[b];
         let value;
         if (style.unit !== '') {
-          value = easeArray(style.values, lerp, lifeFrac);
+          value = valueToCSSString(easeArray(style.values, lerp, lifeFrac), style.unit);
         } else {
-          
+           value = colourToCSSString(style.values.map(a => easeArray(style.values, lerp, lifeFrac))); 
         }
         return { ...a, [b]: value }
       }, {});
+    this.setStyle(styleSnapshot);
   }
   
   updateTransform () {

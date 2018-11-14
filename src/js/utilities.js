@@ -53,11 +53,11 @@ export const tryGetValue = (string) => {
 }
 
 export const transpose = (array) => {
-  return array[0].map((c, i) => array.map(r => r[i]));  
+  return array[0].map((_, i) => array.map(r => r[i]));  
 }
 
 export const colourToCSSString = ([r, g, b, a]) => `rgba(${r}, ${g}, ${b}, ${a})`;
-export const valueToCSSString = ([val, unit]) => `${val}${unit}`;
+export const valueToCSSString = (val, unit) => `${val}${unit}`;
 
 /* Easing functions */
 export const lerp = (a, b, frac) => a + ((b - a) * frac);
