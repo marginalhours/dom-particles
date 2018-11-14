@@ -189,8 +189,8 @@ var TextParticleManager = function () {
   }
 
   _createClass(TextParticleManager, [{
-    key: 'createParticle',
-    value: function createParticle(options) {
+    key: 'create',
+    value: function create(options) {
       if (this.particles.length < this.max) {
         this.particles.push(new _text_particle2.default(_extends({}, options, { el: this.pop() })));
       }
@@ -199,6 +199,11 @@ var TextParticleManager = function () {
     key: 'createEmitter',
     value: function createEmitter(options) {
       this.emitters.push(new _text_particle_emitter2.default(_extends({}, options, { manager: this })));
+    }
+  }, {
+    key: 'from',
+    value: function from(element, pattern, options) {
+      // wrap a dom node, mess about with it 
     }
   }, {
     key: 'update',
@@ -461,7 +466,7 @@ var TextParticleEmitter = function () {
         this.elapsed = 0;
         this.emitted++;
         // emit particle
-        this.manager.createParticle({
+        this.manager.create({
           position: this.getParticlePosition(this),
           velocity: this.getParticleVelocity(this),
           acceleration: this.getParticleAcceleration(this),

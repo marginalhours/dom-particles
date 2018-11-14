@@ -51,7 +51,7 @@ export default class TextParticleEmitter {
       this.elapsed = 0;
       this.emitted++;
       // emit particle
-      this.manager.createParticle({
+      this.manager.create({
         position: this.getParticlePosition(this),
         velocity: this.getParticleVelocity(this),
         acceleration: this.getParticleAcceleration(this),

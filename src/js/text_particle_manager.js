@@ -21,7 +21,7 @@ export default class TextParticleManager {
     document.body.appendChild(this.foldElement);
   }
   
-  createParticle (options) {
+  create (options) {
     if (this.particles.length < this.max) {
       this.particles.push(new TextParticle({...options, el: this.pop()}));
     }
@@ -29,6 +29,10 @@ export default class TextParticleManager {
   
   createEmitter (options) {
     this.emitters.push(new TextParticleEmitter({...options, manager: this}));
+  }
+  
+  from (element, pattern, options) {
+   // wrap a dom node, mess about with it 
   }
   
   update(dt) {
