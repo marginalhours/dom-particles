@@ -2,7 +2,7 @@
 // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
 // an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
 
-import { tryGetValue } from './utilities';
+import { tryGetValue, easeArray, lerp } from './utilities';
 
 export const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0}, 
@@ -56,7 +56,7 @@ export default class TextParticle {
         if (k[0].length === 2){
           dynamicStyles[styleKey] = { unit: k[0][1], values: k.map(v => v[0])};  
         } else {
-          dynamicStyles[styleKey] = { unit: '', values: k }  
+          dynamicStyles[styleKey] = { unit: '', values: [k }  
         }
       } else if (typeof styleValue === 'object') {
         // I guess...?           
@@ -64,7 +64,6 @@ export default class TextParticle {
     });
     
     this.dynamicStyles = dynamicStyles;
-    console.log(this.dynamicStyles);
     // assign fixed styles
     this.setStyle(fixedStyles);
   }
@@ -78,19 +77,29 @@ export default class TextParticle {
     this.el.innerText = text;
   }
   
-  lerp (a, b) {
-    return a + ((b - a) * this.lifeFrac);  
+  updateDynamicStyles () {
+    let lifeFrac = this.lifeFrac;
+    let styleSnapShot = Object.keys(this.dynamicStyles)
+      .reduce((a, b) => {
+        let style = this.dynamicStyles[b];
+        let value;
+        if (style.unit !== '') {
+          value = easeArray(style.values, lerp, lifeFrac);
+        } else {
+          
+        }
+        return { ...a, [b]: value }
+      }, {});
   }
   
+  updateTransform () {
+    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
+  }
   
   updateGridTransform () {
     let x = this.grid ? this.position.x - (this.position.x % this.grid) : this.position.x;
     let y = this.grid ? this.position.y - (this.position.y % this.grid) : this.position.y;
     this.el.style.transform = `translate3d(${x}px, ${y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
-  }
-  
-  updateTransform () {
-    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
   }
     
   update (f) {
@@ -102,7 +111,7 @@ export default class TextParticle {
     this.position.x += this.velocity.x * f;
     this.position.y += this.velocity.y * f;
     
-    this.styleUpdate();
+    this.updateDynamicStyles();
     this.onUpdate(this);
     
     this.updateTransform();
