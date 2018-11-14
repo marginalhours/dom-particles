@@ -34,18 +34,17 @@ document.querySelector('button').addEventListener('click', () => {
         let k = 50 + 50 * Math.random();
         return { x: k * Math.cos(h), y: k * Math.sin(h) }  
       },
-      style: {
-    },
-    getParticleStyle: () => ({ fontSize: 14, color: '#fff', width: '12px' }),
-    onParticleUpdate: (p) => {
-      p.setStyle({ color: p.colourFromRGBA(
-                                p.arrayLerp(HEAT_COLORS.map(i => i[0])),
-                                p.arrayLerp(HEAT_COLORS.map(i => i[1])),
-                                p.arrayLerp(HEAT_COLORS.map(i => i[2])))
+      style: { fontSize: 14, color: '#fff', width: '12px' },
+      onUpdate: (p) => {
+        p.setStyle({ color: p.colourFromRGBA(
+                              p.arrayLerp(HEAT_COLORS.map(i => i[0])),
+                              p.arrayLerp(HEAT_COLORS.map(i => i[1])),
+                              p.arrayLerp(HEAT_COLORS.map(i => i[2])))
         });
-      if (p.frameNumber % 30 === 0){
-        p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+        if (p.frameNumber % 30 === 0){
+          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+        }
       }
-    }
+    },
   });
 });

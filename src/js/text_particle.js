@@ -2,7 +2,7 @@
 // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
 // an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
 
-const DEFAULT_PARTICLE_OPTIONS = {
+export const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0}, 
   acceleration: { x: 0, y: 0 },
   ttl: 1000,

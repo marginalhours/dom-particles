@@ -1,3 +1,5 @@
+import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
+
 const DEFAULT_EMITTER_OPTIONS = {
   emitEvery: 500,
   position: { x: 0, y: 0 },
@@ -5,14 +7,7 @@ const DEFAULT_EMITTER_OPTIONS = {
   acceleration: { x: 0, y: 0},
   onCreate: () => {},
   onUpdate: () => {},
-  getParticleTTL: () => 1000,
-  getParticleText: () => '.',
-  getParticlePosition: (emitter) => ({...emitter.position}),
-  getParticleVelocity: () => ({ x: 0, y: -10}),
-  getParticleAcceleration: () => ({ x: 0, y: 0}),
-  getParticleStyle: () => ({}),
-  onParticleCreate: () => {},
-  onParticleUpdate: () => {},
+  particleOptions: DEFAULT_PARTICLE_OPTIONS
 }
 
 export default class TextParticleEmitter {
@@ -51,16 +46,7 @@ export default class TextParticleEmitter {
       this.elapsed = 0;
       this.emitted++;
       // emit particle
-      this.manager.createParticle({
-        position: this.getParticlePosition(this),
-        velocity: this.getParticleVelocity(this),
-        acceleration: this.getParticleAcceleration(this),
-        ttl: this.getParticleTTL(this),
-        text: this.getParticleText(this),
-        style: this.getParticleStyle(this),
-        onCreate: this.onParticleCreate,
-        onUpdate: this.onParticleUpdate
-      });
+      this.manager.createParticle(this.particleOptions);
     }
     
     // user-provided update
