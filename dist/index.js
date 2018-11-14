@@ -76,7 +76,7 @@ var _text_particle_manager2 = _interopRequireDefault(_text_particle_manager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var t = new _text_particle_manager2.default({ max: 1000 });
+var t = new _text_particle_manager2.default({ max: 10000 });
 
 var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
 var GRAVITY = 0.1;
@@ -95,12 +95,14 @@ var HEAT_COLORS = [[0, 0, 0], // we're out
 [255, 246, 79], // lemon
 [255, 253, 148], // light yellow
 [254, 254, 200], // white
-[254, 254, 254]];
+[254, 254, 254]].reverse();
 
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 },
     emitEvery: 10,
+    maxEmissions: 500,
+    ttl: 5000,
     getParticleTTL: function getParticleTTL() {
       return 4000 + 1000 * Math.random();
     },
@@ -114,9 +116,15 @@ document.querySelector('button').addEventListener('click', function () {
       return { fontSize: 14, color: '#fff', width: '12px' };
     },
     onParticleUpdate: function onParticleUpdate(p) {
-      p.setStyle({ color: p.colourFromRGBA(p.arrayLerp([254, 254, 255]), p.arrayLerp([254, 254, 253]), p.arrayLerp([254, 200, 148]))
+      p.setStyle({ color: p.colourFromRGBA(p.arrayLerp(HEAT_COLORS.map(function (i) {
+          return i[0];
+        })), p.arrayLerp(HEAT_COLORS.map(function (i) {
+          return i[1];
+        })), p.arrayLerp(HEAT_COLORS.map(function (i) {
+          return i[2];
+        })))
       });
-      if (p.frameNumber % 10 === 0) {
+      if (p.frameNumber % 30 === 0) {
         p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
       }
     }
@@ -311,6 +319,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // Colour, backgroundColour also as particle options? (take string or array, if array, lerp, etc)
+// generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
 
 var DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0 },
