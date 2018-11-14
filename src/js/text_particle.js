@@ -12,8 +12,7 @@ export const DEFAULT_PARTICLE_OPTIONS = {
   onUpdate: () => {},
   heading: 0,
   scale: { x: 1, y: 1 },
-  useGrid: true,
-  gridSize: 16
+  grid: false
 }
 
 export default class TextParticle {
@@ -22,7 +21,7 @@ export default class TextParticle {
     
     this.elapsed = 0;
     this.setText(this.text);
-    this.setStyle(this.style);
+    this.buildStyle(this.style);
     this.updateTransform();
     this.el.style.opacity = 1;
     this.frameNumber = 0;
@@ -41,7 +40,26 @@ export default class TextParticle {
     return this.elapsed / this.ttl;
   }
   
+  buildStyle (styleObject) {
+    let fixedStyles = {};
+    Object.keys(styleObject).map(styleKey => {
+      let styleValue = styleObject[styleKey];
+      if (typeof styleValue === 'string'){
+        // fixed style, just assign it
+        fixedStyles[styleKey] = styleValue; 
+      } else if (Array.isArray(styleValue)) {
+        // 
+      } else if (typeof styleValue === 'object') {
+        // I guess...?           
+      }
+    });
+    
+    // assign fixed styles
+    this.setStyle(fixedStyles);
+  }
+  
   setStyle(styleObject) {
+    // Straightforward style assignment
     Object.assign(this.el.style, styleObject);  
   }
   
@@ -53,22 +71,10 @@ export default class TextParticle {
     return a + ((b - a) * this.lifeFrac);  
   }
   
-  arrayLerp(array, cycle) {
-    cycle = cycle || false;
-    let idxFrac = 1 / array.length;
-    let idx = Math.round(this.lifeFrac / idxFrac);
-    let nextIdx = (idx === array.length - 1) ? (cycle ? 0 : idx) : idx + 1;
-    
-    return this.lerp(array[idx], array[nextIdx]);
-  }
-  
-  colourFromRGBA(r, g, b, a){
-    return `rgba(${r}, ${g}, ${b}, ${a || 1.0}`  
-  }
   
   updateGridTransform () {
-    let x = this.useGrid ? this.position.x - (this.position.x % this.gridSize) : this.position.x;
-    let y = this.useGrid ? this.position.y - (this.position.y % this.gridSize) : this.position.y;
+    let x = this.grid ? this.position.x - (this.position.x % this.grid) : this.position.x;
+    let y = this.grid ? this.position.y - (this.position.y % this.grid) : this.position.y;
     this.el.style.transform = `translate3d(${x}px, ${y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
   }
   

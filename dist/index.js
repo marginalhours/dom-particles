@@ -74,6 +74,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -94,8 +96,7 @@ var DEFAULT_PARTICLE_OPTIONS = exports.DEFAULT_PARTICLE_OPTIONS = {
   onUpdate: function onUpdate() {},
   heading: 0,
   scale: { x: 1, y: 1 },
-  useGrid: true,
-  gridSize: 16
+  grid: false
 };
 
 var TextParticle = function () {
@@ -106,7 +107,7 @@ var TextParticle = function () {
 
     this.elapsed = 0;
     this.setText(this.text);
-    this.setStyle(this.style);
+    this.buildStyle(this.style);
     this.updateTransform();
     this.el.style.opacity = 1;
     this.frameNumber = 0;
@@ -118,8 +119,28 @@ var TextParticle = function () {
   }
 
   _createClass(TextParticle, [{
+    key: 'buildStyle',
+    value: function buildStyle(styleObject) {
+      var fixedStyles = {};
+      Object.keys(styleObject).map(function (styleKey) {
+        var styleValue = styleObject[styleKey];
+        if (typeof styleValue === 'string') {
+          // fixed style, just assign it
+          fixedStyles[styleKey] = styleValue;
+        } else if (Array.isArray(styleValue)) {
+          // 
+        } else if ((typeof styleValue === 'undefined' ? 'undefined' : _typeof(styleValue)) === 'object') {
+          // I guess...?           
+        }
+      });
+
+      // assign fixed styles
+      this.setStyle(fixedStyles);
+    }
+  }, {
     key: 'setStyle',
     value: function setStyle(styleObject) {
+      // Straightforward style assignment
       Object.assign(this.el.style, styleObject);
     }
   }, {
@@ -133,25 +154,10 @@ var TextParticle = function () {
       return a + (b - a) * this.lifeFrac;
     }
   }, {
-    key: 'arrayLerp',
-    value: function arrayLerp(array, cycle) {
-      cycle = cycle || false;
-      var idxFrac = 1 / array.length;
-      var idx = Math.round(this.lifeFrac / idxFrac);
-      var nextIdx = idx === array.length - 1 ? cycle ? 0 : idx : idx + 1;
-
-      return this.lerp(array[idx], array[nextIdx]);
-    }
-  }, {
-    key: 'colourFromRGBA',
-    value: function colourFromRGBA(r, g, b, a) {
-      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + (a || 1.0);
-    }
-  }, {
     key: 'updateGridTransform',
     value: function updateGridTransform() {
-      var x = this.useGrid ? this.position.x - this.position.x % this.gridSize : this.position.x;
-      var y = this.useGrid ? this.position.y - this.position.y % this.gridSize : this.position.y;
+      var x = this.grid ? this.position.x - this.position.x % this.grid : this.position.x;
+      var y = this.grid ? this.position.y - this.position.y % this.grid : this.position.y;
       this.el.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
     }
   }, {
@@ -246,7 +252,7 @@ document.querySelector('button').addEventListener('click', function () {
       style: { fontSize: 14, color: '#fff', width: '16px', height: '16px', borderRadius: '16px' },
       onUpdate: function onUpdate(p) {
         if (p.frameNumber % 30 === 0) {
-          // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
         }
       }
     }
