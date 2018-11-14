@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,7 +70,135 @@
 "use strict";
 
 
-var _text_particle_manager = __webpack_require__(1);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// Colour, backgroundColour also as particle options? (take string or array, if array, lerp, etc)
+// generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
+// an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
+
+var DEFAULT_PARTICLE_OPTIONS = exports.DEFAULT_PARTICLE_OPTIONS = {
+  velocity: { x: 0, y: 0 },
+  acceleration: { x: 0, y: 0 },
+  ttl: 1000,
+  text: '.',
+  style: {},
+  onCreate: function onCreate() {},
+  onUpdate: function onUpdate() {},
+  heading: 0,
+  scale: { x: 1, y: 1 },
+  useGrid: true,
+  gridSize: 16
+};
+
+var TextParticle = function () {
+  function TextParticle(options) {
+    _classCallCheck(this, TextParticle);
+
+    Object.assign(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
+
+    this.elapsed = 0;
+    this.setText(this.text);
+    this.setStyle(this.style);
+    this.updateTransform();
+    this.el.style.opacity = 1;
+    this.frameNumber = 0;
+    this.onCreate(this);
+
+    if (this.useGrid) {
+      this.updateTransform = this.updateGridTransform;
+    }
+  }
+
+  _createClass(TextParticle, [{
+    key: 'setStyle',
+    value: function setStyle(styleObject) {
+      Object.assign(this.el.style, styleObject);
+    }
+  }, {
+    key: 'setText',
+    value: function setText(text) {
+      this.el.innerText = text;
+    }
+  }, {
+    key: 'lerp',
+    value: function lerp(a, b) {
+      return a + (b - a) * this.lifeFrac;
+    }
+  }, {
+    key: 'arrayLerp',
+    value: function arrayLerp(array, cycle) {
+      cycle = cycle || false;
+      var idxFrac = 1 / array.length;
+      var idx = Math.round(this.lifeFrac / idxFrac);
+      var nextIdx = idx === array.length - 1 ? cycle ? 0 : idx : idx + 1;
+
+      return this.lerp(array[idx], array[nextIdx]);
+    }
+  }, {
+    key: 'colourFromRGBA',
+    value: function colourFromRGBA(r, g, b, a) {
+      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + (a || 1.0);
+    }
+  }, {
+    key: 'updateGridTransform',
+    value: function updateGridTransform() {
+      var x = this.useGrid ? this.position.x - this.position.x % this.gridSize : this.position.x;
+      var y = this.useGrid ? this.position.y - this.position.y % this.gridSize : this.position.y;
+      this.el.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
+    }
+  }, {
+    key: 'updateTransform',
+    value: function updateTransform() {
+      this.el.style.transform = 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
+    }
+  }, {
+    key: 'update',
+    value: function update(f) {
+      this.elapsed += f * 1000;
+      this.frameNumber++;
+
+      this.velocity.x += this.acceleration.x * f;
+      this.velocity.y += this.acceleration.y * f;
+      this.position.x += this.velocity.x * f;
+      this.position.y += this.velocity.y * f;
+
+      this.onUpdate(this);
+
+      this.updateTransform();
+    }
+  }, {
+    key: 'alive',
+    get: function get() {
+      return this.elapsed < this.ttl;
+    }
+  }, {
+    key: 'lifeFrac',
+    get: function get() {
+      return this.elapsed / this.ttl;
+    }
+  }]);
+
+  return TextParticle;
+}();
+
+exports.default = TextParticle;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _text_particle_manager = __webpack_require__(2);
 
 var _text_particle_manager2 = _interopRequireDefault(_text_particle_manager);
 
@@ -103,18 +231,21 @@ document.querySelector('button').addEventListener('click', function () {
       return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 };
     },
     emitEvery: 10,
-    particle: {
+    particleOptions: {
       get ttl() {
         return 4000 + 1000 * Math.random();
+      },
+      get text() {
+        return '';
       },
       get velocity() {
         var h = 2 * Math.PI * Math.random();
         var k = 50 + 50 * Math.random();
         return { x: k * Math.cos(h), y: k * Math.sin(h) };
       },
-      style: { fontSize: 14, color: '#fff', width: '12px' },
+      style: { fontSize: 14, color: '#fff', width: '16px', height: '16px', borderRadius: '16px' },
       onUpdate: function onUpdate(p) {
-        p.setStyle({ color: p.colourFromRGBA(p.arrayLerp(HEAT_COLORS.map(function (i) {
+        p.setStyle({ backgroundColor: p.colourFromRGBA(p.arrayLerp(HEAT_COLORS.map(function (i) {
             return i[0];
           })), p.arrayLerp(HEAT_COLORS.map(function (i) {
             return i[1];
@@ -123,7 +254,7 @@ document.querySelector('button').addEventListener('click', function () {
           })))
         });
         if (p.frameNumber % 30 === 0) {
-          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+          // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
         }
       }
     }
@@ -131,7 +262,7 @@ document.querySelector('button').addEventListener('click', function () {
 });
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -145,7 +276,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _text_particle = __webpack_require__(2);
+var _text_particle = __webpack_require__(0);
 
 var _text_particle2 = _interopRequireDefault(_text_particle);
 
@@ -301,134 +432,6 @@ var TextParticleManager = function () {
 exports.default = TextParticleManager;
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// Colour, backgroundColour also as particle options? (take string or array, if array, lerp, etc)
-// generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
-// an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
-
-var DEFAULT_PARTICLE_OPTIONS = exports.DEFAULT_PARTICLE_OPTIONS = {
-  velocity: { x: 0, y: 0 },
-  acceleration: { x: 0, y: 0 },
-  ttl: 1000,
-  text: '.',
-  style: {},
-  onCreate: function onCreate() {},
-  onUpdate: function onUpdate() {},
-  heading: 0,
-  scale: { x: 1, y: 1 },
-  useGrid: false,
-  gridSize: -1
-};
-
-var TextParticle = function () {
-  function TextParticle(options) {
-    _classCallCheck(this, TextParticle);
-
-    Object.assign(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
-
-    this.elapsed = 0;
-    this.setText(this.text);
-    this.setStyle(this.style);
-    this.updateTransform();
-    this.el.style.opacity = 1;
-    this.frameNumber = 0;
-    this.onCreate(this);
-
-    if (this.useGrid) {
-      this.updateTransform = this.updateGridTransform;
-    }
-  }
-
-  _createClass(TextParticle, [{
-    key: 'setStyle',
-    value: function setStyle(styleObject) {
-      Object.assign(this.el.style, styleObject);
-    }
-  }, {
-    key: 'setText',
-    value: function setText(text) {
-      this.el.innerText = text;
-    }
-  }, {
-    key: 'lerp',
-    value: function lerp(a, b) {
-      return a + (b - a) * this.lifeFrac;
-    }
-  }, {
-    key: 'arrayLerp',
-    value: function arrayLerp(array, cycle) {
-      cycle = cycle || false;
-      var idxFrac = 1 / array.length;
-      var idx = Math.round(this.lifeFrac / idxFrac);
-      var nextIdx = idx === array.length - 1 ? cycle ? 0 : idx : idx + 1;
-
-      return this.lerp(array[idx], array[nextIdx]);
-    }
-  }, {
-    key: 'colourFromRGBA',
-    value: function colourFromRGBA(r, g, b, a) {
-      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + (a || 1.0);
-    }
-  }, {
-    key: 'updateGridTransform',
-    value: function updateGridTransform() {
-      var x = this.useGrid ? this.position.x - this.position.x % this.gridSize : this.position.x;
-      var y = this.useGrid ? this.position.y - this.position.y % this.gridSize : this.position.y;
-      this.el.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
-    }
-  }, {
-    key: 'updateTransform',
-    value: function updateTransform() {
-      this.el.style.transform = 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
-    }
-  }, {
-    key: 'update',
-    value: function update(f) {
-      this.elapsed += f * 1000;
-      this.frameNumber++;
-
-      this.velocity.x += this.acceleration.x * f;
-      this.velocity.y += this.acceleration.y * f;
-      this.position.x += this.velocity.x * f;
-      this.position.y += this.velocity.y * f;
-
-      this.onUpdate(this);
-
-      this.updateTransform();
-    }
-  }, {
-    key: 'alive',
-    get: function get() {
-      return this.elapsed < this.ttl;
-    }
-  }, {
-    key: 'lifeFrac',
-    get: function get() {
-      return this.elapsed / this.ttl;
-    }
-  }]);
-
-  return TextParticle;
-}();
-
-exports.default = TextParticle;
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -443,7 +446,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _text_particle = __webpack_require__(2);
+var _text_particle = __webpack_require__(0);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -487,7 +490,7 @@ var TextParticleEmitter = function () {
         this.elapsed = 0;
         this.emitted++;
         // emit particle
-        this.manager.createParticle(_extends({ position: this.position }, this.particleOptions));
+        this.manager.createParticle(_extends({ position: _extends({}, this.position) }, this.particleOptions));
       }
 
       // user-provided update

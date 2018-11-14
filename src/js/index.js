@@ -27,22 +27,23 @@ document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     get position () { return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2} },
     emitEvery: 10,
-    particle: {
+    particleOptions: {
       get ttl () { return 4000 + 1000 * Math.random() },
+      get text () { return '' },
       get velocity () {
         let h = 2 * Math.PI * Math.random();
         let k = 50 + 50 * Math.random();
         return { x: k * Math.cos(h), y: k * Math.sin(h) }  
       },
-      style: { fontSize: 14, color: '#fff', width: '12px' },
+      style: { fontSize: 14, color: '#fff', width: '16px', height: '16px', borderRadius: '16px' },
       onUpdate: (p) => {
-        p.setStyle({ color: p.colourFromRGBA(
+        p.setStyle({ backgroundColor: p.colourFromRGBA(
                               p.arrayLerp(HEAT_COLORS.map(i => i[0])),
                               p.arrayLerp(HEAT_COLORS.map(i => i[1])),
                               p.arrayLerp(HEAT_COLORS.map(i => i[2])))
         });
         if (p.frameNumber % 30 === 0){
-          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+          // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
         }
       }
     },

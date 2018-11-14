@@ -12,8 +12,8 @@ export const DEFAULT_PARTICLE_OPTIONS = {
   onUpdate: () => {},
   heading: 0,
   scale: { x: 1, y: 1 },
-  useGrid: false,
-  gridSize: -1
+  useGrid: true,
+  gridSize: 16
 }
 
 export default class TextParticle {
