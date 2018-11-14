@@ -101,14 +101,11 @@ document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 },
     emitEvery: 10,
-    maxEmissions: 500,
-    ttl: 5000,
     getParticleTTL: function getParticleTTL() {
       return 4000 + 1000 * Math.random();
     },
     getParticleVelocity: function getParticleVelocity() {
-      var h = 3 / 2 * Math.PI;
-      h += 1 / 6 * Math.PI * (Math.random() - 0.5);
+      var h = 2 * Math.PI * Math.random();
       var k = 50 + 50 * Math.random();
       return { x: k * Math.cos(h), y: k * Math.sin(h) };
     },
@@ -320,6 +317,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 // Colour, backgroundColour also as particle options? (take string or array, if array, lerp, etc)
 // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
+// an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
 
 var DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0 },
@@ -330,7 +328,9 @@ var DEFAULT_PARTICLE_OPTIONS = {
   onCreate: function onCreate() {},
   onUpdate: function onUpdate() {},
   heading: 0,
-  scale: { x: 1, y: 1 }
+  scale: { x: 1, y: 1 },
+  useGrid: true,
+  gridSize: 16
 };
 
 var TextParticle = function () {
@@ -381,7 +381,9 @@ var TextParticle = function () {
   }, {
     key: 'updateTransform',
     value: function updateTransform() {
-      this.el.style.transform = 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
+      var x = this.useGrid ? this.position.x - this.position.x % this.gridSize : this.position.x;
+      var y = this.useGrid ? this.position.y - this.position.y % this.gridSize : this.position.y;
+      this.el.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
     }
   }, {
     key: 'update',

@@ -1,5 +1,6 @@
 // Colour, backgroundColour also as particle options? (take string or array, if array, lerp, etc)
 // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
+// an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
 
 const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0}, 
@@ -10,7 +11,9 @@ const DEFAULT_PARTICLE_OPTIONS = {
   onCreate: () => {},
   onUpdate: () => {},
   heading: 0,
-  scale: { x: 1, y: 1 }
+  scale: { x: 1, y: 1 },
+  useGrid: true,
+  gridSize: 16
 }
 
 export default class TextParticle {
@@ -60,7 +63,9 @@ export default class TextParticle {
   }
   
   updateTransform () {
-    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
+    let x = this.useGrid ? this.position.x - (this.position.x % this.gridSize) : this.position.x;
+    let y = this.useGrid ? this.position.y - (this.position.y % this.gridSize) : this.position.y;
+    this.el.style.transform = `translate3d(${x}px, ${y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
   }
     
   update (f) {

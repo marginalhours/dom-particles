@@ -27,12 +27,9 @@ document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
     emitEvery: 10,
-    maxEmissions: 500,
-    ttl: 5000,
     getParticleTTL: () => 4000 + 1000 * Math.random(),
     getParticleVelocity: () => {
-      let h = (3/2) * Math.PI;
-      h += (1/6) * Math.PI * (Math.random() - 0.5);
+      let h = 2 * Math.PI * Math.random();
       let k = 50 + 50 * Math.random();
       return { x: k * Math.cos(h), y: k * Math.sin(h) }
     },
