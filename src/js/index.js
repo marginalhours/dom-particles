@@ -1,6 +1,6 @@
 import TextParticleManager from './text_particle_manager';
 
-let t = new TextParticleManager({ max: 10000 });
+let t = new TextParticleManager({ max: 1000 });
 
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 const GRAVITY = 0.1;
@@ -47,19 +47,3 @@ document.querySelector('button').addEventListener('click', () => {
     }
   });
 });
-
-let render = (dt) => {
-  t.update(dt);
-}
-
-let start = null;
-let loop = (timestamp) => {
-  if (!start) start = timestamp;
-  let dt = timestamp - start;
-  start = timestamp;
-  render(dt);
-  
-  requestAnimationFrame(loop);
-}
-
-requestAnimationFrame(loop);

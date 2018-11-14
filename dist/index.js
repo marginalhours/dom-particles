@@ -76,7 +76,7 @@ var _text_particle_manager2 = _interopRequireDefault(_text_particle_manager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var t = new _text_particle_manager2.default({ max: 10000 });
+var t = new _text_particle_manager2.default({ max: 1000 });
 
 var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
 var GRAVITY = 0.1;
@@ -123,22 +123,6 @@ document.querySelector('button').addEventListener('click', function () {
   });
 });
 
-var render = function render(dt) {
-  t.update(dt);
-};
-
-var start = null;
-var loop = function loop(timestamp) {
-  if (!start) start = timestamp;
-  var dt = timestamp - start;
-  start = timestamp;
-  render(dt);
-
-  requestAnimationFrame(loop);
-};
-
-requestAnimationFrame(loop);
-
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -169,7 +153,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var DEFAULT_TPM_OPTIONS = {
   max: 100,
   preallocate: 10,
-  tagName: 'span'
+  tagName: 'span',
+  autoStart: true
 };
 
 var TextParticleManager = function () {
@@ -188,23 +173,29 @@ var TextParticleManager = function () {
 
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
+
+    this.frameStart = null;
   }
 
   _createClass(TextParticleManager, [{
-    key: 'play',
-    value: function play() {
+    key: 'start',
+    value: function start() {
       var _this = this;
 
-      this.raf = requestAnimationFrame(function (s) {
-        return _this.update(s);
+      this.raf = requestAnimationFrame(function (t) {
+        return _this.update(t);
       });
     }
   }, {
     key: 'update',
-    value: function update(dt) {
+    value: function update(timestamp) {
       var _this2 = this;
 
+      if (!this.frameStart) this.frameStart = timestamp;
+      var dt = timestamp - this.frameStart;
+      this.frameStart = timestamp;
       var f = dt / 1000;
+
       this.particles = this.particles.filter(function (p) {
         p.update(f);
         if (p.alive) {
@@ -219,25 +210,37 @@ var TextParticleManager = function () {
 
       this.emitters = this.emitters.filter(function (e) {
         e.update(f);
-        if (e.alive) {
-          return true;
-        }
-        return false;
+        return e.alive;
       });
 
-      if (this.emitters.length === 0 && this.particles.length === 0) {}
+      if (this.emitters.length === 0 && this.particles.length === 0) {
+        cancelAnimationFrame(this.raf);
+        this.raf = false;
+      } else {
+        requestAnimationFrame(function (t) {
+          return _this2.update(t);
+        });
+      }
     }
   }, {
-    key: 'create',
-    value: function create(options) {
+    key: 'createParticle',
+    value: function createParticle(options) {
       if (this.particles.length < this.max) {
-        this.particles.push(new _text_particle2.default(_extends({}, options, { el: this.pop() })));
+        var p = this.particles.push(new _text_particle2.default(_extends({}, options, { el: this.pop() })));
+        if (!this.raf && this.autoStart) {
+          this.start();
+        }
+        return p;
       }
     }
   }, {
     key: 'createEmitter',
     value: function createEmitter(options) {
-      this.emitters.push(new _text_particle_emitter2.default(_extends({}, options, { manager: this })));
+      var e = this.emitters.push(new _text_particle_emitter2.default(_extends({}, options, { manager: this })));
+      if (!this.raf && this.autoStart) {
+        this.start();
+      }
+      return e;
     }
   }, {
     key: 'from',
@@ -479,7 +482,7 @@ var TextParticleEmitter = function () {
         this.elapsed = 0;
         this.emitted++;
         // emit particle
-        this.manager.create({
+        this.manager.createParticle({
           position: this.getParticlePosition(this),
           velocity: this.getParticleVelocity(this),
           acceleration: this.getParticleAcceleration(this),

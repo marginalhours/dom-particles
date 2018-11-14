@@ -4,7 +4,8 @@ import TextParticleEmitter from './text_particle_emitter';
 const DEFAULT_TPM_OPTIONS = {
   max: 100, 
   preallocate: 10, 
-  tagName: 'span'
+  tagName: 'span',
+  autoStart: true
 };
 
 export default class TextParticleManager {
@@ -21,14 +22,20 @@ export default class TextParticleManager {
     
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
+    
+    this.frameStart = null;
   }
   
-  play () {
-    this.raf = requestAnimationFrame((s) => this.update(s));
+  start () {
+    this.raf = requestAnimationFrame((t) => this.update(t));
   }
   
-  update(dt) {
+  update(timestamp) {
+    if (!this.frameStart) this.frameStart = timestamp;
+    let dt = timestamp - this.frameStart;
+    this.frameStart = timestamp;
     let f = (dt/1000);
+    
     this.particles = this.particles.filter(p => {
       p.update(f);
       if (p.alive) { return true; }
@@ -41,24 +48,33 @@ export default class TextParticleManager {
     
     this.emitters = this.emitters.filter(e => {
       e.update(f);
-      if (e.alive) { return true; }
-      return false;
+      return e.alive;
     });
     
     if (this.emitters.length === 0 && this.particles.length === 0){
-        
+      cancelAnimationFrame(this.raf);
+      this.raf = false;
+    } else {
+      requestAnimationFrame((t) => this.update(t));  
     }
   }
   
-  
-  create (options) {
+  createParticle (options) {
     if (this.particles.length < this.max) {
-      this.particles.push(new TextParticle({...options, el: this.pop()}));
+      let p = this.particles.push(new TextParticle({...options, el: this.pop()}));
+      if (!this.raf && this.autoStart) {
+        this.start();  
+      }
+      return p;
     }
   }
   
   createEmitter (options) {
-    this.emitters.push(new TextParticleEmitter({...options, manager: this}));
+    let e = this.emitters.push(new TextParticleEmitter({...options, manager: this}));
+    if (!this.raf && this.autoStart){
+      this.start();
+    }
+    return e;
   }
   
   from (element, pattern, options) {
