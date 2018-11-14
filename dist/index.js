@@ -185,10 +185,49 @@ var TextParticleManager = function () {
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
     Object.assign(this.foldElement.style, { width: 0, height: 0 });
+
+    this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
   }
 
   _createClass(TextParticleManager, [{
+    key: 'play',
+    value: function play() {
+      var _this = this;
+
+      this.raf = requestAnimationFrame(function (s) {
+        return _this.update(s);
+      });
+    }
+  }, {
+    key: 'update',
+    value: function update(dt) {
+      var _this2 = this;
+
+      var f = dt / 1000;
+      this.particles = this.particles.filter(function (p) {
+        p.update(f);
+        if (p.alive) {
+          return true;
+        }
+
+        // disappear and return to pool
+        p.el.style.opacity = 0;
+        _this2.push(p.el);
+        return false;
+      });
+
+      this.emitters = this.emitters.filter(function (e) {
+        e.update(f);
+        if (e.alive) {
+          return true;
+        }
+        return false;
+      });
+
+      if (this.emitters.length === 0 && this.particles.length === 0) {}
+    }
+  }, {
     key: 'create',
     value: function create(options) {
       if (this.particles.length < this.max) {
@@ -204,32 +243,6 @@ var TextParticleManager = function () {
     key: 'from',
     value: function from(element, pattern, options) {
       // wrap a dom node, mess about with it 
-    }
-  }, {
-    key: 'update',
-    value: function update(dt) {
-      var _this = this;
-
-      var f = dt / 1000;
-      this.particles = this.particles.filter(function (p) {
-        p.update(f);
-        if (p.alive) {
-          return true;
-        }
-
-        // disappear and return to pool
-        p.el.style.opacity = 0;
-        _this.push(p.el);
-        return false;
-      });
-
-      this.emitters = this.emitters.filter(function (e) {
-        e.update(f);
-        if (e.alive) {
-          return true;
-        }
-        return false;
-      });
     }
   }, {
     key: 'push',

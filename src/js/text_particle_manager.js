@@ -18,21 +18,13 @@ export default class TextParticleManager {
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
     Object.assign(this.foldElement.style, { width: 0, height: 0 });
+    
+    this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
   }
   
-  create (options) {
-    if (this.particles.length < this.max) {
-      this.particles.push(new TextParticle({...options, el: this.pop()}));
-    }
-  }
-  
-  createEmitter (options) {
-    this.emitters.push(new TextParticleEmitter({...options, manager: this}));
-  }
-  
-  from (element, pattern, options) {
-   // wrap a dom node, mess about with it 
+  play () {
+    this.raf = requestAnimationFrame((s) => this.update(s));
   }
   
   update(dt) {
@@ -52,6 +44,25 @@ export default class TextParticleManager {
       if (e.alive) { return true; }
       return false;
     });
+    
+    if (this.emitters.length === 0 && this.particles.length === 0){
+        
+    }
+  }
+  
+  
+  create (options) {
+    if (this.particles.length < this.max) {
+      this.particles.push(new TextParticle({...options, el: this.pop()}));
+    }
+  }
+  
+  createEmitter (options) {
+    this.emitters.push(new TextParticleEmitter({...options, manager: this}));
+  }
+  
+  from (element, pattern, options) {
+   // wrap a dom node, mess about with it 
   }
     
   push (el) {
