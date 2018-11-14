@@ -12,8 +12,8 @@ const DEFAULT_PARTICLE_OPTIONS = {
   onUpdate: () => {},
   heading: 0,
   scale: { x: 1, y: 1 },
-  useGrid: true,
-  gridSize: 16
+  useGrid: false,
+  gridSize: -1
 }
 
 export default class TextParticle {
@@ -27,6 +27,10 @@ export default class TextParticle {
     this.el.style.opacity = 1;
     this.frameNumber = 0;
     this.onCreate(this);
+    
+    if (this.useGrid) {
+      this.updateTransform = this.updateGridTransform;  
+    }
   }
   
   get alive () {
@@ -62,10 +66,14 @@ export default class TextParticle {
     return `rgba(${r}, ${g}, ${b}, ${a || 1.0}`  
   }
   
-  updateTransform () {
+  updateGridTransform () {
     let x = this.useGrid ? this.position.x - (this.position.x % this.gridSize) : this.position.x;
     let y = this.useGrid ? this.position.y - (this.position.y % this.gridSize) : this.position.y;
     this.el.style.transform = `translate3d(${x}px, ${y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
+  }
+  
+  updateTransform () {
+    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
   }
     
   update (f) {

@@ -78,7 +78,7 @@ export default class TextParticleManager {
   }
   
   from (element, pattern, options) {
-   // wrap a dom node, mess about with it 
+   // wrap a dom node, split its text according to pattern, turn resulting text into absolutely positioned spans, reparent them to particle reservoir, animate away...
   }
     
   push (el) {
