@@ -487,7 +487,7 @@ var TextParticleEmitter = function () {
         this.elapsed = 0;
         this.emitted++;
         // emit particle
-        this.manager.createParticle(this.particleOptions);
+        this.manager.createParticle(_extends({ position: this.position }, this.particleOptions));
       }
 
       // user-provided update
