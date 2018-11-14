@@ -1,14 +1,39 @@
-const RGBA_PATTERN = /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)|rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([01](?:\.\d+)*)\s*\)/;
+const RGB_PATTERN = /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
+const RGBA_PATTERN = /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([01](?:\.\d+)*)\s*\)/;
+const HEX_PATTERN = /#([0-9a-f]{1,2})([0-9a-f]{1,2})([0-9a-f]{1,2})/;
 const NUMBER_AND_UNIT_PATTERN = /(\d+|\d+\.\d+)([a-z]+)/;
 
+export const rgbToNumbers = (string) => {
+  try {
+    let [_, r, g, b] = RGB_PATTERN.exec(string);
+    return [r, g, b].map(v => parseInt(v)) 
+  }
+  catch (err){
+    return false;
+  }
+}
+
+export const rgbaToNumbers = (string) => {
+  try {
+    let [_, r, g, b, a] = RGBA_PATTERN.exec(string);
+    return [r, g, b, a].filter(v => v).map(v => parseInt(v)) 
+  }
+  catch (err){
+    return false;
+  }
+}
+
+export const hexToNumbers = (string) => {
+  try {
+    let [_, r, g, b]   
+  }
+}
+
+export const colourFromRGB = ([r, g, b, a]
 export const colourFromRGBA = (r, g, b, a) => `rgba(${r}, ${g}, ${b}, ${a || 1.0}`;
 
 export const lerp = (a, b, frac) => a + ((b - a) * frac);
 
-export const rgbaToNumbers = (string) => {
-  let [_, r, g, b, a] = RGBA_PATTERN.exec(string);
-  return [r, g, b, a].filter(v => v).map(v => parseInt(v)) 
-}
 
 export const hexToNumbers = (hex) => {
   let h = [...hex.substring(1)];
