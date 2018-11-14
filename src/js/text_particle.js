@@ -2,6 +2,8 @@
 // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
 // an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
 
+import { tryGetValue } from './utilities';
+
 export const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0}, 
   acceleration: { x: 0, y: 0 },
@@ -42,18 +44,27 @@ export default class TextParticle {
   
   buildStyle (styleObject) {
     let fixedStyles = {};
+    let dynamicStyles = {};
+    
     Object.keys(styleObject).map(styleKey => {
       let styleValue = styleObject[styleKey];
       if (typeof styleValue === 'string'){
         // fixed style, just assign it
         fixedStyles[styleKey] = styleValue; 
       } else if (Array.isArray(styleValue)) {
-        // 
+        let k = styleValue.map(s => tryGetValue(s));
+        if (k[0].length === 2){
+          dynamicStyles[styleKey] = { unit: k[0][1], values: k.map(v => v[0])};  
+        } else {
+          dynamicStyles[styleKey] = { unit: '', values: k }  
+        }
       } else if (typeof styleValue === 'object') {
         // I guess...?           
       }
     });
     
+    this.dynamicStyles = dynamicStyles;
+    console.log(this.dynamicStyles);
     // assign fixed styles
     this.setStyle(fixedStyles);
   }
@@ -91,6 +102,7 @@ export default class TextParticle {
     this.position.x += this.velocity.x * f;
     this.position.y += this.velocity.y * f;
     
+    this.styleUpdate();
     this.onUpdate(this);
     
     this.updateTransform();

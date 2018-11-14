@@ -35,7 +35,7 @@ document.querySelector('button').addEventListener('click', () => {
         let k = 50 + 50 * Math.random();
         return { x: k * Math.cos(h), y: k * Math.sin(h) }  
       },
-      style: { fontSize: 14, color: '#fff', width: '16px', height: '16px', borderRadius: '16px' },
+      style: { fontSize: 14, color: ['#fff', '#000'], width: '16px', height: '16px', borderRadius: '16px' },
       onUpdate: (p) => {
         if (p.frameNumber % 30 === 0){
           p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
