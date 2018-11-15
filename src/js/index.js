@@ -28,11 +28,11 @@ document.querySelector('button').addEventListener('click', () => {
     get position () { return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2} },
     emitEvery: 10,
     particleOptions: {
-      get ttl () { return 4000 + 1000 * Math.random() },
+      get ttl () { return 10000 * Math.random() },
       get text () { return '' },
       get velocity () {
         let h = 2 * Math.PI * Math.random();
-        let k = 50 + 50 * Math.random();
+        let k = 500 * Math.random();
         return { x: k * Math.cos(h), y: k * Math.sin(h) }  
       },
       style: { fontSize: 14, color: ['#fff', '#000'], width: '16px', height: '16px', borderRadius: ['0px', '16px'] },

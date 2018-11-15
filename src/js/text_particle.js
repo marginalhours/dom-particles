@@ -54,9 +54,12 @@ export default class TextParticle {
       } else if (Array.isArray(styleValue)) {
         let k = styleValue.map(s => tryGetValue(s));
         if (k[0].length === 2){
-          dynamicStyles[styleKey] = { unit: k[0][1], values: k.map(v => v[0])};  
+          let unit = k[0][1];
+          let values = k.map(v => v[0]);
+          dynamicStyles[styleKey] = (frac) => valueToCSSString(easeArray(values, lerp, frac), unit)
         } else {
-          dynamicStyles[styleKey] = { unit: '', values: transpose(k) }  
+          let k_t = transpose(k);
+          dynamicStyles[styleKey] = (frac) => colourToCSSString(k_t.map(c => easeArray(c, lerp, frac)))  
         }
       } else if (typeof styleValue === 'object') {
         // I guess...?           
@@ -81,14 +84,8 @@ export default class TextParticle {
     let lifeFrac = this.lifeFrac;
     let styleSnapshot = Object.keys(this.dynamicStyles)
       .reduce((a, b) => {
-        let style = this.dynamicStyles[b];
-        let value;
-        if (style.unit !== '') {
-          value = valueToCSSString(easeArray(style.values, lerp, lifeFrac), style.unit);
-        } else {
-           value = colourToCSSString(style.values.map(a => easeArray(style.values, lerp, lifeFrac))); 
-        }
-        return { ...a, [b]: value }
+        let styleFn = this.dynamicStyles[b];
+        return { ...a, [b]: styleFn(lifeFrac) }
       }, {});
     this.setStyle(styleSnapshot);
   }

@@ -83,7 +83,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
 // an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
 
-var _utilities = __webpack_require__(4);
+var _utilities = __webpack_require__(3);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -137,11 +137,20 @@ var TextParticle = function () {
             return (0, _utilities.tryGetValue)(s);
           });
           if (k[0].length === 2) {
-            dynamicStyles[styleKey] = { unit: k[0][1], values: k.map(function (v) {
-                return v[0];
-              }) };
+            var unit = k[0][1];
+            var values = k.map(function (v) {
+              return v[0];
+            });
+            dynamicStyles[styleKey] = function (frac) {
+              return (0, _utilities.valueToCSSString)((0, _utilities.easeArray)(values, _utilities.lerp, frac), unit);
+            };
           } else {
-            dynamicStyles[styleKey] = { unit: '', values: (0, _utilities.transpose)(k) };
+            var k_t = (0, _utilities.transpose)(k);
+            dynamicStyles[styleKey] = function (frac) {
+              return (0, _utilities.colourToCSSString)(k_t.map(function (c) {
+                return (0, _utilities.easeArray)(c, _utilities.lerp, frac);
+              }));
+            };
           }
         } else if ((typeof styleValue === 'undefined' ? 'undefined' : _typeof(styleValue)) === 'object') {
           // I guess...?           
@@ -170,16 +179,8 @@ var TextParticle = function () {
 
       var lifeFrac = this.lifeFrac;
       var styleSnapshot = Object.keys(this.dynamicStyles).reduce(function (a, b) {
-        var style = _this.dynamicStyles[b];
-        var value = void 0;
-        if (style.unit !== '') {
-          value = (0, _utilities.valueToCSSString)((0, _utilities.easeArray)(style.values, _utilities.lerp, lifeFrac), style.unit);
-        } else {
-          value = (0, _utilities.colourToCSSString)(style.values.map(function (a) {
-            return (0, _utilities.easeArray)(style.values, _utilities.lerp, lifeFrac);
-          }));
-        }
-        return _extends({}, a, _defineProperty({}, b, value));
+        var styleFn = _this.dynamicStyles[b];
+        return _extends({}, a, _defineProperty({}, b, styleFn(lifeFrac)));
       }, {});
       this.setStyle(styleSnapshot);
     }
@@ -270,14 +271,14 @@ document.querySelector('button').addEventListener('click', function () {
     emitEvery: 10,
     particleOptions: {
       get ttl() {
-        return 4000 + 1000 * Math.random();
+        return 10000 * Math.random();
       },
       get text() {
         return '';
       },
       get velocity() {
         var h = 2 * Math.PI * Math.random();
-        var k = 50 + 50 * Math.random();
+        var k = 500 * Math.random();
         return { x: k * Math.cos(h), y: k * Math.sin(h) };
       },
       style: { fontSize: 14, color: ['#fff', '#000'], width: '16px', height: '16px', borderRadius: ['0px', '16px'] },
@@ -309,7 +310,7 @@ var _text_particle = __webpack_require__(0);
 
 var _text_particle2 = _interopRequireDefault(_text_particle);
 
-var _text_particle_emitter = __webpack_require__(3);
+var _text_particle_emitter = __webpack_require__(4);
 
 var _text_particle_emitter2 = _interopRequireDefault(_text_particle_emitter);
 
@@ -471,89 +472,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _text_particle = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var DEFAULT_EMITTER_OPTIONS = {
-  emitEvery: 500,
-  position: { x: 0, y: 0 },
-  velocity: { x: 0, y: 0 },
-  acceleration: { x: 0, y: 0 },
-  onCreate: function onCreate() {},
-  onUpdate: function onUpdate() {},
-  particleOptions: _text_particle.DEFAULT_PARTICLE_OPTIONS
-};
-
-var TextParticleEmitter = function () {
-  function TextParticleEmitter(options) {
-    _classCallCheck(this, TextParticleEmitter);
-
-    Object.assign(this, _extends({}, DEFAULT_EMITTER_OPTIONS, options));
-
-    this.manager = options.manager;
-    this.totalElapsed = 0;
-    this.elapsed = this.emitEvery;
-    this.emitted = 0;
-
-    this.onCreate(this);
-  }
-
-  _createClass(TextParticleEmitter, [{
-    key: 'update',
-    value: function update(f) {
-      // position update
-      this.velocity.x += this.acceleration.x * f;
-      this.velocity.y += this.acceleration.y * f;
-      this.position.x += this.velocity.x * f;
-      this.position.y += this.velocity.y * f;
-
-      // emission update
-      this.elapsed += f * 1000;
-      this.totalElapsed += f * 1000;
-      if (this.elapsed > this.emitEvery) {
-        this.elapsed = 0;
-        this.emitted++;
-        // emit particle
-        this.manager.createParticle(_extends({ position: _extends({}, this.position) }, this.particleOptions));
-      }
-
-      // user-provided update
-      this.onUpdate(this);
-    }
-  }, {
-    key: 'alive',
-    get: function get() {
-      if (this.maxEmissions && this.emitted >= this.maxEmissions) {
-        return false;
-      }
-      if (this.ttl && this.totalElapsed >= this.ttl) {
-        return false;
-      }
-      return true;
-    }
-  }]);
-
-  return TextParticleEmitter;
-}();
-
-exports.default = TextParticleEmitter;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -673,6 +591,89 @@ var easeArray = exports.easeArray = function easeArray(array, easeFn, frac) {
   var nextIdx = idx === array.length - 1 ? idx : idx + 1;
   return easeFn(array[idx], array[nextIdx], frac);
 };
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _text_particle = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var DEFAULT_EMITTER_OPTIONS = {
+  emitEvery: 500,
+  position: { x: 0, y: 0 },
+  velocity: { x: 0, y: 0 },
+  acceleration: { x: 0, y: 0 },
+  onCreate: function onCreate() {},
+  onUpdate: function onUpdate() {},
+  particleOptions: _text_particle.DEFAULT_PARTICLE_OPTIONS
+};
+
+var TextParticleEmitter = function () {
+  function TextParticleEmitter(options) {
+    _classCallCheck(this, TextParticleEmitter);
+
+    Object.assign(this, _extends({}, DEFAULT_EMITTER_OPTIONS, options));
+
+    this.manager = options.manager;
+    this.totalElapsed = 0;
+    this.elapsed = this.emitEvery;
+    this.emitted = 0;
+
+    this.onCreate(this);
+  }
+
+  _createClass(TextParticleEmitter, [{
+    key: 'update',
+    value: function update(f) {
+      // position update
+      this.velocity.x += this.acceleration.x * f;
+      this.velocity.y += this.acceleration.y * f;
+      this.position.x += this.velocity.x * f;
+      this.position.y += this.velocity.y * f;
+
+      // emission update
+      this.elapsed += f * 1000;
+      this.totalElapsed += f * 1000;
+      if (this.elapsed > this.emitEvery) {
+        this.elapsed = 0;
+        this.emitted++;
+        // emit particle
+        this.manager.createParticle(_extends({ position: _extends({}, this.position) }, this.particleOptions));
+      }
+
+      // user-provided update
+      this.onUpdate(this);
+    }
+  }, {
+    key: 'alive',
+    get: function get() {
+      if (this.maxEmissions && this.emitted >= this.maxEmissions) {
+        return false;
+      }
+      if (this.ttl && this.totalElapsed >= this.ttl) {
+        return false;
+      }
+      return true;
+    }
+  }]);
+
+  return TextParticleEmitter;
+}();
+
+exports.default = TextParticleEmitter;
 
 /***/ })
 /******/ ]);
