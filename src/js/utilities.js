@@ -59,13 +59,14 @@ export const valueToCSSString = (val, unit) => `${val}${unit}`;
 export const lerp = (a, b, frac) => a + ((b - a) * frac);
 
 export const easeArray = (array, easeFn, frac) => {
-    /* 
-    For 2 values, it should always spit out [0, 1] as idx and nextIdx.
-    For 3 values
-    */
-    let idx = Math.round(frac / idxFrac);
-    let nextIdx = idx === array.length - 1 ? idx : idx + 1;
-    return easeFn(array[idx], array[nextIdx], frac);
+  /* 
+  For 2 values, it should always spit out [0, 1] as idx and nextIdx.
+  For 3 values, it should 
+  */
+  let totalLerp = frac * array.length;
+  let start = Math.floor(totalLerp);
+  let end = start + 1;
+  return easeFn(array[start], array[end], totalLerp % 1);
 }
 
 /* Property calculation function-generation functions */
