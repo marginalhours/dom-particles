@@ -218,7 +218,7 @@ exports.default = TextParticle;
 /***/ (function(module, exports) {
 
 "use strict";
-throw new Error("Module build failed: SyntaxError: Unexpected token, expected { (89:7)\n\n  87 | }\n  88 | \n> 89 | export buildOffsets = (text, selector) => {\n     |        ^\n  90 |   // finds all offsets in text when split by selector\n  91 |   \n  92 | }\n");
+throw new Error("Module build failed: SyntaxError: Unexpected token (98:4)\n\n   96 |       offsets.push([m.index, m.index + m[0].length]);\n   97 |       prev = m.\n>  98 |     }\n      |     ^\n   99 |   } while (m);\n  100 |   return offsets;\n  101 | }\n");
 
 /***/ }),
 /* 2 */
@@ -257,35 +257,27 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 [254, 254, 254, 1.0]].reverse();
 
 document.querySelector('button').addEventListener('click', function () {
-  t.createEmitter({
-    position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 },
-    emitEvery: 2,
-    particleOptions: {
-      grid: 16,
-      get ttl() {
-        return 1500;
-      },
-      get text() {
-        return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())];
-      },
-      /* particle position getter is relative to emitter position */
-      get position() {
-        return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) };
-      },
-      get velocity() {
-        return { x: 0, y: -50 };
-      },
-      style: { color: HEAT_COLOURS.map(function (c) {
-          return (0, _utilities.colourToCSSString)(c);
-        }), fontSize: ['24px', '12px'] },
-      onUpdate: function onUpdate(p) {
-        if (p.frameNumber % 30 === 0) {
-          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
-        }
-      }
-    }
-  });
+  t.from(document.querySelector('p'), /\w+/g);
 });
+
+// t.createEmitter({
+//   position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
+//   emitEvery: 2,
+//   particleOptions: {
+//     grid: 16,
+//     get ttl () { return 1500 },
+//     get text () { return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]},
+//     /* particle position getter is relative to emitter position */
+//     get position () { return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+//     get velocity () { return { x: 0, y: -50 } },
+//     style: { color: HEAT_COLOURS.map(c => colourToCSSString(c)), fontSize: ['24px', '12px'] },
+//     onUpdate: (p) => {
+//       if (p.frameNumber % 30 === 0){
+//         p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+//       }
+//     }
+//   },
+// });
 
 /***/ }),
 /* 3 */
@@ -309,6 +301,8 @@ var _text_particle2 = _interopRequireDefault(_text_particle);
 var _text_particle_emitter = __webpack_require__(4);
 
 var _text_particle_emitter2 = _interopRequireDefault(_text_particle_emitter);
+
+var _utilities = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -411,7 +405,7 @@ var TextParticleManager = function () {
     value: function from(element, pattern, options) {
       // wrap a dom node, split its text according to pattern, turn resulting text into absolutely positioned spans, reparent them to particle reservoir, animate away...
       // this is gonna be hideous
-
+      console.log((0, _utilities.buildOffsets)(element.innerText, pattern));
     }
   }, {
     key: 'push',

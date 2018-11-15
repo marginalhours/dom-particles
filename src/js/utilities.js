@@ -86,7 +86,16 @@ export const styleValueToFunction = (styleValue) => {
   } 
 }
 
-export buildOffsets = (text, selector) => {
+export const buildOffsets = (text, selector) => {
   // finds all offsets in text when split by selector
-  
+  let offsets = [];
+  let m, prev;
+  do {
+    m = selector.exec(text);
+    if (m) {      
+      offsets.push([m.index, m.index + m[0].length]);
+      prev = m.
+    }
+  } while (m);
+  return offsets;
 }

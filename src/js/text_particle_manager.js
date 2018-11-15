@@ -1,6 +1,8 @@
 import TextParticle from './text_particle';
 import TextParticleEmitter from './text_particle_emitter';
 
+import { buildOffsets } from './utilities';
+
 const DEFAULT_TPM_OPTIONS = {
   max: 100, 
   preallocate: 10, 
@@ -80,7 +82,7 @@ export default class TextParticleManager {
   from (element, pattern, options) {
     // wrap a dom node, split its text according to pattern, turn resulting text into absolutely positioned spans, reparent them to particle reservoir, animate away...
     // this is gonna be hideous
-    
+    console.log(buildOffsets(element.innerText, pattern));
   }
     
   push (el) {
