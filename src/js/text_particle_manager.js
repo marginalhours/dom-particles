@@ -80,9 +80,8 @@ export default class TextParticleManager {
   }
   
   from (element, pattern, options) {
-    // wrap a dom node, split its text according to pattern, turn resulting text into absolutely positioned spans, reparent them to particle reservoir, animate away...
-    // this is gonna be hideous
-    console.log(buildOffsets(element.innerText, pattern));
+    let offsets = buildOffsets(element.innerText, pattern);
+    // at this point, range.setStart() and setEnd() will give you your wrapped object, then we can start playing with it.
   }
     
   push (el) {

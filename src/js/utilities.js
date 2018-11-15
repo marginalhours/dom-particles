@@ -93,8 +93,14 @@ export const buildOffsets = (text, selector) => {
   do {
     m = selector.exec(text);
     if (m) {      
-      offsets.push([m.index, m.index + m[0].length]);
-      prev = m.
+      let next = m.index;
+      if (next > prev + 1) {
+        offsets.push([prev + 1, next - 1]);  
+      }
+      let end = m.index + m[0].length;
+      offsets.push([m.index, end]);
+      
+      prev = end;
     }
   } while (m);
   return offsets;
