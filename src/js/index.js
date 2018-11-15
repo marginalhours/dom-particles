@@ -27,21 +27,18 @@ const HEAT_COLOURS = [
 document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     get position () { return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2} },
-    emitEvery: 32,
+    get velocity () { return { x: 0, y: 5 } },
+    emitEvery: 5,
     particleOptions: {
-      get ttl () { return 1000 },
-      get text () { return '' },
-      get position () { return { x: 10 * Math.random() - 0.5)
-      get velocity () {
-        return { x: 0, y: -50 }  
-      },
-      get acceleration () {
-       return { x: 0, y: 10 } 
-      },
-      style: { backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)), height: '16px', width: '16px' },
+      get ttl () { return 1500 },
+      get text () { return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]},
+      /* particle position getter is relative to emitter position */
+      get position () { return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get velocity () { return { x: 0, y: -50 } },
+      style: { color: HEAT_COLOURS.map(c => colourToCSSString(c)), height: '16px', width: '16px' },
       onUpdate: (p) => {
         if (p.frameNumber % 30 === 0){
-          // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
         }
       }
     },
