@@ -21,9 +21,13 @@ export default class TextParticle {
     Object.assign(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options});
     
     this.elapsed = 0;
+    
     this.setText(this.text);
-    this.buildStyle(this.style);
+    this.buildStyles(this.style);
+    
+    // By default, at this point opacity will be 0, so set it to 1
     this.el.style.opacity = 1;
+    
     this.frameNumber = 0;
     this.onCreate(this);
     
@@ -31,7 +35,8 @@ export default class TextParticle {
       this.updateTransform = this.updateGridTransform;  
     }
     
-    this.updateStyles();
+    // Zero duration update to propagate initial styles
+    this.update(0);
   }
   
   get alive () {
@@ -42,7 +47,7 @@ export default class TextParticle {
     return this.elapsed / this.ttl;
   }
   
-  buildStyle (styleObject) {
+  buildStyles (styleObject) {
     let fixedStyles = {};
     let dynamicStyles = {};
     
@@ -73,16 +78,14 @@ export default class TextParticle {
     this.el.innerText = text;
   }
   
-  updateStyles () {
+  getStyleSnapshot () {
     let lifeFrac = this.lifeFrac;
     
-    let styleSnapshot = Object.keys(this.dynamicStyles)
+    return Object.keys(this.dynamicStyles)
       .reduce((a, b) => {
         let styleFn = this.dynamicStyles[b];
         return { ...a, [b]: styleFn(lifeFrac) }
       }, {...this.fixedStyles, transform: this.getTransform()});
-    
-    Object.assign(this.el.style, styleSnapshot);
   }
   
   getTransform () {
@@ -96,16 +99,21 @@ export default class TextParticle {
   }
     
   update (f) {
+    // Housekeeping
     this.elapsed += f * 1000;
     this.frameNumber ++;
     
+    // Standard motion update
     this.velocity.x += this.acceleration.x * f;
     this.velocity.y += this.acceleration.y * f;
     this.position.x += this.velocity.x * f;
     this.position.y += this.velocity.y * f;
 
+    this.nextStyles = this.getStyleSnapshot();
+    
+    // Mutate this.nextStyles in this function
     this.onUpdate(this);
     
-    this.updateStyles();
+    Object.assign(this.el.style, this.nextStyles);
   }
 }

@@ -108,9 +108,13 @@ var TextParticle = function () {
     Object.assign(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
 
     this.elapsed = 0;
+
     this.setText(this.text);
-    this.buildStyle(this.style);
+    this.buildStyles(this.style);
+
+    // By default, at this point opacity will be 0, so set it to 1
     this.el.style.opacity = 1;
+
     this.frameNumber = 0;
     this.onCreate(this);
 
@@ -118,12 +122,13 @@ var TextParticle = function () {
       this.updateTransform = this.updateGridTransform;
     }
 
-    this.updateStyles();
+    // Zero duration update to propagate initial styles
+    this.update(0);
   }
 
   _createClass(TextParticle, [{
-    key: 'buildStyle',
-    value: function buildStyle(styleObject) {
+    key: 'buildStyles',
+    value: function buildStyles(styleObject) {
       var fixedStyles = {};
       var dynamicStyles = {};
 
@@ -154,18 +159,16 @@ var TextParticle = function () {
       this.el.innerText = text;
     }
   }, {
-    key: 'updateStyles',
-    value: function updateStyles() {
+    key: 'getStyleSnapshot',
+    value: function getStyleSnapshot() {
       var _this = this;
 
       var lifeFrac = this.lifeFrac;
 
-      var styleSnapshot = Object.keys(this.dynamicStyles).reduce(function (a, b) {
+      return Object.keys(this.dynamicStyles).reduce(function (a, b) {
         var styleFn = _this.dynamicStyles[b];
         return _extends({}, a, _defineProperty({}, b, styleFn(lifeFrac)));
       }, _extends({}, this.fixedStyles, { transform: this.getTransform() }));
-
-      Object.assign(this.el.style, styleSnapshot);
     }
   }, {
     key: 'getTransform',
@@ -182,17 +185,22 @@ var TextParticle = function () {
   }, {
     key: 'update',
     value: function update(f) {
+      // Housekeeping
       this.elapsed += f * 1000;
       this.frameNumber++;
 
+      // Standard motion update
       this.velocity.x += this.acceleration.x * f;
       this.velocity.y += this.acceleration.y * f;
       this.position.x += this.velocity.x * f;
       this.position.y += this.velocity.y * f;
 
+      this.nextStyles = this.getStyleSnapshot();
+
+      // Mutate this.nextStyles in this function
       this.onUpdate(this);
 
-      this.updateStyles();
+      Object.assign(this.el.style, this.nextStyles);
     }
   }, {
     key: 'alive',
