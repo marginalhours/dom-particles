@@ -2,7 +2,7 @@
 const RGB_PATTERN = /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
 const RGBA_PATTERN = /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([01](?:\.\d+)*)\s*\)/;
 const HEX_PATTERN = /#([0-9a-f]{1,2})([0-9a-f]{1,2})([0-9a-f]{1,2})/;
-const NUMBER_AND_UNIT_PATTERN = /(\d+|\d+\.\d+)([a-z]+)/;
+const NUMBER_AND_UNIT_PATTERN = /(\d+\.\d+|\d+)([a-z]+)?/;
 
 /* CSS to internal format import / export */
 
@@ -38,7 +38,7 @@ export const hexToNumbers = (string) => {
 
 export const extractNumberAndUnit = (string) => {
   let [_, num, unit] = NUMBER_AND_UNIT_PATTERN.exec(string);
-  return [parseInt(num), unit]
+  return [parseInt(num), unit || '']
 }
 
 export const tryGetValue = (string) => {

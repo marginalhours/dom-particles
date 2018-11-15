@@ -26,7 +26,7 @@ const HEAT_COLORS = [
 document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
     get position () { return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2} },
-    emitEvery: 16,
+    emitEvery: 32,
     particleOptions: {
       get ttl () { return 5000 * Math.random() },
       get text () { return '' },
@@ -35,10 +35,11 @@ document.querySelector('button').addEventListener('click', () => {
         let k = 100 + 400 * Math.random();
         return { x: k * Math.cos(h), y: k * Math.sin(h) }  
       },
-      style: { fontSize: 14, color: ['#fff'], width: '16px', scale: ['1', '5'], display: 'block', borderRadius: ['0px', '16px'] },
+      
+      style: { fontSize: 14, backgroundColor: ['#fff'], width: '16px', height: '16px', width: '16px', borderStyle: 'solid', borderWidth: '2px', display: 'block', borderRadius: ['0px', '16px'] },
       onUpdate: (p) => {
         if (p.frameNumber % 30 === 0){
-          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+          // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
         }
       }
     },

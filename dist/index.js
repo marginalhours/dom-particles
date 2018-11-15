@@ -242,6 +242,8 @@ var _text_particle_manager2 = _interopRequireDefault(_text_particle_manager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var t = new _text_particle_manager2.default({ max: 10000 });
 
 var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
@@ -264,11 +266,13 @@ var HEAT_COLORS = [[0, 0, 0], // we're out
 [254, 254, 254]].reverse();
 
 document.querySelector('button').addEventListener('click', function () {
+  var _style;
+
   t.createEmitter({
     get position() {
       return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 };
     },
-    emitEvery: 16,
+    emitEvery: 32,
     particleOptions: {
       get ttl() {
         return 5000 * Math.random();
@@ -281,10 +285,11 @@ document.querySelector('button').addEventListener('click', function () {
         var k = 100 + 400 * Math.random();
         return { x: k * Math.cos(h), y: k * Math.sin(h) };
       },
-      style: { fontSize: 14, color: ['#fff'], width: '16px', scale: ['1', '5'], display: 'block', borderRadius: ['0px', '16px'] },
+
+      style: (_style = { fontSize: 14, backgroundColor: ['#fff'], width: '16px', height: '16px' }, _defineProperty(_style, 'width', '16px'), _defineProperty(_style, 'borderStyle', 'solid'), _defineProperty(_style, 'borderWidth', '2px'), _defineProperty(_style, 'display', 'block'), _defineProperty(_style, 'borderRadius', ['0px', '16px']), _style),
       onUpdate: function onUpdate(p) {
         if (p.frameNumber % 30 === 0) {
-          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+          // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
         }
       }
     }
@@ -480,7 +485,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var RGB_PATTERN = /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
 var RGBA_PATTERN = /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([01](?:\.\d+)*)\s*\)/;
 var HEX_PATTERN = /#([0-9a-f]{1,2})([0-9a-f]{1,2})([0-9a-f]{1,2})/;
-var NUMBER_AND_UNIT_PATTERN = /(\d+|\d+\.\d+)([a-z]+)/;
+var NUMBER_AND_UNIT_PATTERN = /(\d+\.\d+|\d+)([a-z]+)?/;
 
 /* CSS to internal format import / export */
 
@@ -545,7 +550,7 @@ var extractNumberAndUnit = exports.extractNumberAndUnit = function extractNumber
       num = _NUMBER_AND_UNIT_PATT2[1],
       unit = _NUMBER_AND_UNIT_PATT2[2];
 
-  return [parseInt(num), unit];
+  return [parseInt(num), unit || ''];
 };
 
 var tryGetValue = exports.tryGetValue = function tryGetValue(string) {
