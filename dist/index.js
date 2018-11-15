@@ -108,7 +108,7 @@ var TextParticle = function () {
 
     this.elapsed = 0;
     this.frameNumber = 0;
-    this.updateTransform = this.grid ? this.updateTransform : this.updateGridTransform;
+    this.updateTransform = this.grid ? this.updateGridTransform : this.updateTransform;
 
     // By default, at this point opacity will be 0, so set it to 1
     this.element.style.opacity = 1;
@@ -142,7 +142,7 @@ var TextParticle = function () {
             dynamicStyles[styleKey] = (0, _utilities.styleValueToFunction)(styleValue);
           }
         } else if ((typeof styleValue === 'undefined' ? 'undefined' : _typeof(styleValue)) === 'object') {
-          // I guess...?           
+          // Not implemented yet, but I guess per-property easing (>.<)
         }
       });
 
@@ -174,8 +174,8 @@ var TextParticle = function () {
   }, {
     key: 'getGridTransform',
     value: function getGridTransform() {
-      var x = this.grid ? this.position.x - this.position.x % this.grid : this.position.x;
-      var y = this.grid ? this.position.y - this.position.y % this.grid : this.position.y;
+      var x = this.position.x - this.position.x % this.grid;
+      var y = this.position.y - this.position.y % this.grid;
       return 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
     }
   }, {
@@ -191,11 +191,9 @@ var TextParticle = function () {
       this.position.x += this.velocity.x * f;
       this.position.y += this.velocity.y * f;
 
+      // Get current style, call user onUpdate(), assign them
       this.nextStyles = this.getStyleSnapshot();
-
-      // Mutate this.nextStyles in this function
       this.onUpdate(this);
-
       Object.assign(this.element.style, this.nextStyles);
     }
   }, {
@@ -256,6 +254,7 @@ document.querySelector('button').addEventListener('click', function () {
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 },
     emitEvery: 2,
     particleOptions: {
+      grid: 16,
       get ttl() {
         return 1500;
       },

@@ -29,6 +29,7 @@ document.querySelector('button').addEventListener('click', () => {
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
     emitEvery: 2,
     particleOptions: {
+      grid: 16,
       get ttl () { return 1500 },
       get text () { return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]},
       /* particle position getter is relative to emitter position */
