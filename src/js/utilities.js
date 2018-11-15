@@ -36,7 +36,7 @@ export const hexToNumbers = (string) => {
   }
 }
 
-export const extractNumberAndUnit = (string) => {
+export const valueToNumberAndUnit = (string) => {
   let [_, num, unit] = NUMBER_AND_UNIT_PATTERN.exec(string);
   return [parseInt(num), unit || '']
 }
@@ -48,7 +48,7 @@ export const tryGetValue = (string) => {
     case 'r':
       return (string[3] === 'a' ? rgbaToNumbers : rgbToNumbers)(string);
     default:
-      return extractNumberAndUnit(string);
+      return valueToNumberAndUnit(string);
   }
 }
 
@@ -56,17 +56,14 @@ export const colourToCSSString = ([r, g, b, a]) => `rgba(${r}, ${g}, ${b}, ${a})
 export const valueToCSSString = (val, unit) => `${val}${unit}`;
 
 /* Easing functions */
+
 export const lerp = (a, b, frac) => a + ((b - a) * frac);
 
 export const easeArray = (array, easeFn, frac) => {
-  /* 
-  For 2 values, it should always spit out [0, 1] as idx and nextIdx.
-  For 3 values, it should 
-  */
-  let totalLerp = frac * array.length;
-  let start = Math.floor(totalLerp);
+  let total = frac * array.length;
+  let start = Math.floor(total);
   let end = start + 1;
-  return easeFn(array[start], array[end], totalLerp % 1);
+  return easeFn(array[start], array[end], total % 1);
 }
 
 /* Property calculation function-generation functions */
@@ -77,13 +74,13 @@ export const transpose = (array) => {
 
 export const styleValueToFunction = (styleValue) => {
   let k = styleValue.map(s => tryGetValue(s));
-  
-  
   if (k[0].length === 2){
+    // CSS unit property (either like '12px' or like '1.0'
     let unit = k[0][1];
     let values = k.map(v => v[0]);
     return (frac) => valueToCSSString(easeArray(values, lerp, frac), unit)
   } else {
+    // Colour in [[r, g, b, a],...] format 
     let k_t = transpose(k);
     return (frac) => colourToCSSString(k_t.map(c => easeArray(c, lerp, frac)))  
   } 

@@ -79,8 +79,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
-// an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _utilities = __webpack_require__(3);
 
@@ -91,14 +90,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var DEFAULT_PARTICLE_OPTIONS = exports.DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0 },
   acceleration: { x: 0, y: 0 },
+  scale: { x: 1, y: 1 },
+  heading: 0,
   ttl: 1000,
   text: '.',
+  grid: false,
   style: {},
   onCreate: function onCreate() {},
-  onUpdate: function onUpdate() {},
-  heading: 0,
-  scale: { x: 1, y: 1 },
-  grid: false
+  onUpdate: function onUpdate() {}
 };
 
 var TextParticle = function () {
@@ -108,22 +107,19 @@ var TextParticle = function () {
     Object.assign(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
 
     this.elapsed = 0;
-
-    this.setText(this.text);
-    this.buildStyles(this.style);
+    this.frameNumber = 0;
+    this.updateTransform = this.grid ? this.updateTransform : this.updateGridTransform;
 
     // By default, at this point opacity will be 0, so set it to 1
-    this.el.style.opacity = 1;
+    this.element.style.opacity = 1;
+    // Populate initial text content
+    this.setText(this.text);
 
-    this.frameNumber = 0;
+    // Fetch initial style snapshot, call user onCreate(), assign styles
+    this.buildStyles(this.style);
+    this.nextStyles = this.getStyleSnapshot();
     this.onCreate(this);
-
-    if (this.useGrid) {
-      this.updateTransform = this.updateGridTransform;
-    }
-
-    // Zero duration update to propagate initial styles
-    this.update(0);
+    Object.assign(this.element.style, this.nextStyles);
   }
 
   _createClass(TextParticle, [{
@@ -156,7 +152,7 @@ var TextParticle = function () {
   }, {
     key: 'setText',
     value: function setText(text) {
-      this.el.innerText = text;
+      this.element.innerText = text;
     }
   }, {
     key: 'getStyleSnapshot',
@@ -200,7 +196,7 @@ var TextParticle = function () {
       // Mutate this.nextStyles in this function
       this.onUpdate(this);
 
-      Object.assign(this.el.style, this.nextStyles);
+      Object.assign(this.element.style, this.nextStyles);
     }
   }, {
     key: 'alive',
@@ -239,7 +235,7 @@ var t = new _text_particle_manager2.default({ max: 10000 });
 var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
 var GRAVITY = 0.1;
 
-var HEAT_COLOURS = [[0, 0, 0, 1.0], // we're out
+var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 [31, 0, 0, 1.0], // even fainter
 [61, 12, 8, 1.0], // faint red
 [98, 12, 11, 1.0], // blood red
@@ -365,8 +361,8 @@ var TextParticleManager = function () {
         }
 
         // disappear and return to pool
-        p.el.style.opacity = 0;
-        _this2.push(p.el);
+        p.element.style.opacity = 0;
+        _this2.push(p.element);
         return false;
       });
 
@@ -388,7 +384,7 @@ var TextParticleManager = function () {
     key: 'createParticle',
     value: function createParticle(options) {
       if (this.particles.length < this.max) {
-        var p = this.particles.push(new _text_particle2.default(_extends({}, options, { el: this.pop() })));
+        var p = this.particles.push(new _text_particle2.default(_extends({}, options, { element: this.pop() })));
         if (!this.raf && this.autoStart) {
           this.start();
         }
@@ -532,7 +528,7 @@ var hexToNumbers = exports.hexToNumbers = function hexToNumbers(string) {
   }
 };
 
-var extractNumberAndUnit = exports.extractNumberAndUnit = function extractNumberAndUnit(string) {
+var valueToNumberAndUnit = exports.valueToNumberAndUnit = function valueToNumberAndUnit(string) {
   var _NUMBER_AND_UNIT_PATT = NUMBER_AND_UNIT_PATTERN.exec(string),
       _NUMBER_AND_UNIT_PATT2 = _slicedToArray(_NUMBER_AND_UNIT_PATT, 3),
       _ = _NUMBER_AND_UNIT_PATT2[0],
@@ -549,7 +545,7 @@ var tryGetValue = exports.tryGetValue = function tryGetValue(string) {
     case 'r':
       return (string[3] === 'a' ? rgbaToNumbers : rgbToNumbers)(string);
     default:
-      return extractNumberAndUnit(string);
+      return valueToNumberAndUnit(string);
   }
 };
 
@@ -567,19 +563,16 @@ var valueToCSSString = exports.valueToCSSString = function valueToCSSString(val,
 };
 
 /* Easing functions */
+
 var lerp = exports.lerp = function lerp(a, b, frac) {
   return a + (b - a) * frac;
 };
 
 var easeArray = exports.easeArray = function easeArray(array, easeFn, frac) {
-  /* 
-  For 2 values, it should always spit out [0, 1] as idx and nextIdx.
-  For 3 values, it should 
-  */
-  var totalLerp = frac * array.length;
-  var start = Math.floor(totalLerp);
+  var total = frac * array.length;
+  var start = Math.floor(total);
   var end = start + 1;
-  return easeFn(array[start], array[end], totalLerp % 1);
+  return easeFn(array[start], array[end], total % 1);
 };
 
 /* Property calculation function-generation functions */
@@ -596,8 +589,8 @@ var styleValueToFunction = exports.styleValueToFunction = function styleValueToF
   var k = styleValue.map(function (s) {
     return tryGetValue(s);
   });
-
   if (k[0].length === 2) {
+    // CSS unit property (either like '12px' or like '1.0'
     var unit = k[0][1];
     var values = k.map(function (v) {
       return v[0];
@@ -606,6 +599,7 @@ var styleValueToFunction = exports.styleValueToFunction = function styleValueToF
       return valueToCSSString(easeArray(values, lerp, frac), unit);
     };
   } else {
+    // Colour in [[r, g, b, a],...] format 
     var k_t = transpose(k);
     return function (frac) {
       return colourToCSSString(k_t.map(function (c) {

@@ -41,8 +41,8 @@ export default class TextParticleManager {
       if (p.alive) { return true; }
       
       // disappear and return to pool
-      p.el.style.opacity = 0;
-      this.push(p.el);
+      p.element.style.opacity = 0;
+      this.push(p.element);
       return false;
     });
     
@@ -61,7 +61,7 @@ export default class TextParticleManager {
   
   createParticle (options) {
     if (this.particles.length < this.max) {
-      let p = this.particles.push(new TextParticle({...options, el: this.pop()}));
+      let p = this.particles.push(new TextParticle({...options, element: this.pop()}));
       if (!this.raf && this.autoStart) {
         this.start();  
       }

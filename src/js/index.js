@@ -7,7 +7,7 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
 const GRAVITY = 0.1;
 
 const HEAT_COLOURS = [
-  [0, 0, 0, 1.0], // we're out
+  [0, 0, 0, 1.0], // out
   [31, 0, 0, 1.0], // even fainter
   [61, 12, 8, 1.0], // faint red
   [98, 12, 11, 1.0], // blood red

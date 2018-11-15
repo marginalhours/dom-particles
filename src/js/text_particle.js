@@ -1,19 +1,16 @@
-// generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
-// an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
-
-import { tryGetValue, easeArray, lerp, styleValueToFunction } from './utilities';
+import { styleValueToFunction } from './utilities';
 
 export const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0}, 
   acceleration: { x: 0, y: 0 },
+  scale: { x: 1, y: 1 },
+  heading: 0,
   ttl: 1000,
   text: '.',
+  grid: false,
   style: {},
   onCreate: () => {},
   onUpdate: () => {},
-  heading: 0,
-  scale: { x: 1, y: 1 },
-  grid: false
 }
 
 export default class TextParticle {
@@ -21,22 +18,19 @@ export default class TextParticle {
     Object.assign(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options});
     
     this.elapsed = 0;
-    
-    this.setText(this.text);
-    this.buildStyles(this.style);
-    
-    // By default, at this point opacity will be 0, so set it to 1
-    this.el.style.opacity = 1;
-    
     this.frameNumber = 0;
-    this.onCreate(this);
-    
-    if (this.useGrid) {
-      this.updateTransform = this.updateGridTransform;  
-    }
-    
-    // Zero duration update to propagate initial styles
-    this.update(0);
+    this.updateTransform = this.grid ? this.updateTransform : this.updateGridTransform;
+
+    // By default, at this point opacity will be 0, so set it to 1
+    this.element.style.opacity = 1;
+    // Populate initial text content
+    this.setText(this.text);
+ 
+    // Fetch initial style snapshot, call user onCreate(), assign styles
+    this.buildStyles(this.style);
+    this.nextStyles = this.getStyleSnapshot();
+    this.onCreate(this);    
+    Object.assign(this.element.style, this.nextStyles);
   }
   
   get alive () {
@@ -75,7 +69,7 @@ export default class TextParticle {
   }
   
   setText (text) {
-    this.el.innerText = text;
+    this.element.innerText = text;
   }
   
   getStyleSnapshot () {
@@ -114,6 +108,6 @@ export default class TextParticle {
     // Mutate this.nextStyles in this function
     this.onUpdate(this);
     
-    Object.assign(this.el.style, this.nextStyles);
+    Object.assign(this.element.style, this.nextStyles);
   }
 }
