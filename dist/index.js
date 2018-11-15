@@ -215,161 +215,10 @@ exports.default = TextParticle;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-/* Useful regexes */
-var RGB_PATTERN = /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
-var RGBA_PATTERN = /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([01](?:\.\d+)*)\s*\)/;
-var HEX_PATTERN = /#([0-9a-f]{1,2})([0-9a-f]{1,2})([0-9a-f]{1,2})/;
-var NUMBER_AND_UNIT_PATTERN = /(\d+\.\d+|\d+)([a-z]+)?/;
-
-/* CSS to internal format import / export */
-
-var rgbToNumbers = exports.rgbToNumbers = function rgbToNumbers(string) {
-  try {
-    var _RGB_PATTERN$exec = RGB_PATTERN.exec(string),
-        _RGB_PATTERN$exec2 = _slicedToArray(_RGB_PATTERN$exec, 4),
-        _ = _RGB_PATTERN$exec2[0],
-        r = _RGB_PATTERN$exec2[1],
-        g = _RGB_PATTERN$exec2[2],
-        b = _RGB_PATTERN$exec2[3];
-
-    return [].concat(_toConsumableArray([r, g, b].map(function (v) {
-      return parseInt(v);
-    })), [1.0]);
-  } catch (err) {
-    return false;
-  }
-};
-
-var rgbaToNumbers = exports.rgbaToNumbers = function rgbaToNumbers(string) {
-  try {
-    var _RGBA_PATTERN$exec = RGBA_PATTERN.exec(string),
-        _RGBA_PATTERN$exec2 = _slicedToArray(_RGBA_PATTERN$exec, 5),
-        _ = _RGBA_PATTERN$exec2[0],
-        r = _RGBA_PATTERN$exec2[1],
-        g = _RGBA_PATTERN$exec2[2],
-        b = _RGBA_PATTERN$exec2[3],
-        a = _RGBA_PATTERN$exec2[4];
-
-    return [r, g, b, a].filter(function (v) {
-      return v;
-    }).map(function (v) {
-      return parseInt(v);
-    });
-  } catch (err) {
-    return false;
-  }
-};
-
-var hexToNumbers = exports.hexToNumbers = function hexToNumbers(string) {
-  try {
-    var _HEX_PATTERN$exec = HEX_PATTERN.exec(string),
-        _HEX_PATTERN$exec2 = _slicedToArray(_HEX_PATTERN$exec, 4),
-        _ = _HEX_PATTERN$exec2[0],
-        r = _HEX_PATTERN$exec2[1],
-        g = _HEX_PATTERN$exec2[2],
-        b = _HEX_PATTERN$exec2[3];
-
-    return [].concat(_toConsumableArray([r, g, b].map(function (x) {
-      return parseInt(x, 16) * (x.length === 1 ? 0x11 : 0x1);
-    })), [1.0]);
-  } catch (err) {
-    return false;
-  }
-};
-
-var valueToNumberAndUnit = exports.valueToNumberAndUnit = function valueToNumberAndUnit(string) {
-  var _NUMBER_AND_UNIT_PATT = NUMBER_AND_UNIT_PATTERN.exec(string),
-      _NUMBER_AND_UNIT_PATT2 = _slicedToArray(_NUMBER_AND_UNIT_PATT, 3),
-      _ = _NUMBER_AND_UNIT_PATT2[0],
-      num = _NUMBER_AND_UNIT_PATT2[1],
-      unit = _NUMBER_AND_UNIT_PATT2[2];
-
-  return [parseInt(num), unit || ''];
-};
-
-var tryGetValue = exports.tryGetValue = function tryGetValue(string) {
-  switch (string[0]) {
-    case '#':
-      return hexToNumbers(string);
-    case 'r':
-      return (string[3] === 'a' ? rgbaToNumbers : rgbToNumbers)(string);
-    default:
-      return valueToNumberAndUnit(string);
-  }
-};
-
-var colourToCSSString = exports.colourToCSSString = function colourToCSSString(_ref) {
-  var _ref2 = _slicedToArray(_ref, 4),
-      r = _ref2[0],
-      g = _ref2[1],
-      b = _ref2[2],
-      a = _ref2[3];
-
-  return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
-};
-var valueToCSSString = exports.valueToCSSString = function valueToCSSString(val, unit) {
-  return '' + val + unit;
-};
-
-/* Easing functions */
-
-var lerp = exports.lerp = function lerp(a, b, frac) {
-  return a + (b - a) * frac;
-};
-
-var easeArray = exports.easeArray = function easeArray(array, easeFn, frac) {
-  var total = frac * array.length;
-  var start = Math.floor(total);
-  var end = start + 1;
-  return easeFn(array[start], array[end], total % 1);
-};
-
-/* Property calculation function-generation functions */
-
-var transpose = exports.transpose = function transpose(array) {
-  return array[0].map(function (_, i) {
-    return array.map(function (r) {
-      return r[i];
-    });
-  });
-};
-
-var styleValueToFunction = exports.styleValueToFunction = function styleValueToFunction(styleValue) {
-  var k = styleValue.map(function (s) {
-    return tryGetValue(s);
-  });
-  if (k[0].length === 2) {
-    // CSS unit property (either like '12px' or like '1.0'
-    var unit = k[0][1];
-    var values = k.map(function (v) {
-      return v[0];
-    });
-    return function (frac) {
-      return valueToCSSString(easeArray(values, lerp, frac), unit);
-    };
-  } else {
-    // Colour in [[r, g, b, a],...] format 
-    var k_t = transpose(k);
-    return function (frac) {
-      return colourToCSSString(k_t.map(function (c) {
-        return easeArray(c, lerp, frac);
-      }));
-    };
-  }
-};
+throw new Error("Module build failed: SyntaxError: Unexpected token, expected { (89:7)\n\n  87 | }\n  88 | \n> 89 | export buildOffsets = (text, selector) => {\n     |        ^\n  90 |   // finds all offsets in text when split by selector\n  91 |   \n  92 | }\n");
 
 /***/ }),
 /* 2 */
@@ -561,6 +410,8 @@ var TextParticleManager = function () {
     key: 'from',
     value: function from(element, pattern, options) {
       // wrap a dom node, split its text according to pattern, turn resulting text into absolutely positioned spans, reparent them to particle reservoir, animate away...
+      // this is gonna be hideous
+
     }
   }, {
     key: 'push',

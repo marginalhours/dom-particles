@@ -85,3 +85,8 @@ export const styleValueToFunction = (styleValue) => {
     return (frac) => colourToCSSString(k_t.map(c => easeArray(c, lerp, frac)))  
   } 
 }
+
+export buildOffsets = (text, selector) => {
+  // finds all offsets in text when split by selector
+  
+}
