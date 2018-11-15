@@ -44,6 +44,9 @@ export default class TextParticleEmitter {
     this.totalElapsed += f * 1000;
     if (this.elapsed > this.emitEvery) {
       let toEmit = Math.floor(this.elapsed / this.emitEvery);
+      
+      if (this.maxEmissions) { toEmit = Math.min(this.maxEmissions - this.emitted, toEmit); }
+      
       this.elapsed = 0;
       
       for(let i = 0; i < toEmit; i++){

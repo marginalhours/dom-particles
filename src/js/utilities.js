@@ -52,10 +52,6 @@ export const tryGetValue = (string) => {
   }
 }
 
-export const transpose = (array) => {
-  return array[0].map((_, i) => array.map(r => r[i]));  
-}
-
 export const colourToCSSString = ([r, g, b, a]) => `rgba(${r}, ${g}, ${b}, ${a})`;
 export const valueToCSSString = (val, unit) => `${val}${unit}`;
 
@@ -68,4 +64,21 @@ export const easeArray = (array, easeFn, frac) => {
     let nextIdx = idx === array.length - 1 ? idx : idx + 1;
     return easeFn(array[idx], array[nextIdx], frac);
 }
-  
+
+/* Property calculation function-generation functions */
+
+export const transpose = (array) => {
+  return array[0].map((_, i) => array.map(r => r[i]));  
+}
+
+export const styleValueToFunction = (styleValue) => {
+ let k = styleValue.map(s => tryGetValue(s));
+  if (k[0].length === 2){
+    let unit = k[0][1];
+    let values = k.map(v => v[0]);
+    return (frac) => valueToCSSString(easeArray(values, lerp, frac), unit)
+  } else {
+    let k_t = transpose(k);
+    return (frac) => colourToCSSString(k_t.map(c => easeArray(c, lerp, frac)))  
+  } 
+}

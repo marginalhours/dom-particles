@@ -1,8 +1,7 @@
-// Colour, backgroundColour also as particle options? (take string or array, if array, lerp, etc)
 // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
 // an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
 
-import { tryGetValue, easeArray, lerp, transpose, valueToCSSString, colourToCSSString } from './utilities';
+import { tryGetValue, easeArray, lerp, styleValueToFunction } from './utilities';
 
 export const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0}, 
@@ -51,16 +50,11 @@ export default class TextParticle {
       if (typeof styleValue === 'string'){
         // fixed style, just assign it
         fixedStyles[styleKey] = styleValue; 
+      
       } else if (Array.isArray(styleValue)) {
-        let k = styleValue.map(s => tryGetValue(s));
-        if (k[0].length === 2){
-          let unit = k[0][1];
-          let values = k.map(v => v[0]);
-          dynamicStyles[styleKey] = (frac) => valueToCSSString(easeArray(values, lerp, frac), unit)
-        } else {
-          let k_t = transpose(k);
-          dynamicStyles[styleKey] = (frac) => colourToCSSString(k_t.map(c => easeArray(c, lerp, frac)))  
-        }
+        // dynamic style, calculate function for it
+        dynamicStyles[styleKey] = styleValueToFunction(styleValue);
+      
       } else if (typeof styleValue === 'object') {
         // I guess...?           
       }
@@ -82,6 +76,7 @@ export default class TextParticle {
   
   updateDynamicStyles () {
     let lifeFrac = this.lifeFrac;
+    console.log(lifeFrac);
     let styleSnapshot = Object.keys(this.dynamicStyles)
       .reduce((a, b) => {
         let styleFn = this.dynamicStyles[b];

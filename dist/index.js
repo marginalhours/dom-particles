@@ -79,8 +79,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Colour, backgroundColour also as particle options? (take string or array, if array, lerp, etc)
-// generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // generalized lerping? (ugh, because then you're into other easing function stuff - at that point may as well be an anime.js plugin...
 // an API like that would be cool, though. Any style attribute that's an array of values gets lerped over the course of the particle lifetime.
 
 var _utilities = __webpack_require__(3);
@@ -133,25 +132,8 @@ var TextParticle = function () {
           // fixed style, just assign it
           fixedStyles[styleKey] = styleValue;
         } else if (Array.isArray(styleValue)) {
-          var k = styleValue.map(function (s) {
-            return (0, _utilities.tryGetValue)(s);
-          });
-          if (k[0].length === 2) {
-            var unit = k[0][1];
-            var values = k.map(function (v) {
-              return v[0];
-            });
-            dynamicStyles[styleKey] = function (frac) {
-              return (0, _utilities.valueToCSSString)((0, _utilities.easeArray)(values, _utilities.lerp, frac), unit);
-            };
-          } else {
-            var k_t = (0, _utilities.transpose)(k);
-            dynamicStyles[styleKey] = function (frac) {
-              return (0, _utilities.colourToCSSString)(k_t.map(function (c) {
-                return (0, _utilities.easeArray)(c, _utilities.lerp, frac);
-              }));
-            };
-          }
+          // dynamic style, calculate function for it
+          dynamicStyles[styleKey] = (0, _utilities.styleValueToFunction)(styleValue);
         } else if ((typeof styleValue === 'undefined' ? 'undefined' : _typeof(styleValue)) === 'object') {
           // I guess...?           
         }
@@ -178,6 +160,7 @@ var TextParticle = function () {
       var _this = this;
 
       var lifeFrac = this.lifeFrac;
+      console.log(lifeFrac);
       var styleSnapshot = Object.keys(this.dynamicStyles).reduce(function (a, b) {
         var styleFn = _this.dynamicStyles[b];
         return _extends({}, a, _defineProperty({}, b, styleFn(lifeFrac)));
@@ -273,6 +256,7 @@ document.querySelector('button').addEventListener('click', function () {
       return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 };
     },
     emitEvery: 32,
+    maxEmissions: 1,
     particleOptions: {
       get ttl() {
         return 5000 * Math.random();
@@ -286,7 +270,7 @@ document.querySelector('button').addEventListener('click', function () {
         return { x: k * Math.cos(h), y: k * Math.sin(h) };
       },
 
-      style: (_style = { fontSize: 14, backgroundColor: ['#fff'], width: '16px', height: '16px' }, _defineProperty(_style, 'width', '16px'), _defineProperty(_style, 'borderStyle', 'solid'), _defineProperty(_style, 'borderWidth', '2px'), _defineProperty(_style, 'display', 'block'), _defineProperty(_style, 'borderRadius', ['0px', '16px']), _style),
+      style: (_style = { backgroundColor: '#fff', width: '16px', height: '100px' }, _defineProperty(_style, 'width', '100px'), _defineProperty(_style, 'borderStyle', 'solid'), _defineProperty(_style, 'borderWidth', '2px'), _defineProperty(_style, 'display', 'block'), _defineProperty(_style, 'borderRadius', ['0px', '50px']), _style),
       onUpdate: function onUpdate(p) {
         if (p.frameNumber % 30 === 0) {
           // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
@@ -564,14 +548,6 @@ var tryGetValue = exports.tryGetValue = function tryGetValue(string) {
   }
 };
 
-var transpose = exports.transpose = function transpose(array) {
-  return array[0].map(function (_, i) {
-    return array.map(function (r) {
-      return r[i];
-    });
-  });
-};
-
 var colourToCSSString = exports.colourToCSSString = function colourToCSSString(_ref) {
   var _ref2 = _slicedToArray(_ref, 4),
       r = _ref2[0],
@@ -595,6 +571,38 @@ var easeArray = exports.easeArray = function easeArray(array, easeFn, frac) {
   var idx = Math.round(frac / idxFrac);
   var nextIdx = idx === array.length - 1 ? idx : idx + 1;
   return easeFn(array[idx], array[nextIdx], frac);
+};
+
+/* Property calculation function-generation functions */
+
+var transpose = exports.transpose = function transpose(array) {
+  return array[0].map(function (_, i) {
+    return array.map(function (r) {
+      return r[i];
+    });
+  });
+};
+
+var styleValueToFunction = exports.styleValueToFunction = function styleValueToFunction(styleValue) {
+  var k = styleValue.map(function (s) {
+    return tryGetValue(s);
+  });
+  if (k[0].length === 2) {
+    var unit = k[0][1];
+    var values = k.map(function (v) {
+      return v[0];
+    });
+    return function (frac) {
+      return valueToCSSString(easeArray(values, lerp, frac), unit);
+    };
+  } else {
+    var k_t = transpose(k);
+    return function (frac) {
+      return colourToCSSString(k_t.map(function (c) {
+        return easeArray(c, lerp, frac);
+      }));
+    };
+  }
 };
 
 /***/ }),
@@ -654,6 +662,11 @@ var TextParticleEmitter = function () {
       this.totalElapsed += f * 1000;
       if (this.elapsed > this.emitEvery) {
         var toEmit = Math.floor(this.elapsed / this.emitEvery);
+
+        if (this.maxEmissions) {
+          toEmit = Math.min(this.maxEmissions - this.emitted, toEmit);
+        }
+
         this.elapsed = 0;
 
         for (var i = 0; i < toEmit; i++) {
