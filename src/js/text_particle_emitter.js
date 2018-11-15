@@ -7,7 +7,8 @@ const DEFAULT_EMITTER_OPTIONS = {
   acceleration: { x: 0, y: 0},
   onCreate: () => {},
   onUpdate: () => {},
-  particleOptions: DEFAULT_PARTICLE_OPTIONS
+  particleOptions: DEFAULT_PARTICLE_OPTIONS,
+  MAX_EMIT_PER_STEP: 10
 }
 
 export default class TextParticleEmitter {
@@ -44,9 +45,9 @@ export default class TextParticleEmitter {
     this.totalElapsed += f * 1000;
     if (this.elapsed > this.emitEvery) {
       let toEmit = Math.floor(this.elapsed / this.emitEvery);
+      toEmit = Math.min(toEmit, this.MAX_EMIT_PER_STEP);
       
       if (this.maxEmissions) { toEmit = Math.min(this.maxEmissions - this.emitted, toEmit); }
-      
       this.elapsed = 0;
       
       for(let i = 0; i < toEmit; i++){

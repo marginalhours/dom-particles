@@ -26,8 +26,7 @@ const HEAT_COLOURS = [
 
 document.querySelector('button').addEventListener('click', () => {
   t.createEmitter({
-    get position () { return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2} },
-    get velocity () { return { x: 0, y: 5 } },
+    position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
     emitEvery: 5,
     particleOptions: {
       get ttl () { return 1500 },
@@ -35,7 +34,7 @@ document.querySelector('button').addEventListener('click', () => {
       /* particle position getter is relative to emitter position */
       get position () { return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
       get velocity () { return { x: 0, y: -50 } },
-      style: { color: HEAT_COLOURS.map(c => colourToCSSString(c)), height: '16px', width: '16px' },
+      style: { color: HEAT_COLOURS.map(c => colourToCSSString(c)), fontSize: ['24px', '1px'] },
       onUpdate: (p) => {
         if (p.frameNumber % 30 === 0){
           p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);

@@ -249,12 +249,7 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // we're out
 
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
-    get position() {
-      return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 };
-    },
-    get velocity() {
-      return { x: 0, y: 5 };
-    },
+    position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 },
     emitEvery: 5,
     particleOptions: {
       get ttl() {
@@ -270,9 +265,9 @@ document.querySelector('button').addEventListener('click', function () {
       get velocity() {
         return { x: 0, y: -50 };
       },
-      style: { color: HEAT_COLOURS.map(function (c) {
+      style: { bac: HEAT_COLOURS.map(function (c) {
           return (0, _utilities.colourToCSSString)(c);
-        }), height: '16px', width: '16px' },
+        }), fontSize: ['24px', '16px'] },
       onUpdate: function onUpdate(p) {
         if (p.frameNumber % 30 === 0) {
           p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
@@ -638,7 +633,8 @@ var DEFAULT_EMITTER_OPTIONS = {
   acceleration: { x: 0, y: 0 },
   onCreate: function onCreate() {},
   onUpdate: function onUpdate() {},
-  particleOptions: _text_particle.DEFAULT_PARTICLE_OPTIONS
+  particleOptions: _text_particle.DEFAULT_PARTICLE_OPTIONS,
+  MAX_EMIT_PER_STEP: 10
 };
 
 var TextParticleEmitter = function () {
@@ -669,11 +665,11 @@ var TextParticleEmitter = function () {
       this.totalElapsed += f * 1000;
       if (this.elapsed > this.emitEvery) {
         var toEmit = Math.floor(this.elapsed / this.emitEvery);
+        toEmit = Math.min(toEmit, this.MAX_EMIT_PER_STEP);
 
         if (this.maxEmissions) {
           toEmit = Math.min(this.maxEmissions - this.emitted, toEmit);
         }
-
         this.elapsed = 0;
 
         for (var i = 0; i < toEmit; i++) {
