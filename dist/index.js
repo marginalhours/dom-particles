@@ -250,7 +250,7 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // we're out
 document.querySelector('button').addEventListener('click', function () {
   t.createEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 },
-    emitEvery: 5,
+    emitEvery: 2,
     particleOptions: {
       get ttl() {
         return 1500;
@@ -265,9 +265,9 @@ document.querySelector('button').addEventListener('click', function () {
       get velocity() {
         return { x: 0, y: -50 };
       },
-      style: { bac: HEAT_COLOURS.map(function (c) {
+      style: { color: HEAT_COLOURS.map(function (c) {
           return (0, _utilities.colourToCSSString)(c);
-        }), fontSize: ['24px', '16px'] },
+        }), fontSize: ['24px', '12px'] },
       onUpdate: function onUpdate(p) {
         if (p.frameNumber % 30 === 0) {
           p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
