@@ -37,7 +37,7 @@ document.querySelector('button').addEventListener('click', () => {
         return { x: k * Math.cos(h), y: k * Math.sin(h) }  
       },
       
-      style: { backgroundColor: '#fff', width: '16px', height: '100px', width: '100px', borderStyle: 'solid', borderWidth: '2px', display: 'block', borderRadius: ['0px', '50px'] },
+      style: { backgroundColor: '#fff', width: '16px', height: '100px', width: '100px', borderStyle: 'solid', borderWidth: '2px', display: 'block', borderRadius: ['0px'] },
       onUpdate: (p) => {
         if (p.frameNumber % 30 === 0){
           // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);

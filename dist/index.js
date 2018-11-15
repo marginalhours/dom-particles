@@ -110,7 +110,6 @@ var TextParticle = function () {
     this.elapsed = 0;
     this.setText(this.text);
     this.buildStyle(this.style);
-    this.updateTransform();
     this.el.style.opacity = 1;
     this.frameNumber = 0;
     this.onCreate(this);
@@ -118,6 +117,8 @@ var TextParticle = function () {
     if (this.useGrid) {
       this.updateTransform = this.updateGridTransform;
     }
+
+    this.updateStyles();
   }
 
   _createClass(TextParticle, [{
@@ -132,22 +133,20 @@ var TextParticle = function () {
           // fixed style, just assign it
           fixedStyles[styleKey] = styleValue;
         } else if (Array.isArray(styleValue)) {
-          // dynamic style, calculate function for it
-          dynamicStyles[styleKey] = (0, _utilities.styleValueToFunction)(styleValue);
+          if (styleValue.length === 1) {
+            // It's a one-element array, so it's still fixed
+            fixedStyles[styleKey] = styleValue;
+          } else {
+            // dynamic style, calculate function for it
+            dynamicStyles[styleKey] = (0, _utilities.styleValueToFunction)(styleValue);
+          }
         } else if ((typeof styleValue === 'undefined' ? 'undefined' : _typeof(styleValue)) === 'object') {
           // I guess...?           
         }
       });
 
       this.dynamicStyles = dynamicStyles;
-      // assign fixed styles
-      this.setStyle(fixedStyles);
-    }
-  }, {
-    key: 'setStyle',
-    value: function setStyle(styleObject) {
-      // Straightforward style assignment
-      Object.assign(this.el.style, styleObject);
+      this.fixedStyles = fixedStyles;
     }
   }, {
     key: 'setText',
@@ -155,29 +154,30 @@ var TextParticle = function () {
       this.el.innerText = text;
     }
   }, {
-    key: 'updateDynamicStyles',
-    value: function updateDynamicStyles() {
+    key: 'updateStyles',
+    value: function updateStyles() {
       var _this = this;
 
       var lifeFrac = this.lifeFrac;
-      console.log(lifeFrac);
+
       var styleSnapshot = Object.keys(this.dynamicStyles).reduce(function (a, b) {
         var styleFn = _this.dynamicStyles[b];
         return _extends({}, a, _defineProperty({}, b, styleFn(lifeFrac)));
-      }, {});
-      this.setStyle(styleSnapshot);
+      }, _extends({}, this.fixedStyles, { transform: this.getTransform() }));
+
+      Object.assign(this.el.style, styleSnapshot);
     }
   }, {
-    key: 'updateTransform',
-    value: function updateTransform() {
-      this.el.style.transform = 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
+    key: 'getTransform',
+    value: function getTransform() {
+      return 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
     }
   }, {
-    key: 'updateGridTransform',
-    value: function updateGridTransform() {
+    key: 'getGridTransform',
+    value: function getGridTransform() {
       var x = this.grid ? this.position.x - this.position.x % this.grid : this.position.x;
       var y = this.grid ? this.position.y - this.position.y % this.grid : this.position.y;
-      this.el.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
+      return 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
     }
   }, {
     key: 'update',
@@ -190,10 +190,9 @@ var TextParticle = function () {
       this.position.x += this.velocity.x * f;
       this.position.y += this.velocity.y * f;
 
-      this.updateDynamicStyles();
       this.onUpdate(this);
 
-      this.updateTransform();
+      this.updateStyles();
     }
   }, {
     key: 'alive',
@@ -270,7 +269,7 @@ document.querySelector('button').addEventListener('click', function () {
         return { x: k * Math.cos(h), y: k * Math.sin(h) };
       },
 
-      style: (_style = { backgroundColor: '#fff', width: '16px', height: '100px' }, _defineProperty(_style, 'width', '100px'), _defineProperty(_style, 'borderStyle', 'solid'), _defineProperty(_style, 'borderWidth', '2px'), _defineProperty(_style, 'display', 'block'), _defineProperty(_style, 'borderRadius', ['0px', '50px']), _style),
+      style: (_style = { backgroundColor: '#fff', width: '16px', height: '100px' }, _defineProperty(_style, 'width', '100px'), _defineProperty(_style, 'borderStyle', 'solid'), _defineProperty(_style, 'borderWidth', '2px'), _defineProperty(_style, 'display', 'block'), _defineProperty(_style, 'borderRadius', ['0px']), _style),
       onUpdate: function onUpdate(p) {
         if (p.frameNumber % 30 === 0) {
           // p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
@@ -567,7 +566,10 @@ var lerp = exports.lerp = function lerp(a, b, frac) {
 };
 
 var easeArray = exports.easeArray = function easeArray(array, easeFn, frac) {
-  var idxFrac = 1 / array.length;
+  /* 
+  For 2 values, it should always spit out [0, 1] as idx and nextIdx.
+  For 3 values
+  */
   var idx = Math.round(frac / idxFrac);
   var nextIdx = idx === array.length - 1 ? idx : idx + 1;
   return easeFn(array[idx], array[nextIdx], frac);
@@ -587,6 +589,7 @@ var styleValueToFunction = exports.styleValueToFunction = function styleValueToF
   var k = styleValue.map(function (s) {
     return tryGetValue(s);
   });
+
   if (k[0].length === 2) {
     var unit = k[0][1];
     var values = k.map(function (v) {

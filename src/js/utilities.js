@@ -59,7 +59,10 @@ export const valueToCSSString = (val, unit) => `${val}${unit}`;
 export const lerp = (a, b, frac) => a + ((b - a) * frac);
 
 export const easeArray = (array, easeFn, frac) => {
-    let idxFrac = 1 / array.length;
+    /* 
+    For 2 values, it should always spit out [0, 1] as idx and nextIdx.
+    For 3 values
+    */
     let idx = Math.round(frac / idxFrac);
     let nextIdx = idx === array.length - 1 ? idx : idx + 1;
     return easeFn(array[idx], array[nextIdx], frac);
@@ -72,7 +75,9 @@ export const transpose = (array) => {
 }
 
 export const styleValueToFunction = (styleValue) => {
- let k = styleValue.map(s => tryGetValue(s));
+  let k = styleValue.map(s => tryGetValue(s));
+  
+  
   if (k[0].length === 2){
     let unit = k[0][1];
     let values = k.map(v => v[0]);

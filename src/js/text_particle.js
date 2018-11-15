@@ -23,7 +23,6 @@ export default class TextParticle {
     this.elapsed = 0;
     this.setText(this.text);
     this.buildStyle(this.style);
-    this.updateTransform();
     this.el.style.opacity = 1;
     this.frameNumber = 0;
     this.onCreate(this);
@@ -31,6 +30,8 @@ export default class TextParticle {
     if (this.useGrid) {
       this.updateTransform = this.updateGridTransform;  
     }
+    
+    this.updateStyles();
   }
   
   get alive () {
@@ -52,47 +53,46 @@ export default class TextParticle {
         fixedStyles[styleKey] = styleValue; 
       
       } else if (Array.isArray(styleValue)) {
-        // dynamic style, calculate function for it
-        dynamicStyles[styleKey] = styleValueToFunction(styleValue);
-      
+        if (styleValue.length === 1){
+          // It's a one-element array, so it's still fixed
+          fixedStyles[styleKey] = styleValue; 
+        } else {
+          // dynamic style, calculate function for it
+          dynamicStyles[styleKey] = styleValueToFunction(styleValue);
+        }
       } else if (typeof styleValue === 'object') {
         // I guess...?           
       }
     });
     
     this.dynamicStyles = dynamicStyles;
-    // assign fixed styles
-    this.setStyle(fixedStyles);
-  }
-  
-  setStyle(styleObject) {
-    // Straightforward style assignment
-    Object.assign(this.el.style, styleObject);  
+    this.fixedStyles = fixedStyles;
   }
   
   setText (text) {
     this.el.innerText = text;
   }
   
-  updateDynamicStyles () {
+  updateStyles () {
     let lifeFrac = this.lifeFrac;
-    console.log(lifeFrac);
+    
     let styleSnapshot = Object.keys(this.dynamicStyles)
       .reduce((a, b) => {
         let styleFn = this.dynamicStyles[b];
         return { ...a, [b]: styleFn(lifeFrac) }
-      }, {});
-    this.setStyle(styleSnapshot);
+      }, {...this.fixedStyles, transform: this.getTransform()});
+    
+    Object.assign(this.el.style, styleSnapshot);
   }
   
-  updateTransform () {
-    this.el.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
+  getTransform () {
+    return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
   }
   
-  updateGridTransform () {
+  getGridTransform () {
     let x = this.grid ? this.position.x - (this.position.x % this.grid) : this.position.x;
     let y = this.grid ? this.position.y - (this.position.y % this.grid) : this.position.y;
-    this.el.style.transform = `translate3d(${x}px, ${y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
+    return `translate3d(${x}px, ${y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
   }
     
   update (f) {
@@ -103,10 +103,9 @@ export default class TextParticle {
     this.velocity.y += this.acceleration.y * f;
     this.position.x += this.velocity.x * f;
     this.position.y += this.velocity.y * f;
-    
-    this.updateDynamicStyles();
+
     this.onUpdate(this);
     
-    this.updateTransform();
+    this.updateStyles();
   }
 }
