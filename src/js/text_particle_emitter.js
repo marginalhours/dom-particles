@@ -43,10 +43,14 @@ export default class TextParticleEmitter {
     this.elapsed += f * 1000;
     this.totalElapsed += f * 1000;
     if (this.elapsed > this.emitEvery) {
+      let toEmit = Math.floor(this.elapsed / this.emitEvery);
       this.elapsed = 0;
-      this.emitted++;
-      // emit particle
-      this.manager.createParticle({position: {...this.position}, ...this.particleOptions});
+      
+      for(let i = 0; i < toEmit; i++){
+        // emit particle
+        this.emitted++;
+        this.manager.createParticle({position: {...this.position}, ...this.particleOptions});
+      }
     }
     
     // user-provided update

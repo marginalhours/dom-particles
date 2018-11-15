@@ -268,20 +268,20 @@ document.querySelector('button').addEventListener('click', function () {
     get position() {
       return { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 };
     },
-    emitEvery: 10,
+    emitEvery: 16,
     particleOptions: {
       get ttl() {
-        return 10000 * Math.random();
+        return 5000 * Math.random();
       },
       get text() {
         return '';
       },
       get velocity() {
         var h = 2 * Math.PI * Math.random();
-        var k = 500 * Math.random();
+        var k = 100 + 400 * Math.random();
         return { x: k * Math.cos(h), y: k * Math.sin(h) };
       },
-      style: { fontSize: 14, color: ['#fff', '#000'], width: '16px', height: '16px', borderRadius: ['0px', '16px'] },
+      style: { fontSize: 14, color: ['#fff'], width: '16px', scale: ['1', '5'], display: 'block', borderRadius: ['0px', '16px'] },
       onUpdate: function onUpdate(p) {
         if (p.frameNumber % 30 === 0) {
           p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
@@ -648,10 +648,14 @@ var TextParticleEmitter = function () {
       this.elapsed += f * 1000;
       this.totalElapsed += f * 1000;
       if (this.elapsed > this.emitEvery) {
+        var toEmit = Math.floor(this.elapsed / this.emitEvery);
         this.elapsed = 0;
-        this.emitted++;
-        // emit particle
-        this.manager.createParticle(_extends({ position: _extends({}, this.position) }, this.particleOptions));
+
+        for (var i = 0; i < toEmit; i++) {
+          // emit particle
+          this.emitted++;
+          this.manager.createParticle(_extends({ position: _extends({}, this.position) }, this.particleOptions));
+        }
       }
 
       // user-provided update
