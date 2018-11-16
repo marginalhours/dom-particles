@@ -354,7 +354,15 @@ var TextParticle = function () {
   }, {
     key: 'getTransform',
     value: function getTransform(snapshot) {
-      return 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + snapshot.scaleX + ', ' + this.scale.y + ')';
+      var scaleX = snapshot.scaleX,
+          scaleY = snapshot.scaleY,
+          scale = snapshot.scale;
+
+      scale = scale || 1.0;
+      scaleX = scaleX || scale;
+      scaleY = scaleY || scale;
+
+      return 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + scaleX + ', ' + scaleY + ')';
     }
   }, {
     key: 'getGridTransform',
@@ -438,7 +446,7 @@ document.querySelector('button').addEventListener('click', function (e) {
   t.addParticle({
     position: { x: e.clientX, y: e.clientY },
     text: '+1',
-    style: { color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', fontSize: ['2em', '1em'] },
+    style: { color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', scaleX: ["5", "1"] },
     velocity: { x: 0, y: -50 }
   });
   // t.from(document.querySelector('p'), /\w+/g);

@@ -102,7 +102,7 @@ export default class TextParticleManager {
     Object.assign(el.style, { 
       display: 'block', 
       position: 'absolute', 
-      pointerEvents: 'none', 
+      pointerEvents: 'none',
       transform: 'translate3d(0,0,0)',
       opacity: 0
     });

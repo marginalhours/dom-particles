@@ -28,7 +28,7 @@ document.querySelector('button').addEventListener('click', (e) => {
   t.addParticle({
     position: { x: e.clientX, y: e.clientY},
     text: '+1',
-    style: { color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', fontSize: ['2em', '1em'] },
+    style: { color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', scaleX: ["5", "1"] },
     velocity: { x: 0, y: -50}
   });
   // t.from(document.querySelector('p'), /\w+/g);

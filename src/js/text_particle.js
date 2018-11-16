@@ -84,7 +84,12 @@ export default class TextParticle {
   }
   
   getTransform (snapshot) {
-    return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${snapshot.scaleX}, ${this.scale.y})`;
+    let { scaleX, scaleY, scale } = snapshot;
+    scale = scale || 1.0;
+    scaleX = scaleX || scale;
+    scaleY = scaleY || scale;
+    
+    return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${scaleX}, ${scaleY})`;
   }
   
   getGridTransform (snapshot) {
