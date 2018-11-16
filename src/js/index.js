@@ -24,21 +24,44 @@ const HEAT_COLOURS = [
   [254, 254, 254, 1.0], // white
 ].reverse();
 
+let textClosure = () => {
+  let a = "HELLO";
+  let idx = -1;
+  
+  return () => {
+    idx++;
+    idx = idx % a.length;
+    return a[idx];
+  }
+}
+
+let xClosure = () => {
+  let idx = -1;
+  return () => {
+    idx++;
+    idx = idx % 20;
+    return 20 * idx;
+  }
+}
+
+let m = textClosure();
+let k = xClosure();
+
+
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
     position: { x: e.clientX, y: e.clientY},
-    emitEvery: 5,
+    emitEvery: 100,
     particleOptions: {
-      get position ()  { return { x: 50 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5)} },
-      text: '',
+      get position ()  { return { x: k(), y: 0 }},
+      get text () { return m() },
       style: { 
-        width: ['32px', '16px'], 
-        height: ['32px', '16px'], 
+        width: '16px',
+        height: '16px',
         borderRadius: '16px', 
         color: '#fff', 
         fontWeight: 'bold', 
-        textShadow: '1px 1px 1px #f00', 
-        background: HEAT_COLOURS.map(colourToCSSString) 
+        textShadow: '1px 1px 1px #f00',
       },
       velocity: { x: 0, y: -50}
     }

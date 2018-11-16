@@ -442,23 +442,47 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 [254, 254, 200, 1.0], // white
 [254, 254, 254, 1.0]].reverse();
 
+var textClosure = function textClosure() {
+  var a = "HELLO";
+  var idx = -1;
+
+  return function () {
+    idx++;
+    idx = idx % a.length;
+    return a[idx];
+  };
+};
+
+var xClosure = function xClosure() {
+  var idx = -1;
+  return function () {
+    idx++;
+    idx = idx % 20;
+    return 20 * idx;
+  };
+};
+
+var m = textClosure();
+var k = xClosure();
+
 document.querySelector('button').addEventListener('click', function (e) {
   t.addEmitter({
     position: { x: e.clientX, y: e.clientY },
-    emitEvery: 5,
+    emitEvery: 100,
     particleOptions: {
       get position() {
-        return { x: 50 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) };
+        return { x: k(), y: 0 };
       },
-      text: '',
+      get text() {
+        return m();
+      },
       style: {
-        width: ['32px', '16px'],
-        height: ['32px', '16px'],
+        width: '16px',
+        height: '16px',
         borderRadius: '16px',
         color: '#fff',
         fontWeight: 'bold',
-        textShadow: '1px 1px 1px #f00',
-        background: HEAT_COLOURS.map(_utilities.colourToCSSString)
+        textShadow: '1px 1px 1px #f00'
       },
       velocity: { x: 0, y: -50 }
     }
