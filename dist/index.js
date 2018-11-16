@@ -297,7 +297,7 @@ var TextParticle = function () {
     this.updateTransform = this.grid ? this.updateGridTransform : this.updateTransform;
 
     // By default, at this point opacity will be 0, so set it to 1
-    this.element.style.display = 'block';
+    this.element.style.opacity = 1;
     // Populate initial text content
     this.setText(this.text);
 
@@ -578,7 +578,7 @@ var TextParticleManager = function () {
         }
 
         // disappear and return to pool
-        p.element.style.display = 'none';
+        p.element.style.opacity = 0;
         _this2.push(p.element);
         return false;
       });

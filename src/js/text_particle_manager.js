@@ -45,7 +45,7 @@ export default class TextParticleManager {
       if (p.alive) { return true; }
       
       // disappear and return to pool
-      p.element.style.display = 'none';
+      p.element.style.opacity = 0;
       this.push(p.element);
       return false;
     });

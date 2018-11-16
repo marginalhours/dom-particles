@@ -23,7 +23,7 @@ export default class TextParticle {
     this.updateTransform = this.grid ? this.updateGridTransform : this.updateTransform;
 
     // By default, at this point opacity will be 0, so set it to 1
-    this.element.style.display = 'block';
+    this.element.style.opacity = 1;
     // Populate initial text content
     this.setText(this.text);
  
