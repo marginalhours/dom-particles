@@ -297,7 +297,7 @@ var TextParticle = function () {
     this.updateTransform = this.grid ? this.updateGridTransform : this.updateTransform;
 
     // By default, at this point opacity will be 0, so set it to 1
-    this.element.style.opacity = 1;
+    this.element.style.display = 'block';
     // Populate initial text content
     this.setText(this.text);
 
@@ -454,11 +454,11 @@ var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
 document.querySelector('button').addEventListener('click', function (e) {
   t.addEmitter({
     position: { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 },
-    emitEvery: 1,
-    MAX_EMIT_PER_STEP: 10,
+    emitEvery: 16,
+    MAX_EMIT_PER_STEP: 2,
     particleOptions: {
-      text: '.',
-      style: { color: '#fff' },
+      text: '',
+      style: { backgroundColor: ['#00f', '#fff'], height: '12px', width: '12px', scale: [1, 20] },
       get position() {
         return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) };
       },
@@ -469,7 +469,7 @@ document.querySelector('button').addEventListener('click', function (e) {
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) };
       },
       onCreate: function onCreate(p) {
-        // p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
       }
     }
   });
@@ -578,7 +578,7 @@ var TextParticleManager = function () {
         }
 
         // disappear and return to pool
-        p.element.style.opacity = 0;
+        p.element.style.display = 'none';
         _this2.push(p.element);
         return false;
       });
