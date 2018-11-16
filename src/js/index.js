@@ -25,11 +25,14 @@ const HEAT_COLOURS = [
 ].reverse();
 
 document.querySelector('button').addEventListener('click', (e) => {
-  t.addParticle({
+  t.addEmitter({
     position: { x: e.clientX, y: e.clientY},
-    text: '+1',
-    style: { color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', scaleX: ["5", "1"] },
+    particleOptions: {
+    position: { x: e.clientX, y: e.clientY},
+    text: '',
+    style: { width: '32px', height: '32px', borderRadius: '16px', color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', background: '-webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%)' },
     velocity: { x: 0, y: -50}
+    }
   });
   // t.from(document.querySelector('p'), /\w+/g);
 });

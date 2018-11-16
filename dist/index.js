@@ -263,7 +263,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* Fix scaling! */
 
 var _utilities = __webpack_require__(0);
 
@@ -443,11 +443,14 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 [254, 254, 254, 1.0]].reverse();
 
 document.querySelector('button').addEventListener('click', function (e) {
-  t.addParticle({
+  t.addEmitter({
     position: { x: e.clientX, y: e.clientY },
-    text: '+1',
-    style: { color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', scaleX: ["5", "1"] },
-    velocity: { x: 0, y: -50 }
+    particleOptions: {
+      position: { x: e.clientX, y: e.clientY },
+      text: '',
+      style: { width: '32px', height: '32px', borderRadius: '16px', color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', background: '-webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%)' },
+      velocity: { x: 0, y: -50 }
+    }
   });
   // t.from(document.querySelector('p'), /\w+/g);
 });

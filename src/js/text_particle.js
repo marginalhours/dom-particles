@@ -1,3 +1,5 @@
+/* Fix scaling! */
+
 import { styleValueToFunction } from './utilities';
 
 export const DEFAULT_PARTICLE_OPTIONS = {
