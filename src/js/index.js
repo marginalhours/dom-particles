@@ -27,11 +27,12 @@ const HEAT_COLOURS = [
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
     position: { x: e.clientX, y: e.clientY},
+    emitEvery: 5,
     particleOptions: {
-    position: { x: e.clientX, y: e.clientY},
-    text: '',
-    style: { width: '32px', height: '32px', borderRadius: '16px', color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', background: '-webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%)' },
-    velocity: { x: 0, y: -50}
+      get position ()  { return { x: 50 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5)} },
+      text: '',
+      style: { width: '32px', height: '32px', borderRadius: '16px', color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', background: '-webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%)' },
+      velocity: { x: 0, y: -50}
     }
   });
   // t.from(document.querySelector('p'), /\w+/g);
