@@ -24,9 +24,12 @@ const HEAT_COLOURS = [
   [254, 254, 254, 1.0], // white
 ].reverse();
 
-document.querySelector('button').addEventListener('click', () => {
+document.querySelector('button').addEventListener('click', (e) => {
   t.addParticle({
-    position: positionFromNode(document.querySelector('button'), 0, 0) 
+    position: { x: e.clientX, y: e.clientY},
+    text: '+1',
+    style: { color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', fontSize: ['2em', '1em'] },
+    velocity: { x: 0, y: -50}
   });
   // t.from(document.querySelector('p'), /\w+/g);
 });

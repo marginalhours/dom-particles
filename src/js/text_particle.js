@@ -3,7 +3,6 @@ import { styleValueToFunction } from './utilities';
 export const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0}, 
   acceleration: { x: 0, y: 0 },
-  scale: { x: 1, y: 1 },
   heading: 0,
   ttl: 1000,
   text: '.',
@@ -75,18 +74,20 @@ export default class TextParticle {
   getStyleSnapshot () {
     let lifeFrac = this.lifeFrac;
     
-    return Object.keys(this.dynamicStyles)
+    let snapshot = Object.keys(this.dynamicStyles)
       .reduce((a, b) => {
         let styleFn = this.dynamicStyles[b];
         return { ...a, [b]: styleFn(lifeFrac) }
-      }, {...this.fixedStyles, transform: this.getTransform()});
+      }, {...this.fixedStyles});
+    
+    return {...snapshot, transform: this.getTransform(snapshot) }
   }
   
-  getTransform () {
-    return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
+  getTransform (snapshot) {
+    return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${snapshot.scaleX}, ${this.scale.y})`;
   }
   
-  getGridTransform () {
+  getGridTransform (snapshot) {
     let x = this.position.x - (this.position.x % this.grid);
     let y = this.position.y - (this.position.y % this.grid);
     return `translate3d(${x}px, ${y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;

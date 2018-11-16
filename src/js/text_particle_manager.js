@@ -20,7 +20,7 @@ export default class TextParticleManager {
     
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
-    Object.assign(this.foldElement.style, { width: 0, height: 0 });
+    Object.assign(this.foldElement.style, { width: 0, height: 0, position: 'absolute', top: 0, left: 0});
     
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);

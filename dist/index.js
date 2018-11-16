@@ -274,7 +274,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var DEFAULT_PARTICLE_OPTIONS = exports.DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0 },
   acceleration: { x: 0, y: 0 },
-  scale: { x: 1, y: 1 },
   heading: 0,
   ttl: 1000,
   text: '.',
@@ -345,19 +344,21 @@ var TextParticle = function () {
 
       var lifeFrac = this.lifeFrac;
 
-      return Object.keys(this.dynamicStyles).reduce(function (a, b) {
+      var snapshot = Object.keys(this.dynamicStyles).reduce(function (a, b) {
         var styleFn = _this.dynamicStyles[b];
         return _extends({}, a, _defineProperty({}, b, styleFn(lifeFrac)));
-      }, _extends({}, this.fixedStyles, { transform: this.getTransform() }));
+      }, _extends({}, this.fixedStyles));
+
+      return _extends({}, snapshot, { transform: this.getTransform(snapshot) });
     }
   }, {
     key: 'getTransform',
-    value: function getTransform() {
-      return 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
+    value: function getTransform(snapshot) {
+      return 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + snapshot.scaleX + ', ' + this.scale.y + ')';
     }
   }, {
     key: 'getGridTransform',
-    value: function getGridTransform() {
+    value: function getGridTransform(snapshot) {
       var x = this.position.x - this.position.x % this.grid;
       var y = this.position.y - this.position.y % this.grid;
       return 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
@@ -433,9 +434,12 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 [254, 254, 200, 1.0], // white
 [254, 254, 254, 1.0]].reverse();
 
-document.querySelector('button').addEventListener('click', function () {
+document.querySelector('button').addEventListener('click', function (e) {
   t.addParticle({
-    position: (0, _utilities.positionFromNode)(document.querySelector('button'), 0, 0)
+    position: { x: e.clientX, y: e.clientY },
+    text: '+1',
+    style: { color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', fontSize: ['2em', '1em'] },
+    velocity: { x: 0, y: -50 }
   });
   // t.from(document.querySelector('p'), /\w+/g);
 });
@@ -507,7 +511,7 @@ var TextParticleManager = function () {
 
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
-    Object.assign(this.foldElement.style, { width: 0, height: 0 });
+    Object.assign(this.foldElement.style, { width: 0, height: 0, position: 'absolute', top: 0, left: 0 });
 
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
