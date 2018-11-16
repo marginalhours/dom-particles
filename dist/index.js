@@ -242,6 +242,11 @@ var buildOffsets = exports.buildOffsets = function buildOffsets(text, selector) 
   return offsets;
 };
 
+var positionFromNode = exports.positionFromNode = function positionFromNode(element, xOffset, yOffset) {
+  var rect = element.getBoundingClientRect();
+  return { x: rect.x + xOffset, y: rect.y + yOffset };
+};
+
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -429,7 +434,10 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 [254, 254, 254, 1.0]].reverse();
 
 document.querySelector('button').addEventListener('click', function () {
-  t.from(document.querySelector('p'), /\w+/g);
+  t.addParticle({
+    position: (0, _utilities.positionFromNode)(document.querySelector('button'), 0, 0)
+  });
+  // t.from(document.querySelector('p'), /\w+/g);
 });
 
 // t.createEmitter({
@@ -553,8 +561,8 @@ var TextParticleManager = function () {
       }
     }
   }, {
-    key: 'createParticle',
-    value: function createParticle(options) {
+    key: 'addParticle',
+    value: function addParticle(options) {
       if (this.particles.length < this.max) {
         var p = this.particles.push(new _text_particle2.default(_extends({}, options, { element: this.pop() })));
         if (!this.raf && this.autoStart) {
@@ -564,8 +572,8 @@ var TextParticleManager = function () {
       }
     }
   }, {
-    key: 'createEmitter',
-    value: function createEmitter(options) {
+    key: 'addEmitter',
+    value: function addEmitter(options) {
       var e = this.emitters.push(new _text_particle_emitter2.default(_extends({}, options, { manager: this })));
       if (!this.raf && this.autoStart) {
         this.start();
@@ -651,7 +659,7 @@ var DEFAULT_EMITTER_OPTIONS = {
   onCreate: function onCreate() {},
   onUpdate: function onUpdate() {},
   particleOptions: _text_particle.DEFAULT_PARTICLE_OPTIONS,
-  MAX_EMIT_PER_STEP: 10
+  MAX_EMIT_PER_STEP: 10 /* Prevent thundering herds on tab switch */
 };
 
 var TextParticleEmitter = function () {
@@ -694,7 +702,7 @@ var TextParticleEmitter = function () {
           this.emitted++;
           var p = this.particleOptions.position;
           var pp = { x: this.position.x + p.x, y: this.position.y + p.y };
-          this.manager.createParticle(_extends({}, this.particleOptions, { position: pp }));
+          this.manager.addParticle(_extends({}, this.particleOptions, { position: pp }));
         }
       }
 

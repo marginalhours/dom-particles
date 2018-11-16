@@ -1,5 +1,5 @@
 import TextParticleManager from './text_particle_manager';
-import { colourToCSSString } from './utilities';
+import { colourToCSSString, positionFromNode } from './utilities';
 
 let t = new TextParticleManager({ max: 10000 });
 
@@ -25,7 +25,10 @@ const HEAT_COLOURS = [
 ].reverse();
 
 document.querySelector('button').addEventListener('click', () => {
-  t.from(document.querySelector('p'), /\w+/g);
+  t.addParticle({
+    position: positionFromNode(document.querySelector('button'), 0, 0) 
+  });
+  // t.from(document.querySelector('p'), /\w+/g);
 });
 
   // t.createEmitter({

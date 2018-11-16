@@ -8,7 +8,7 @@ const DEFAULT_EMITTER_OPTIONS = {
   onCreate: () => {},
   onUpdate: () => {},
   particleOptions: DEFAULT_PARTICLE_OPTIONS,
-  MAX_EMIT_PER_STEP: 10
+  MAX_EMIT_PER_STEP: 10 /* Prevent thundering herds on tab switch */
 }
 
 export default class TextParticleEmitter {
@@ -55,7 +55,7 @@ export default class TextParticleEmitter {
         this.emitted++;
         let p = this.particleOptions.position;
         let pp = { x: this.position.x + p.x, y: this.position.y + p.y }
-        this.manager.createParticle({...this.particleOptions, position: pp});
+        this.manager.addParticle({...this.particleOptions, position: pp});
       }
     }
     

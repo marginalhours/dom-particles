@@ -61,7 +61,7 @@ export default class TextParticleManager {
     }
   }
   
-  createParticle (options) {
+  addParticle (options) {
     if (this.particles.length < this.max) {
       let p = this.particles.push(new TextParticle({...options, element: this.pop()}));
       if (!this.raf && this.autoStart) {
@@ -71,7 +71,7 @@ export default class TextParticleManager {
     }
   }
   
-  createEmitter (options) {
+  addEmitter (options) {
     let e = this.emitters.push(new TextParticleEmitter({...options, manager: this}));
     if (!this.raf && this.autoStart){
       this.start();

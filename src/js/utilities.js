@@ -105,3 +105,8 @@ export const buildOffsets = (text, selector) => {
   } while (m);
   return offsets;
 }
+
+export const positionFromNode = (element, xOffset, yOffset) => {
+  let rect = element.getBoundingClientRect();
+  return { x: rect.x + xOffset, y: rect.y + yOffset}
+}
