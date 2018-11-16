@@ -1,11 +1,6 @@
 import TextParticleManager from './text_particle_manager';
 import { colourToCSSString, positionFromNode, lerp } from './utilities';
 
-let t = new TextParticleManager({ max: 10000 });
-
-let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
-const GRAVITY = 0.1;
-
 const HEAT_COLOURS = [
   [0, 0, 0, 1.0], // out
   [31, 0, 0, 1.0], // even fainter
@@ -25,22 +20,27 @@ const HEAT_COLOURS = [
 ].reverse();
 
 
+
+let t = new TextParticleManager({ max: 10000 });
+
+let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
+
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
     position: { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2},
-    emitEvery: 5,
+    emitEvery: 0.05,
     particleOptions: {
-      text: '',
-      style: { scale: [1, 10], backgroundColor: '#fff', width: '1px', height: '1px' },
+      text: '+',
+      style: { scaleX: [1, 10], scaleY: [2, 20], backgroundColor: ['#ccf', '#fff'] },
       get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
       ttl: 1000,
       get velocity () {
-        let h = 600 + 100 * Math.random();
+        let h = 900 + 100 * Math.random();
         let theta = 2 * Math.PI * Math.random();
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },
       onCreate: (p) => {
-        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+        // p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
       }
     }
   });
