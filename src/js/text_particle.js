@@ -3,7 +3,7 @@
 import { styleValueToFunction } from './utilities';
 
 export const DEFAULT_PARTICLE_OPTIONS = {
-  velocity: { x: 0, y: 0}, 
+  velocity: { x: 0, y: 0 }, 
   acceleration: { x: 0, y: 0 },
   heading: 0,
   ttl: 1000,

@@ -1,5 +1,5 @@
 import TextParticleManager from './text_particle_manager';
-import { colourToCSSString, positionFromNode } from './utilities';
+import { colourToCSSString, positionFromNode, lerp } from './utilities';
 
 let t = new TextParticleManager({ max: 10000 });
 
@@ -28,40 +28,19 @@ const HEAT_COLOURS = [
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
     position: { x: e.clientX, y: e.clientY},
-    emitEvery: 100,
-    maxEmissions: 1,
     particleOptions: {
-      get position ()  { return { x: 0, y: 0 }},
-      get velocity () {
-        let k = 50 + 50 * Math.random();
-        let h = 2 * Math.PI * Math.random();
-        return { x: k * Math.cos(h), y: k * Math.sin(h)}
-      },
-      text: '>',
-      style: { 
-        width: '16px',
-        height: '16px',
-        borderRadius: '16px', 
-        color: '#fff', 
-        fontWeight: 'bold', 
-        textShadow: '1px 1px 1px #f00',
-        scale: [1, 5],
-        translateX: [0, 10],
-        translateY: [0, 10]
-      },
+      text: '🐝',
+      ttl: 10000,
       onUpdate: (p) => {
         if (p.frameNumber % 30 === 0){
           let k = 50 + 50 * Math.random();
           let h = 2 * Math.PI * Math.random();
-          p.acceleration = {x: k * Math.cos(h),  
+          p.velocity = {x: k * Math.cos(h), y: k * Math.sin(h)} 
         }
-        
-        p.heading = Math.atan2(this.acceleration.y, this.acceleration.x);
-      },
-      velocity: { x: 0, y: -50}
+        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+      }
     }
   });
-  // t.from(document.querySelector('p'), /\w+/g);
 });
 
   // t.createEmitter({

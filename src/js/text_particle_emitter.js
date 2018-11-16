@@ -7,7 +7,7 @@ const DEFAULT_EMITTER_OPTIONS = {
   acceleration: { x: 0, y: 0},
   onCreate: () => {},
   onUpdate: () => {},
-  particleOptions: DEFAULT_PARTICLE_OPTIONS,
+  particleOptions: { position: { x: 0, y: 0 }, ...DEFAULT_PARTICLE_OPTIONS },
   MAX_EMIT_PER_STEP: 10 /* Prevent thundering herds on tab switch */
 }
 
