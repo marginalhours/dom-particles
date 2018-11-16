@@ -455,13 +455,16 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 document.querySelector('button').addEventListener('click', function (e) {
   t.addEmitter({
     position: { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 },
-    emitEvery: 30,
+    emitEvery: 5,
     particleOptions: {
-      text: '🐝',
-      style: { fontSize: '32px' },
-      ttl: 10000,
+      text: '',
+      style: { scale: [1, 2], backgroundColor: '#fff', width: '1px', height: '1px' },
+      get position() {
+        return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) };
+      },
+      ttl: 1000,
       get velocity() {
-        var h = 100 + 100 * Math.random();
+        var h = 600 + 100 * Math.random();
         var theta = 2 * Math.PI * Math.random();
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) };
       },
@@ -544,6 +547,8 @@ var TextParticleManager = function () {
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
 
+    this.out = document.querySelector('p');
+
     this.frameStart = null;
   }
 
@@ -577,6 +582,8 @@ var TextParticleManager = function () {
         _this2.push(p.element);
         return false;
       });
+
+      this.out.innerText = this.particles.length;
 
       this.emitters = this.emitters.filter(function (e) {
         e.update(f);

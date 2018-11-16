@@ -28,13 +28,14 @@ const HEAT_COLOURS = [
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
     position: { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2},
-    emitEvery: 30,
+    emitEvery: 5,
     particleOptions: {
-      text: '🐝',
-      style: { fontSize: '32px' },
-      ttl: 10000,
+      text: '',
+      style: { scale: [1, 10], backgroundColor: '#fff', width: '1px', height: '1px' },
+      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      ttl: 1000,
       get velocity () {
-        let h = 100 + 100 * Math.random();
+        let h = 600 + 100 * Math.random();
         let theta = 2 * Math.PI * Math.random();
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },

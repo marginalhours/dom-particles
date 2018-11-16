@@ -25,6 +25,8 @@ export default class TextParticleManager {
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
     
+    this.out = document.querySelector('p');
+    
     this.frameStart = null;
   }
   
@@ -47,6 +49,8 @@ export default class TextParticleManager {
       this.push(p.element);
       return false;
     });
+    
+    this.out.innerText = this.particles.length;
     
     this.emitters = this.emitters.filter(e => {
       e.update(f);
