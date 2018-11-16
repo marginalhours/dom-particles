@@ -19,33 +19,27 @@ const HEAT_COLOURS = [
   [254, 254, 254, 1.0], // white
 ].reverse();
 
-
-
 let t = new TextParticleManager({ max: 10000 });
-
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 
-let h = 0;
+let theta = 0;
 
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
-    position: { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 },
+    position: { x: c.x, y: c.y },
     emitEvery: 8,
     particleOptions: {
-      text: '  ',
-      style: { backgroundColor: ['#00f', '#fff'], height: '12px', width: '12px', scale: [0.1, 20] },
+      text: '',
+      style: { backgroundColor: ['#f33', '#fefeee'], height: '12px', width: '12px', scale: [0.1, 20] },
       get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
       ttl: 1000,
       get velocity () {
-        let h = 900 + 100 * Math.random();
-        let theta = 2 * Math.PI * Math.random();
+        let h = 600 + 100 * Math.random();
+        theta += 0.1 * Math.PI * Math.random();
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },
       onCreate: (p) => {
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-      },
-      onUpdate: (p) => {
-        p.heading += 0.02; 
       }
     }
   });

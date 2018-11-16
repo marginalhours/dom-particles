@@ -448,32 +448,28 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 [254, 254, 254, 1.0]].reverse();
 
 var t = new _text_particle_manager2.default({ max: 10000 });
-
 var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
 
-var h = 0;
+var theta = 0;
 
 document.querySelector('button').addEventListener('click', function (e) {
   t.addEmitter({
-    position: { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 },
+    position: { x: c.x, y: c.y },
     emitEvery: 8,
     particleOptions: {
-      text: '  ',
-      style: { backgroundColor: ['#00f', '#fff'], height: '12px', width: '12px', scale: [0.1, 20] },
+      text: '',
+      style: { backgroundColor: ['#f33', '#fefeee'], height: '12px', width: '12px', scale: [0.1, 20] },
       get position() {
         return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) };
       },
       ttl: 1000,
       get velocity() {
-        var h = 900 + 100 * Math.random();
-        var theta = 2 * Math.PI * Math.random();
+        var h = 600 + 100 * Math.random();
+        theta += 0.1 * Math.PI * Math.random();
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) };
       },
       onCreate: function onCreate(p) {
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-      },
-      onUpdate: function onUpdate(p) {
-        p.heading += 0.02;
       }
     }
   });
