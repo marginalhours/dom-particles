@@ -99,6 +99,7 @@ var rgbToNumbers = exports.rgbToNumbers = function rgbToNumbers(string) {
       return parseInt(v);
     })), [1.0]);
   } catch (err) {
+    console.log(err);
     return false;
   }
 };
@@ -119,6 +120,7 @@ var rgbaToNumbers = exports.rgbaToNumbers = function rgbaToNumbers(string) {
       return parseInt(v);
     });
   } catch (err) {
+    console.log(err);
     return false;
   }
 };
@@ -136,6 +138,7 @@ var hexToNumbers = exports.hexToNumbers = function hexToNumbers(string) {
       return parseInt(x, 16) * (x.length === 1 ? 0x11 : 0x1);
     })), [1.0]);
   } catch (err) {
+    console.log(err);
     return false;
   }
 };
@@ -181,9 +184,9 @@ var lerp = exports.lerp = function lerp(a, b, frac) {
 };
 
 var easeArray = exports.easeArray = function easeArray(array, easeFn, frac) {
-  var total = frac * array.length;
-  var start = Math.floor(total);
-  var end = start + 1;
+  var total = frac * (array.length - 1);
+  var start = Math.min(Math.floor(total), array.length - 1);
+  var end = Math.min(start + 1, array.length - 1);
   return easeFn(array[start], array[end], total % 1);
 };
 
@@ -313,10 +316,7 @@ var TextParticle = function () {
 
       Object.keys(styleObject).map(function (styleKey) {
         var styleValue = styleObject[styleKey];
-        if (typeof styleValue === 'string') {
-          // fixed style, just assign it
-          fixedStyles[styleKey] = styleValue;
-        } else if (Array.isArray(styleValue)) {
+        if (Array.isArray(styleValue)) {
           if (styleValue.length === 1) {
             // It's a one-element array, so it's still fixed
             fixedStyles[styleKey] = styleValue;
@@ -326,6 +326,9 @@ var TextParticle = function () {
           }
         } else if ((typeof styleValue === 'undefined' ? 'undefined' : _typeof(styleValue)) === 'object') {
           // Not implemented yet, but I guess per-property easing (>.<)
+        } else {
+          // assume fixed style, just assign it
+          fixedStyles[styleKey] = styleValue;
         }
       });
 
@@ -352,8 +355,8 @@ var TextParticle = function () {
       return _extends({}, snapshot, { transform: this.getTransform(snapshot) });
     }
   }, {
-    key: 'getTransform',
-    value: function getTransform(snapshot) {
+    key: 'getScaledTransform',
+    value: function getScaledTransform(snapshot) {
       var scaleX = snapshot.scaleX,
           scaleY = snapshot.scaleY,
           scale = snapshot.scale;
@@ -362,6 +365,11 @@ var TextParticle = function () {
       scaleX = scaleX || scale;
       scaleY = scaleY || scale;
 
+      return this.getTransform(scaleX, scaleY);
+    }
+  }, {
+    key: 'getTransform',
+    value: function getTransform(scaleX, scaleY) {
       return 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + scaleX + ', ' + scaleY + ')';
     }
   }, {
@@ -442,47 +450,26 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 [254, 254, 200, 1.0], // white
 [254, 254, 254, 1.0]].reverse();
 
-var textClosure = function textClosure() {
-  var a = "HELLO";
-  var idx = -1;
-
-  return function () {
-    idx++;
-    idx = idx % a.length;
-    return a[idx];
-  };
-};
-
-var xClosure = function xClosure() {
-  var idx = -1;
-  return function () {
-    idx++;
-    idx = idx % 20;
-    return 20 * idx;
-  };
-};
-
-var m = textClosure();
-var k = xClosure();
-
 document.querySelector('button').addEventListener('click', function (e) {
   t.addEmitter({
     position: { x: e.clientX, y: e.clientY },
     emitEvery: 100,
+    maxEmissions: 1,
     particleOptions: {
       get position() {
-        return { x: k(), y: 0 };
+        return { x: 0, y: 0 };
       },
-      get text() {
-        return m();
-      },
+      text: '>',
       style: {
         width: '16px',
         height: '16px',
         borderRadius: '16px',
         color: '#fff',
         fontWeight: 'bold',
-        textShadow: '1px 1px 1px #f00'
+        textShadow: '1px 1px 1px #f00',
+        scale: [1, 2],
+        translateX: [0, 10],
+        translateY: [0, 10]
       },
       velocity: { x: 0, y: -50 }
     }

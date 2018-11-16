@@ -24,37 +24,15 @@ const HEAT_COLOURS = [
   [254, 254, 254, 1.0], // white
 ].reverse();
 
-let textClosure = () => {
-  let a = "HELLO";
-  let idx = -1;
-  
-  return () => {
-    idx++;
-    idx = idx % a.length;
-    return a[idx];
-  }
-}
-
-let xClosure = () => {
-  let idx = -1;
-  return () => {
-    idx++;
-    idx = idx % 20;
-    return 20 * idx;
-  }
-}
-
-let m = textClosure();
-let k = xClosure();
-
 
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
     position: { x: e.clientX, y: e.clientY},
     emitEvery: 100,
+    maxEmissions: 1,
     particleOptions: {
-      get position ()  { return { x: k(), y: 0 }},
-      get text () { return m() },
+      get position ()  { return { x: 0, y: 0 }},
+      text: '>',
       style: { 
         width: '16px',
         height: '16px',
@@ -62,6 +40,9 @@ document.querySelector('button').addEventListener('click', (e) => {
         color: '#fff', 
         fontWeight: 'bold', 
         textShadow: '1px 1px 1px #f00',
+        scale: [1, 2],
+        translateX: [0, 10],
+        translateY: [0, 10]
       },
       velocity: { x: 0, y: -50}
     }

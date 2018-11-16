@@ -48,11 +48,7 @@ export default class TextParticle {
     
     Object.keys(styleObject).map(styleKey => {
       let styleValue = styleObject[styleKey];
-      if (typeof styleValue === 'string'){
-        // fixed style, just assign it
-        fixedStyles[styleKey] = styleValue; 
-      
-      } else if (Array.isArray(styleValue)) {
+      if (Array.isArray(styleValue)) {
         if (styleValue.length === 1){
           // It's a one-element array, so it's still fixed
           fixedStyles[styleKey] = styleValue; 
@@ -62,6 +58,9 @@ export default class TextParticle {
         }
       } else if (typeof styleValue === 'object') {
         // Not implemented yet, but I guess per-property easing (>.<)
+      } else {
+        // assume fixed style, just assign it
+        fixedStyles[styleKey] = styleValue; 
       }
     });
     
@@ -85,12 +84,16 @@ export default class TextParticle {
     return {...snapshot, transform: this.getTransform(snapshot) }
   }
   
-  getTransform (snapshot) {
-    let { scaleX, scaleY, scale } = snapshot;
+  getScaledTransform(snapshot) {
+    let { scaleX, scaleY, scale, } = snapshot;
     scale = scale || 1.0;
     scaleX = scaleX || scale;
     scaleY = scaleY || scale;
     
+    return this.getTransform(scaleX, scaleY);
+  }
+  
+  getTransform (scaleX, scaleY) {    
     return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${scaleX}, ${scaleY})`;
   }
   

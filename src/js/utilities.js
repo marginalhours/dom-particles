@@ -12,6 +12,7 @@ export const rgbToNumbers = (string) => {
     return [...[r, g, b].map(v => parseInt(v)), 1.0]; 
   }
   catch (err){
+    console.log(err);
     return false;
   }
 }
@@ -22,6 +23,7 @@ export const rgbaToNumbers = (string) => {
     return [r, g, b, a].filter(v => v).map(v => parseInt(v)) 
   }
   catch (err){
+    console.log(err);
     return false;
   }
 }
@@ -32,6 +34,7 @@ export const hexToNumbers = (string) => {
     return [...[r, g, b].map(x => parseInt(x, 16) * ((x.length === 1) ? 0x11 : 0x1)), 1.0];
   } 
   catch (err) {
+    console.log(err);
     return false;  
   }
 }
@@ -60,9 +63,9 @@ export const valueToCSSString = (val, unit) => `${val}${unit}`;
 export const lerp = (a, b, frac) => a + ((b - a) * frac);
 
 export const easeArray = (array, easeFn, frac) => {
-  let total = frac * array.length;
-  let start = Math.floor(total);
-  let end = start + 1;
+  let total = frac * (array.length - 1);
+  let start = Math.min(Math.floor(total), array.length - 1);
+  let end = Math.min(start + 1, array.length - 1);
   return easeFn(array[start], array[end], total % 1);
 }
 
