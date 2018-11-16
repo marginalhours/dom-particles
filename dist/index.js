@@ -451,7 +451,15 @@ document.querySelector('button').addEventListener('click', function (e) {
         return { x: 50 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) };
       },
       text: '',
-      style: { width: '32px', height: '32px', borderRadius: '16px', color: '#fff', fontWeight: 'bold', textShadow: '1px 1px 1px #f00', background: '-webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%)' },
+      style: {
+        width: ['32px', '16px'],
+        height: ['32px', '16px'],
+        borderRadius: '16px',
+        color: '#fff',
+        fontWeight: 'bold',
+        textShadow: '1px 1px 1px #f00',
+        background: HEAT_COLOURS.map(_utilities.colourToCSSString)
+      },
       velocity: { x: 0, y: -50 }
     }
   });
