@@ -106,7 +106,6 @@ export default class TextParticle {
   update (f) {
     // Housekeeping
     this.elapsed += f * 1000;
-    this.frameNumber ++;
     
     // Standard motion update
     this.velocity.x += this.acceleration.x * f;
@@ -118,5 +117,8 @@ export default class TextParticle {
     this.nextStyles = this.getStyleSnapshot();
     this.onUpdate(this);
     Object.assign(this.element.style, this.nextStyles);
+    
+    // Next frame
+    this.frameNumber ++;
   }
 }

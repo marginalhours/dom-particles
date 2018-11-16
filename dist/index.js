@@ -384,7 +384,6 @@ var TextParticle = function () {
     value: function update(f) {
       // Housekeeping
       this.elapsed += f * 1000;
-      this.frameNumber++;
 
       // Standard motion update
       this.velocity.x += this.acceleration.x * f;
@@ -396,6 +395,9 @@ var TextParticle = function () {
       this.nextStyles = this.getStyleSnapshot();
       this.onUpdate(this);
       Object.assign(this.element.style, this.nextStyles);
+
+      // Next frame
+      this.frameNumber++;
     }
   }, {
     key: 'alive',
@@ -453,14 +455,15 @@ var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
 document.querySelector('button').addEventListener('click', function (e) {
   t.addEmitter({
     position: { x: e.clientX, y: e.clientY },
+
     particleOptions: {
       text: '🐝',
       ttl: 10000,
       onUpdate: function onUpdate(p) {
-        if (p.frameNumber % 30 === 0) {
-          var k = 50 + 50 * Math.random();
-          var h = 2 * Math.PI * Math.random();
-          p.velocity = { x: k * Math.cos(h), y: k * Math.sin(h) };
+        if (p.frameNumber % 50 === 0) {
+          var r = 100 * Math.random();
+          var theta = 2 * Math.PI * Math.random();
+          p.velocity = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
         }
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
       }
@@ -728,7 +731,7 @@ var TextParticleEmitter = function () {
         for (var i = 0; i < toEmit; i++) {
           // emit particle
           this.emitted++;
-          var p = this.particleOptions.position;
+          var p = this.particleOptions.position || { x: 0, y: 0 };
           var pp = { x: this.position.x + p.x, y: this.position.y + p.y };
           this.manager.addParticle(_extends({}, this.particleOptions, { position: pp }));
         }

@@ -53,7 +53,7 @@ export default class TextParticleEmitter {
       for(let i = 0; i < toEmit; i++){
         // emit particle
         this.emitted++;
-        let p = this.particleOptions.position;
+        let p = this.particleOptions.position || { x: 0, y: 0 };
         let pp = { x: this.position.x + p.x, y: this.position.y + p.y }
         this.manager.addParticle({...this.particleOptions, position: pp});
       }
