@@ -32,6 +32,11 @@ document.querySelector('button').addEventListener('click', (e) => {
     maxEmissions: 1,
     particleOptions: {
       get position ()  { return { x: 0, y: 0 }},
+      get velocity () {
+        let k = 50 + 50 * Math.random();
+        let h = 2 * Math.PI * Math.random();
+        return { x: k * Math.cos(h), y: k * Math.sin(h)}
+      },
       text: '>',
       style: { 
         width: '16px',
@@ -40,9 +45,18 @@ document.querySelector('button').addEventListener('click', (e) => {
         color: '#fff', 
         fontWeight: 'bold', 
         textShadow: '1px 1px 1px #f00',
-        scale: [1, 2],
+        scale: [1, 5],
         translateX: [0, 10],
         translateY: [0, 10]
+      },
+      onUpdate: (p) => {
+        if (p.frameNumber % 30 === 0){
+          let k = 50 + 50 * Math.random();
+          let h = 2 * Math.PI * Math.random();
+          p.acceleration = {x: k * Math.cos(h),  
+        }
+        
+        p.heading = Math.atan2(this.acceleration.y, this.acceleration.x);
       },
       velocity: { x: 0, y: -50}
     }
