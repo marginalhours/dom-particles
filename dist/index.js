@@ -454,10 +454,11 @@ var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
 document.querySelector('button').addEventListener('click', function (e) {
   t.addEmitter({
     position: { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 },
-    emitEvery: 0.05,
+    emitEvery: 1,
+    MAX_EMIT_PER_STEP: 10,
     particleOptions: {
-      text: '+',
-      style: { scaleX: [1, 10], scaleY: [2, 20], backgroundColor: ['#ccf', '#fff'] },
+      text: '.',
+      style: { color: '#fff' },
       get position() {
         return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) };
       },
