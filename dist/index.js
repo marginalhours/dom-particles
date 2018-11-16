@@ -451,14 +451,15 @@ var t = new _text_particle_manager2.default({ max: 10000 });
 
 var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
 
+var h = 0;
+
 document.querySelector('button').addEventListener('click', function (e) {
   t.addEmitter({
     position: { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 },
-    emitEvery: 16,
-    MAX_EMIT_PER_STEP: 2,
+    emitEvery: 8,
     particleOptions: {
-      text: '',
-      style: { backgroundColor: ['#00f', '#fff'], height: '12px', width: '12px', scale: [1, 20] },
+      text: '  ',
+      style: { backgroundColor: ['#00f', '#fff'], height: '12px', width: '12px', scale: [0.1, 20] },
       get position() {
         return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) };
       },
@@ -470,6 +471,9 @@ document.querySelector('button').addEventListener('click', function (e) {
       },
       onCreate: function onCreate(p) {
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+      },
+      onUpdate: function onUpdate(p) {
+        p.heading += 0.02;
       }
     }
   });
