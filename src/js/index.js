@@ -27,17 +27,18 @@ const HEAT_COLOURS = [
 
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
-    position: { x: e.clientX, y: e.clientY},
-    
+    position: { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2},
+    emitEvery: 30,
     particleOptions: {
       text: '🐝',
+      style: { fontSize: '32px' },
       ttl: 10000,
-      onUpdate: (p) => {
-        if (p.frameNumber % 50 === 0){
-          let r = 100 * Math.random();
-          let theta = 2 * Math.PI * Math.random();
-          p.velocity = {x: r * Math.cos(theta), y: r * Math.sin(theta) } 
-        }
+      get velocity () {
+        let h = 100 + 100 * Math.random();
+        let theta = 2 * Math.PI * Math.random();
+        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+      },
+      onCreate: (p) => {
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
       }
     }
