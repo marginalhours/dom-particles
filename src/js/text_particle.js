@@ -81,7 +81,7 @@ export default class TextParticle {
         return { ...a, [b]: styleFn(lifeFrac) }
       }, {...this.fixedStyles});
     
-    return {...snapshot, transform: this.getTransform(snapshot) }
+    return {...snapshot, transform: this.getScaledTransform(snapshot) }
   }
   
   getScaledTransform(snapshot) {
@@ -97,7 +97,7 @@ export default class TextParticle {
     return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${scaleX}, ${scaleY})`;
   }
   
-  getGridTransform (snapshot) {
+  getGridTransform (scaleX, scaleY) {
     let x = this.position.x - (this.position.x % this.grid);
     let y = this.position.y - (this.position.y % this.grid);
     return `translate3d(${x}px, ${y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;

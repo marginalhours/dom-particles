@@ -352,7 +352,7 @@ var TextParticle = function () {
         return _extends({}, a, _defineProperty({}, b, styleFn(lifeFrac)));
       }, _extends({}, this.fixedStyles));
 
-      return _extends({}, snapshot, { transform: this.getTransform(snapshot) });
+      return _extends({}, snapshot, { transform: this.getScaledTransform(snapshot) });
     }
   }, {
     key: 'getScaledTransform',
@@ -374,7 +374,7 @@ var TextParticle = function () {
     }
   }, {
     key: 'getGridTransform',
-    value: function getGridTransform(snapshot) {
+    value: function getGridTransform(scaleX, scaleY) {
       var x = this.position.x - this.position.x % this.grid;
       var y = this.position.y - this.position.y % this.grid;
       return 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
