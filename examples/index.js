@@ -30,16 +30,17 @@ let i = 0;
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
     position: positionFromNode(document.querySelector('button'), 0, 0),
-    emitEvery: 200,
+    emitEvery: 100,
     particleOptions: {
       text: '', 
-      get position () { return { x: 50 * (Math.random()), y: -20}},
+      get ttl () { return 1000 + (500 * Math.random()) },
+      get position () { return { x: 100 * (Math.random()), y: -20}},
       get velocity () { return { x: 0, y: -10 } },
-      get acceleration () { return { x: 0, y: -50 } },
+      get acceleration () { return { x: 0, y: -100 } },
       style: { 
-        get scale () { return 0.5 + Math.random() },
-        opacity: [1, 0],
-        border: '2px solid #aac',
+        get scale () { return 0.75 * Math.random() },
+        opacity: [0, 1, 1, 1, 0.5, 0],
+        border: '2px solid #3c3',
         width: '16px',
         height: '16px',
         borderRadius: '16px'
