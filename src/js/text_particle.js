@@ -28,7 +28,7 @@ export default class TextParticle {
     this.setText(this.text);
  
     // Fetch initial style snapshot, call user onCreate(), assign styles
-    this.buildProps(this.style);
+    this.buildProps(this.props);
     this.nextProps = this.getSnapshot();
     this.onCreate(this);    
     Object.assign(this.element.style, this.nextProps);
@@ -43,9 +43,8 @@ export default class TextParticle {
   }
   
   buildProps (propObject) {
-    let fixedStyles = {};
-    let dynamicStyles = {};
-    
+    let fixedProps = {};
+    let dynamicProps = {};
     Object.keys(propObject).map(propKey => {
       let propValue = propObject[propKey];
       if (Array.isArray(propValue)) {
@@ -59,27 +58,27 @@ export default class TextParticle {
       } else if (typeof styleValue === 'object') {
         // Not implemented yet, but I guess per-property easing (>.<)
       } else {
-        // assume fixed style, just assign it
-        fixedStyles[styleKey] = styleValue; 
+        // Either a fixed value or a getter, either way, just assign it
+        fixedProps[propKey] = propValue; 
       }
     });
     
-    this.dynamicStyles = dynamicStyles;
-    this.fixedStyles = fixedStyles;
+    this.dynamicProps = dynamicProps;
+    this.fixedProps = fixedProps;
   }
   
   setText (text) {
     this.element.innerText = text;
   }
   
-  getStyleSnapshot () {
+  getSnapshot () {
     let lifeFrac = this.lifeFrac;
     
-    let snapshot = Object.keys(this.dynamicStyles)
+    let snapshot = Object.keys(this.dynamicProps)
       .reduce((a, b) => {
-        let styleFn = this.dynamicStyles[b];
-        return { ...a, [b]: styleFn(lifeFrac) }
-      }, {...this.fixedStyles});
+        let propFn = this.dynamicProps[b];
+        return { ...a, [b]: propFn(lifeFrac) }
+      }, {...this.fixedProps});
     
     return {...snapshot, transform: this.getScaledTransform(snapshot) }
   }
@@ -114,9 +113,12 @@ export default class TextParticle {
     this.position.y += this.velocity.y * f;
 
     // Get current style, call user onUpdate(), assign them
-    this.nextStyles = this.getStyleSnapshot();
+    this.nextProps = this.getSnapshot();
     this.onUpdate(this);
-    Object.assign(this.element.style, this.nextStyles);
+    
+    // Update element
+    this.setText(this.nextProps.text);
+    Object.assign(this.element.style, this.nextProps);
     
     // Next frame
     this.frameNumber ++;

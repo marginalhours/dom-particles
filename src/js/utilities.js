@@ -75,8 +75,8 @@ export const transpose = (array) => {
   return array[0].map((_, i) => array.map(r => r[i]));  
 }
 
-export const styleValueToFunction = (styleValue) => {
-  let k = styleValue.map(s => tryGetValue(s));
+export const propValueToFunction = (propValue) => {
+  let k = propValue.map(s => tryGetValue(s));
   if (k[0].length === 2){
     // CSS unit property (either like '12px' or like '1.0'
     let unit = k[0][1];
