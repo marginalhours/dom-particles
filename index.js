@@ -29,29 +29,30 @@ let i = 0;
 
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
-    position: { x: c.x, y: c.y },
+    position: positionFromNode(document.querySelector('button'), 100, 0),
     emitEvery: 8,
-    particleOptions: {
-      ttl: 1000,
-      props: { 
-        backgroundColor: ['#f33', '#fefeee'], 
-        height: '12px', 
-        width: '12px', 
-        scale: [0.1, 20], 
-      },
-      get text () { return i++ },
-      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-      get velocity () {
-        let h = 600 + 100 * Math.random();
-        theta += 0.1 * Math.PI * Math.random();
-        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-      },
-      onCreate: (p) => {
-        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-      }
-    }
   });
 });
+
+    // particleOptions: {
+    //   ttl: 1000,
+    //   style: { 
+    //     backgroundColor: ['#f33', '#fefeee'], 
+    //     width: '16px',
+    //     height: '16px',
+    //     scale: [0.1, 20], 
+    //   },
+    //   text: '',
+    //   get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+    //   get velocity () {
+    //     let h = 600 + 100 * Math.random();
+    //     theta += 0.1 * Math.PI * Math.random();
+    //     return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+    //   },
+    //   onCreate: (p) => {
+    //     p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+    //   }
+    // }
 
   // t.createEmitter({
   //   position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
