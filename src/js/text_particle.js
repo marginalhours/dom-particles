@@ -1,6 +1,6 @@
 /* Fix scaling! */
 
-import { styleValueToFunction } from './utilities';
+import { propValueToFunction } from './utilities';
 
 export const DEFAULT_PARTICLE_OPTIONS = {
   velocity: { x: 0, y: 0 }, 
@@ -28,10 +28,10 @@ export default class TextParticle {
     this.setText(this.text);
  
     // Fetch initial style snapshot, call user onCreate(), assign styles
-    this.buildStyles(this.style);
-    this.nextStyles = this.getStyleSnapshot();
+    this.buildProps(this.style);
+    this.nextProps = this.getSnapshot();
     this.onCreate(this);    
-    Object.assign(this.element.style, this.nextStyles);
+    Object.assign(this.element.style, this.nextProps);
   }
   
   get alive () {
@@ -42,19 +42,19 @@ export default class TextParticle {
     return this.elapsed / this.ttl;
   }
   
-  buildStyles (styleObject) {
+  buildProps (propObject) {
     let fixedStyles = {};
     let dynamicStyles = {};
     
-    Object.keys(styleObject).map(styleKey => {
-      let styleValue = styleObject[styleKey];
-      if (Array.isArray(styleValue)) {
-        if (styleValue.length === 1){
+    Object.keys(propObject).map(propKey => {
+      let propValue = propObject[propKey];
+      if (Array.isArray(propValue)) {
+        if (propValue.length === 1){
           // It's a one-element array, so it's still fixed
-          fixedStyles[styleKey] = styleValue; 
+          fixedProps[propKey] = propValue; 
         } else {
-          // dynamic style, calculate function for it
-          dynamicStyles[styleKey] = styleValueToFunction(styleValue);
+          // dynamic property; calculate function for it
+          dynamicProps[propKey] = propValueToFunction(propValue);
         }
       } else if (typeof styleValue === 'object') {
         // Not implemented yet, but I guess per-property easing (>.<)

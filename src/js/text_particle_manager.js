@@ -11,12 +11,11 @@ const DEFAULT_TPM_OPTIONS = {
 };
 
 const PARTICLE_SKELETON_STYLES = {
-display: 'block', 
-      position: 'absolute', 
-      pointerEvents: 'none',
-      transform: 'translate3d(0,0,0)',
-      opacity: 0
-    }
+  display: 'block', 
+  position: 'absolute', 
+  pointerEvents: 'none',
+  transform: 'translate3d(0,0,0)',
+  opacity: 0
 }
 
 export default class TextParticleManager {
@@ -54,7 +53,7 @@ export default class TextParticleManager {
       if (p.alive) { return true; }
       
       // disappear and return to pool
-      p.element.style.opacity = 0;
+      Object.assign(p.element.style, PARTICLE_SKELETON_STYLES);
       this.push(p.element);
       return false;
     });
@@ -110,12 +109,11 @@ export default class TextParticleManager {
   }
     
   create () {
-    let el = document.createElement(this.tagName);
+    let element = document.createElement(this.tagName);
+    this.foldElement.appendChild(element);    
+    Object.assign(element.style, PARTICLE_SKELETON_STYLES);
     
-    Object.assign(el.style, );
-    
-    this.foldElement.appendChild(el);
-    return el;
+    return element;
   }
   
   allocate (n) {
