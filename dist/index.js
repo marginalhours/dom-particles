@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("Letterbomb", [], factory);
+	else if(typeof exports === 'object')
+		exports["Letterbomb"] = factory();
+	else
+		root["Letterbomb"] = factory();
+})(typeof self !== 'undefined' ? self : this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -65,6 +75,172 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DEFAULT_PARTICLE_OPTIONS = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* Fix scaling! */
+
+var _utilities = __webpack_require__(1);
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var DEFAULT_PARTICLE_OPTIONS = exports.DEFAULT_PARTICLE_OPTIONS = {
+  velocity: { x: 0, y: 0 },
+  acceleration: { x: 0, y: 0 },
+  heading: 0,
+  ttl: 1000,
+  text: '.',
+  grid: false,
+  style: {},
+  onCreate: function onCreate() {},
+  onUpdate: function onUpdate() {}
+};
+
+var TextParticle = function () {
+  function TextParticle(options) {
+    _classCallCheck(this, TextParticle);
+
+    Object.assign(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
+
+    this.elapsed = 0;
+    this.frameNumber = 0;
+    this.updateTransform = this.grid ? this.updateGridTransform : this.updateTransform;
+
+    // By default, at this point opacity will be 0, so set it to 1
+    this.element.style.opacity = 1;
+    // Populate initial text content
+    this.setText(this.text);
+
+    // Fetch initial style snapshot, call user onCreate(), assign styles
+    this.buildStyles(this.style);
+    this.nextStyles = this.getStyleSnapshot();
+    this.onCreate(this);
+    Object.assign(this.element.style, this.nextStyles);
+  }
+
+  _createClass(TextParticle, [{
+    key: 'buildStyles',
+    value: function buildStyles(styleObject) {
+      var fixedStyles = {};
+      var dynamicStyles = {};
+
+      Object.keys(styleObject).map(function (styleKey) {
+        var styleValue = styleObject[styleKey];
+        if (Array.isArray(styleValue)) {
+          if (styleValue.length === 1) {
+            // It's a one-element array, so it's still fixed
+            fixedStyles[styleKey] = styleValue;
+          } else {
+            // dynamic style, calculate function for it
+            dynamicStyles[styleKey] = (0, _utilities.styleValueToFunction)(styleValue);
+          }
+        } else if ((typeof styleValue === 'undefined' ? 'undefined' : _typeof(styleValue)) === 'object') {
+          // Not implemented yet, but I guess per-property easing (>.<)
+        } else {
+          // assume fixed style, just assign it
+          fixedStyles[styleKey] = styleValue;
+        }
+      });
+
+      this.dynamicStyles = dynamicStyles;
+      this.fixedStyles = fixedStyles;
+    }
+  }, {
+    key: 'setText',
+    value: function setText(text) {
+      this.element.innerText = text;
+    }
+  }, {
+    key: 'getStyleSnapshot',
+    value: function getStyleSnapshot() {
+      var _this = this;
+
+      var lifeFrac = this.lifeFrac;
+
+      var snapshot = Object.keys(this.dynamicStyles).reduce(function (a, b) {
+        var styleFn = _this.dynamicStyles[b];
+        return _extends({}, a, _defineProperty({}, b, styleFn(lifeFrac)));
+      }, _extends({}, this.fixedStyles));
+
+      return _extends({}, snapshot, { transform: this.getScaledTransform(snapshot) });
+    }
+  }, {
+    key: 'getScaledTransform',
+    value: function getScaledTransform(snapshot) {
+      var scaleX = snapshot.scaleX,
+          scaleY = snapshot.scaleY,
+          scale = snapshot.scale;
+
+      scale = scale || 1.0;
+      scaleX = scaleX || scale;
+      scaleY = scaleY || scale;
+
+      return this.getTransform(scaleX, scaleY);
+    }
+  }, {
+    key: 'getTransform',
+    value: function getTransform(scaleX, scaleY) {
+      return 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + scaleX + ', ' + scaleY + ')';
+    }
+  }, {
+    key: 'getGridTransform',
+    value: function getGridTransform(scaleX, scaleY) {
+      var x = this.position.x - this.position.x % this.grid;
+      var y = this.position.y - this.position.y % this.grid;
+      return 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
+    }
+  }, {
+    key: 'update',
+    value: function update(f) {
+      // Housekeeping
+      this.elapsed += f * 1000;
+
+      // Standard motion update
+      this.velocity.x += this.acceleration.x * f;
+      this.velocity.y += this.acceleration.y * f;
+      this.position.x += this.velocity.x * f;
+      this.position.y += this.velocity.y * f;
+
+      // Get current style, call user onUpdate(), assign them
+      this.nextStyles = this.getStyleSnapshot();
+      this.onUpdate(this);
+      Object.assign(this.element.style, this.nextStyles);
+
+      // Next frame
+      this.frameNumber++;
+    }
+  }, {
+    key: 'alive',
+    get: function get() {
+      return this.elapsed < this.ttl;
+    }
+  }, {
+    key: 'lifeFrac',
+    get: function get() {
+      return this.elapsed / this.ttl;
+    }
+  }]);
+
+  return TextParticle;
+}();
+
+exports.default = TextParticle;
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -251,251 +427,7 @@ var positionFromNode = exports.positionFromNode = function positionFromNode(elem
 };
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.DEFAULT_PARTICLE_OPTIONS = undefined;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* Fix scaling! */
-
-var _utilities = __webpack_require__(0);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var DEFAULT_PARTICLE_OPTIONS = exports.DEFAULT_PARTICLE_OPTIONS = {
-  velocity: { x: 0, y: 0 },
-  acceleration: { x: 0, y: 0 },
-  heading: 0,
-  ttl: 1000,
-  text: '.',
-  grid: false,
-  style: {},
-  onCreate: function onCreate() {},
-  onUpdate: function onUpdate() {}
-};
-
-var TextParticle = function () {
-  function TextParticle(options) {
-    _classCallCheck(this, TextParticle);
-
-    Object.assign(this, _extends({}, DEFAULT_PARTICLE_OPTIONS, options));
-
-    this.elapsed = 0;
-    this.frameNumber = 0;
-    this.updateTransform = this.grid ? this.updateGridTransform : this.updateTransform;
-
-    // By default, at this point opacity will be 0, so set it to 1
-    this.element.style.opacity = 1;
-    // Populate initial text content
-    this.setText(this.text);
-
-    // Fetch initial style snapshot, call user onCreate(), assign styles
-    this.buildStyles(this.style);
-    this.nextStyles = this.getStyleSnapshot();
-    this.onCreate(this);
-    Object.assign(this.element.style, this.nextStyles);
-  }
-
-  _createClass(TextParticle, [{
-    key: 'buildStyles',
-    value: function buildStyles(styleObject) {
-      var fixedStyles = {};
-      var dynamicStyles = {};
-
-      Object.keys(styleObject).map(function (styleKey) {
-        var styleValue = styleObject[styleKey];
-        if (Array.isArray(styleValue)) {
-          if (styleValue.length === 1) {
-            // It's a one-element array, so it's still fixed
-            fixedStyles[styleKey] = styleValue;
-          } else {
-            // dynamic style, calculate function for it
-            dynamicStyles[styleKey] = (0, _utilities.styleValueToFunction)(styleValue);
-          }
-        } else if ((typeof styleValue === 'undefined' ? 'undefined' : _typeof(styleValue)) === 'object') {
-          // Not implemented yet, but I guess per-property easing (>.<)
-        } else {
-          // assume fixed style, just assign it
-          fixedStyles[styleKey] = styleValue;
-        }
-      });
-
-      this.dynamicStyles = dynamicStyles;
-      this.fixedStyles = fixedStyles;
-    }
-  }, {
-    key: 'setText',
-    value: function setText(text) {
-      this.element.innerText = text;
-    }
-  }, {
-    key: 'getStyleSnapshot',
-    value: function getStyleSnapshot() {
-      var _this = this;
-
-      var lifeFrac = this.lifeFrac;
-
-      var snapshot = Object.keys(this.dynamicStyles).reduce(function (a, b) {
-        var styleFn = _this.dynamicStyles[b];
-        return _extends({}, a, _defineProperty({}, b, styleFn(lifeFrac)));
-      }, _extends({}, this.fixedStyles));
-
-      return _extends({}, snapshot, { transform: this.getScaledTransform(snapshot) });
-    }
-  }, {
-    key: 'getScaledTransform',
-    value: function getScaledTransform(snapshot) {
-      var scaleX = snapshot.scaleX,
-          scaleY = snapshot.scaleY,
-          scale = snapshot.scale;
-
-      scale = scale || 1.0;
-      scaleX = scaleX || scale;
-      scaleY = scaleY || scale;
-
-      return this.getTransform(scaleX, scaleY);
-    }
-  }, {
-    key: 'getTransform',
-    value: function getTransform(scaleX, scaleY) {
-      return 'translate3d(' + this.position.x + 'px, ' + this.position.y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + scaleX + ', ' + scaleY + ')';
-    }
-  }, {
-    key: 'getGridTransform',
-    value: function getGridTransform(scaleX, scaleY) {
-      var x = this.position.x - this.position.x % this.grid;
-      var y = this.position.y - this.position.y % this.grid;
-      return 'translate3d(' + x + 'px, ' + y + 'px, 0) rotateZ(' + this.heading + 'rad) scale(' + this.scale.x + ', ' + this.scale.y + ')';
-    }
-  }, {
-    key: 'update',
-    value: function update(f) {
-      // Housekeeping
-      this.elapsed += f * 1000;
-
-      // Standard motion update
-      this.velocity.x += this.acceleration.x * f;
-      this.velocity.y += this.acceleration.y * f;
-      this.position.x += this.velocity.x * f;
-      this.position.y += this.velocity.y * f;
-
-      // Get current style, call user onUpdate(), assign them
-      this.nextStyles = this.getStyleSnapshot();
-      this.onUpdate(this);
-      Object.assign(this.element.style, this.nextStyles);
-
-      // Next frame
-      this.frameNumber++;
-    }
-  }, {
-    key: 'alive',
-    get: function get() {
-      return this.elapsed < this.ttl;
-    }
-  }, {
-    key: 'lifeFrac',
-    get: function get() {
-      return this.elapsed / this.ttl;
-    }
-  }]);
-
-  return TextParticle;
-}();
-
-exports.default = TextParticle;
-
-/***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _text_particle_manager = __webpack_require__(3);
-
-var _text_particle_manager2 = _interopRequireDefault(_text_particle_manager);
-
-var _utilities = __webpack_require__(0);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var HEAT_COLOURS = [[0, 0, 0, 1.0], // out
-[31, 0, 0, 1.0], // even fainter
-[61, 12, 8, 1.0], // faint red
-[98, 12, 11, 1.0], // blood red
-[167, 18, 14, 1.0], // dark cherry
-[220, 25, 21, 1.0], // medium cherry 
-[232, 39, 24, 1.0], // cherry
-[255, 54, 28, 1.0], // bright cherry
-[255, 72, 24, 1.0], // salmon
-[255, 105, 16, 1.0], // dark orange
-[255, 166, 36, 1.0], // orange
-[255, 246, 79, 1.0], // lemon
-[255, 253, 148, 1.0], // light yellow
-[254, 254, 200, 1.0], // white
-[254, 254, 254, 1.0]].reverse();
-
-var t = new _text_particle_manager2.default({ max: 10000 });
-var c = { x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 };
-
-var theta = 0;
-
-document.querySelector('button').addEventListener('click', function (e) {
-  t.addEmitter({
-    position: { x: c.x, y: c.y },
-    emitEvery: 8,
-    particleOptions: {
-      text: '',
-      style: { backgroundColor: ['#f33', '#fefeee'], height: '12px', width: '12px', scale: [0.1, 20] },
-      get position() {
-        return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) };
-      },
-      ttl: 1000,
-      get velocity() {
-        var h = 600 + 100 * Math.random();
-        theta += 0.1 * Math.PI * Math.random();
-        return { x: h * Math.cos(theta), y: h * Math.sin(theta) };
-      },
-      onCreate: function onCreate(p) {
-        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-      }
-    }
-  });
-});
-
-// t.createEmitter({
-//   position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
-//   emitEvery: 2,
-//   particleOptions: {
-//     grid: 16,
-//     get ttl () { return 1500 },
-//     get text () { return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]},
-//     /* particle position getter is relative to emitter position */
-//     get position () { return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-//     get velocity () { return { x: 0, y: -50 } },
-//     style: { color: HEAT_COLOURS.map(c => colourToCSSString(c)), fontSize: ['24px', '12px'] },
-//     onUpdate: (p) => {
-//       if (p.frameNumber % 30 === 0){
-//         p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
-//       }
-//     }
-//   },
-// });
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -509,15 +441,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _text_particle = __webpack_require__(1);
+var _text_particle = __webpack_require__(0);
 
 var _text_particle2 = _interopRequireDefault(_text_particle);
 
-var _text_particle_emitter = __webpack_require__(4);
+var _text_particle_emitter = __webpack_require__(3);
 
 var _text_particle_emitter2 = _interopRequireDefault(_text_particle_emitter);
 
-var _utilities = __webpack_require__(0);
+var _utilities = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -672,7 +604,7 @@ var TextParticleManager = function () {
 exports.default = TextParticleManager;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -686,7 +618,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _text_particle = __webpack_require__(1);
+var _text_particle = __webpack_require__(0);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -768,3 +700,4 @@ exports.default = TextParticleEmitter;
 
 /***/ })
 /******/ ]);
+});

@@ -1,22 +1,25 @@
 const path = require('path'),
-      html = require('html-webpack-plugin'),
       webpack = require('webpack');
 
-const libraryName = 'library';
-const filename = `${libraryName}.js`;
+const libraryName = 'Letterbomb';
+
+const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+const env = process.env.WEBPACK_ENV;
+
+let plugins = [];
+let outputFile = `${libraryName}.js`;
+
+if (env === 'build') {
+  plugins.push(new UglifyJsPlugin({ minimize: true }));
+  outputFile = libraryName + '.min.js';
+} else {
+  outputFile = libraryName + '.js';
+}
 
 module.exports = {  
   entry: {
-    index: './src/js/index.js'
+    index: './src/js/text_particle_manager.js'
   },
-  plugins: [
-    // new clean(['dist']),
-    new html({
-      filename: 'index.html',
-      template: './src/template.html',
-      inject: true,
-    }),
-  ],
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
@@ -25,6 +28,7 @@ module.exports = {
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
+  plugins,
   module: {
     rules: [
       {
