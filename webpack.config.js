@@ -20,6 +20,7 @@ module.exports = {
     publicPath: '',
     library: libraryName,
     libraryTarget: 'umd',
+    libraryExport: 'default',
     umdNamedDefine: true
   }
 };

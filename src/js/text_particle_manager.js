@@ -10,6 +10,15 @@ const DEFAULT_TPM_OPTIONS = {
   autoStart: true
 };
 
+const PARTICLE_SKELETON_STYLES = {
+display: 'block', 
+      position: 'absolute', 
+      pointerEvents: 'none',
+      transform: 'translate3d(0,0,0)',
+      opacity: 0
+    }
+}
+
 export default class TextParticleManager {
   constructor (options) {
     Object.assign(this, { ...DEFAULT_TPM_OPTIONS, ...options });
@@ -103,13 +112,7 @@ export default class TextParticleManager {
   create () {
     let el = document.createElement(this.tagName);
     
-    Object.assign(el.style, { 
-      display: 'block', 
-      position: 'absolute', 
-      pointerEvents: 'none',
-      transform: 'translate3d(0,0,0)',
-      opacity: 0
-    });
+    Object.assign(el.style, );
     
     this.foldElement.appendChild(el);
     return el;
