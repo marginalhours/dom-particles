@@ -7,6 +7,10 @@ app.get("/", (request, response) => {
   response.sendFile(__dirname + '/examples/index.html');
 });
 
+app.get("/index.js", (request, response) => {
+  response.sendFile(__dirname + '/examples/index.js');
+});
+
 app.get("/lib/letterbomb.js", (request, response) => {
   response.sendFile(__dirname + '/lib/letterbomb.js');
 });

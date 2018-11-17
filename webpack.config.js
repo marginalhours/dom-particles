@@ -12,7 +12,7 @@ if (mode === 'production') {
 
 module.exports = {  
   entry: {
-    index: './src/js/text_particle_manager.js'
+    index: './src/js/index.js'
   },
   output: {
     filename: outputFile,

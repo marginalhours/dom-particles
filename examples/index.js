@@ -1,5 +1,7 @@
-import TextParticleManager from './text_particle_manager';
-import { colourToCSSString, positionFromNode, lerp } from './utilities';
+// import TextParticleManager from './text_particle_manager';
+// import { colourToCSSString, positionFromNode, lerp } from './utilities';
+
+const { colourToCSSString, positionFromNode, lerp } = letterbomb.utilities;
 
 const HEAT_COLOURS = [
   [0, 0, 0, 1.0], // out
@@ -19,7 +21,7 @@ const HEAT_COLOURS = [
   [254, 254, 254, 1.0], // white
 ].reverse();
 
-let t = new TextParticleManager({ max: 10000 });
+let t = new letterbomb({ max: 10000 });
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 
 let theta = 0;
