@@ -1,7 +1,7 @@
 const path = require('path'),
       webpack = require('webpack');
 
-const libraryName = 'Letterbomb';
+const libraryName = 'letterbomb';
 
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const env = process.env.WEBPACK_ENV;
@@ -21,8 +21,8 @@ module.exports = {
     index: './src/js/text_particle_manager.js'
   },
   output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: outputFile,
+    path: path.resolve(__dirname, 'lib'),
     publicPath: '',
     library: libraryName,
     libraryTarget: 'umd',

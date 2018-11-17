@@ -4,26 +4,13 @@
   "description": "a webpack template for glitch",
   "main": "server.js",
   "scripts": {
-    "start": "",
+    "start": "./start.sh",
     "serve": "node server.js",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch",
     "build": "WEBPACK_ENV=build webpack"
   },
-  "dependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.1",
-    "babel-preset-es2015": "^6.24.1",
-    "express": "^4.15.3",
-    "json-stringify-safe": "^5.0.1",
-    "webpack": "^3.3.0"
-  },
   "babel": {
-    "presets": [
-      "env"
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
+    "presets": [ "env" ]
   },
   "engines": {
     "node": "8.1.x"
@@ -33,14 +20,14 @@
   },
   "license": "MIT",
   "keywords": [
-    "node",
-    "glitch",
-    "express",
-    "webpack"
+    "particles",
+    "dom",
+    "graphics",
+    "glitch"
   ],
   "devDependencies": {
     "@babel/preset-env": "^7.0.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "@babel/core": "^7.0.0-0",
+    "express": "^4.15.3"
   }
 }
