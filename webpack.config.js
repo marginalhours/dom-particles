@@ -2,10 +2,10 @@ const path = require('path'),
       html = require('html-webpack-plugin'),
       webpack = require('webpack');
 
-const library = 'library';
-const filename = `${library}.js
+const libraryName = 'library';
+const filename = `${libraryName}.js`;
 
-module.exports = {
+module.exports = {  
   entry: {
     index: './src/js/index.js'
   },
