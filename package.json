@@ -4,7 +4,7 @@
   "description": "a webpack template for glitch",
   "main": "server.js",
   "scripts": {
-    "start": "",
+    "start": "./start.sh",
     "serve": "node server.js",
     "dev": "webpack --progress --colors --watch --mode=development",
     "build": "WEBPACK_ENV=build webpack --mode=production"

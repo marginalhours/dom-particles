@@ -3,8 +3,12 @@ var app = express();
 
 app.use(express.static('dist'));
 
-app.get("/", function (request, response) {
+app.get("/", (request, response) => {
   response.sendFile(__dirname + '/examples/index.html');
+});
+
+app.get("/lib/letterbomb.js", (request, response) => {
+  response.sendFile(__dirname + '/lib/letterbomb.js');
 });
 
 var listener = app.listen(process.env.PORT, function () {
