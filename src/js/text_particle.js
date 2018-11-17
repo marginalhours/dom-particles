@@ -3,8 +3,8 @@
 import { propValueToFunction } from './utilities';
 
 export const DEFAULT_PARTICLE_OPTIONS = {
-  velocity: { x: 0, y: 0 }, 
-  acceleration: { x: 0, y: 0 },
+  get velocity() { return  { x: 0, y: 0 } }, 
+  get acceleration () { return { x: 0, y: 0 } },
   heading: 0,
   ttl: 1000,
   text: '.',

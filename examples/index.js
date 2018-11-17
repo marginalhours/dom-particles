@@ -29,8 +29,22 @@ let i = 0;
 
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
-    position: positionFromNode(document.querySelector('button'), 100, 0),
-    emitEvery: 8,
+    position: positionFromNode(document.querySelector('button'), 0, 0),
+    emitEvery: 200,
+    particleOptions: {
+      text: '', 
+      get position () { return { x: 50 * (Math.random()), y: -20}},
+      get velocity () { return { x: 0, y: -10 } },
+      get acceleration () { return { x: 0, y: -50 } },
+      style: { 
+        get scale () { return 0.5 + Math.random() },
+        opacity: [1, 0],
+        border: '2px solid #aac',
+        width: '16px',
+        height: '16px',
+        borderRadius: '16px'
+      },
+    }
   });
 });
 
