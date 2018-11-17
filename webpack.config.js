@@ -2,18 +2,12 @@ const path = require('path'),
       webpack = require('webpack');
 
 const libraryName = 'letterbomb';
+const mode = process.env.mode;
 
-const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-const env = process.env.WEBPACK_ENV;
-
-let plugins = [];
 let outputFile = `${libraryName}.js`;
 
-if (env === 'build') {
-  plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + '.min.js';
-} else {
-  outputFile = libraryName + '.js';
+if (mode === 'production') {
+  outputFile = `${libraryName}.min.js`;  
 }
 
 module.exports = {  
@@ -27,15 +21,5 @@ module.exports = {
     library: libraryName,
     libraryTarget: 'umd',
     umdNamedDefine: true
-  },
-  plugins,
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      }
-    ]
   }
 };
