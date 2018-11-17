@@ -28,7 +28,7 @@ export default class TextParticle {
     this.setText(this.text);
  
     // Fetch initial style snapshot, call user onCreate(), assign styles
-    this.buildProps(this.props);
+    this.buildProps(this.style);
     this.nextProps = this.getSnapshot();
     this.onCreate(this);    
     Object.assign(this.element.style, this.nextProps);
@@ -112,12 +112,9 @@ export default class TextParticle {
     this.position.x += this.velocity.x * f;
     this.position.y += this.velocity.y * f;
 
-    // Get current style, call user onUpdate(), assign them
+    // Get current props, call user onUpdate(), assign them
     this.nextProps = this.getSnapshot();
     this.onUpdate(this);
-    
-    // Update element
-    this.setText(this.nextProps.text);
     Object.assign(this.element.style, this.nextProps);
     
     // Next frame
