@@ -24,9 +24,15 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
 
 document.querySelector('button').addEventListener('click', (e) => {
   let k = 1;
-  t.from(document.querySelector('p'), 13, {
+  t.from(document.querySelector('p'), /\w+/g, {
     ttl: 60000,
-    get velocity () { k *= -1; return { x: 0, y: k * 10 * Math.random() } },
+    onCreate: (p) => { p.n = k++ },
+    onUpdate: (p) => { 
+      p.position = { 
+        x: p.position.x,
+        y: p.position.y + Math.sin(((p.n) + p.frameNumber) * 0.1)
+      }
+    }
   });
 });
 

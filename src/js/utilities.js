@@ -102,20 +102,15 @@ const buildChunksOfN = (text, n) => {
   let offsets = [];
   let chunks = text.length / n;
   
-  for(let i = 0; i < chunks; i++)
-  {
+  for(let i = 0; i < Math.floor(chunks); i++) {
     offsets.push([i * n, (i + 1) * n]);  
   }
   
   if (text.length % n !== 0){
     let last = offsets[offsets.length - 1];
     
-    offsets.push(last[1], last[1] + (text.length % n));
+    offsets.push([last[1], last[1] + (text.length % n)]);
   }
-  
-  // let k = offsets[offsets.length - 1][1];
-  // offsets.push([k + 1, l - 1]);
-  
   return offsets;
 }
 
