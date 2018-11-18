@@ -53,6 +53,7 @@ export default class TextParticleManager {
     return e;
   }
   
+  /* Problematic: Needs to duplicate element styles (font size etc) */
   from (element, pattern, options) {
     let offsets = buildOffsets(element.innerText, pattern);
     offsets.reverse().map(o => { 

@@ -1,7 +1,14 @@
 /*
 *  Particle emitter. 
-*
-*
+*  Configuration:
+*    emitEvery: Milliseconds. How often to emit a particle.
+*    position, velocity, acceleration: Vector-like objects. During update, velocity += acceleration, position += velocity.
+*    rotation: Which direction this 
+*    maxEmissions: Max number of particles to emit. Once reached, emitter stops.
+*    ttl: Max number of milliseconds to emit particles for.
+*    MAX_EMIT_PER_STEP: Maximum number of particles to emit per timestep. Limitation to stop all particles syncing up on browser tab switch. Not recommended to change.
+*    particleOptions: See particle class. Options used to instantiate particles from this emitter.
+*      Of interest: If these options are getters, not literal, 
 */
 
 import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
@@ -16,6 +23,8 @@ const DEFAULT_EMITTER_OPTIONS = {
   onCreate: () => {},
   onUpdate: () => {},
   particleOptions: { position: { x: 0, y: 0 }, ...DEFAULT_PARTICLE_OPTIONS },
+  maxEmissions: false,
+  ttl: false,
   MAX_EMIT_PER_STEP: 16 /* Prevent thundering herds on tab switch */
 }
 

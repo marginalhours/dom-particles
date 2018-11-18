@@ -25,8 +25,7 @@ document.querySelector('button').addEventListener('click', (e) => {
   let k = 1;
   t.from(document.querySelector('p'), 3, {
     ttl: 5000,
-    get velocity() { return { x: 10, y: 100 * Math.random() } },
-    style: { color: ['#000', 'rgba(200, 0, 0, 0)'] }
+    style: { color: ['#000', 'rgba(200, 0, 0, 0)'], rotation: ['0deg', '360deg'] }
   });
 });
 

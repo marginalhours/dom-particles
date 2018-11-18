@@ -1,10 +1,19 @@
 /* 
 *  Basic particle class. 
 *  Configuration: 
-*    position, velocity, acceleration: coordinate-like objects
-*    
-*    style: 
-*
+*    position, velocity, acceleration: coordinate-like objects. During the particle update step, velocity += position, position += acceleration
+*    ttl: Time-to-live in milliseconds
+*    text: text content of particle node
+*    grid: size of grid to snap to. If false, don't snap to grid.
+*    style: Object with most CSS properties, plus
+*      (1) scale (or scaleX and scaleY separately)
+*      (2) rotation
+*      In the style object, you can provide:
+*         (1) Literal values
+*         (2) Getters 
+*         (3) Arrays of numbers / colours / css values, which will be animated as a fraction of particle TTL
+*    onCreate: function called during particle creation. Takes one argument, the particle object.
+*    onUpdate: function called every frame during particle lifespan. Takes one argument, the particle object.
 */
 
 import { propValueToFunction } from './utilities';
@@ -12,7 +21,6 @@ import { propValueToFunction } from './utilities';
 export const DEFAULT_PARTICLE_OPTIONS = {
   get velocity() { return  { x: 0, y: 0 } }, 
   get acceleration () { return { x: 0, y: 0 } },
-  rotation: 0,
   ttl: 1000,
   text: '.',
   grid: false,
