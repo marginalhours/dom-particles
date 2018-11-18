@@ -3,29 +3,31 @@
 *  Configuration:
 *    emitEvery: Milliseconds. How often to emit a particle.
 *    position, velocity, acceleration: Vector-like objects. During update, velocity += acceleration, position += velocity.
-*    rotation: Which direction this 
+*    rotation: Which direction this emitter is facing (IN DEGREES)
 *    maxEmissions: Max number of particles to emit. Once reached, emitter stops.
 *    ttl: Max number of milliseconds to emit particles for.
 *    MAX_EMIT_PER_STEP: Maximum number of particles to emit per timestep. Limitation to stop all particles syncing up on browser tab switch. Not recommended to change.
 *    particleOptions: See particle class. Options used to instantiate particles from this emitter.
-*      Of interest: If these options are getters, not literal, 
+*      If these options are getters, not literal, they will be recalculated per-particle (useful for randomization etc)
+*      The initial position vector of a particle from an emitter is expressed _relative to the emitter_.
+*      The initial velocity vector of a particle from an emitter is expressed _relative to the emitter's angle_.
 */
 
 import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
 import { propValueToFunction } from './utilities';
 
 const DEFAULT_EMITTER_OPTIONS = {
-  emitEvery: 500,
   position: { x: 0, y: 0 },
   velocity: { x: 0, y: 0 },
   acceleration: { x: 0, y: 0 },
-  rotation: 0,
-  onCreate: () => {},
-  onUpdate: () => {},
-  particleOptions: { position: { x: 0, y: 0 }, ...DEFAULT_PARTICLE_OPTIONS },
   maxEmissions: false,
   ttl: false,
-  MAX_EMIT_PER_STEP: 16 /* Prevent thundering herds on tab switch */
+  emitEvery: 500,
+  rotation: 0,
+  particleOptions: { position: { x: 0, y: 0 }, ...DEFAULT_PARTICLE_OPTIONS },
+  onCreate: () => {},
+  onUpdate: () => {},
+  MAX_EMIT_PER_STEP: 16, /* Prevent thundering herds on tab switch */
 }
 
 export default class TextParticleEmitter {
@@ -71,6 +73,7 @@ export default class TextParticleEmitter {
       for(let i = 0; i < toEmit; i++){
         let p = this.particleOptions.position || { x: 0, y: 0 };
         let pp = { x: this.position.x + p.x, y: this.position.y + p.y }
+        
         let v = this.particleOptions.velocity || { x: 0, y: 0 };
         let v_angle = Math.atan2(v.y, v.x);
         let v_magna = Math.sqrt((v.x * v.x) + (v.y * v.y));
@@ -79,6 +82,7 @@ export default class TextParticleEmitter {
           x: v_magna * Math.cos(v_angle + t_angle),
           y: v_magna * Math.sin(v_angle + t_angle)
         }
+        
         this.manager.addParticle({ ...this.particleOptions, position: pp, velocity: vv });
         // emit particle
         this.emitted ++;

@@ -57,6 +57,7 @@ export default class TextParticleManager {
   from (element, pattern, options) {
     let offsets = buildOffsets(element.innerText, pattern);
     offsets.reverse().map(o => { 
+      console.log(element.innerText.substring(o[0], o[1]);
       let r = document.createRange();
       r.setStart(element.childNodes[0], o[0]);
       r.setEnd(element.childNodes[0], o[1]);
