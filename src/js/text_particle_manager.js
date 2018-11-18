@@ -65,7 +65,7 @@ export default class TextParticleManager {
       r.surroundContents(s);
       let { x, y, width, height } = s.getBoundingClientRect();
       Object.assign(s.style, {...PARTICLE_SKELETON_STYLES});
-      let p = new TextParticle({...options, text: r.toString(), element: s, position: { x, y }, style: { width, height }});
+      let p = new TextParticle({...options, text: r.toString(), element: s, position: { x, y }, style: {...options.style, width, height }});
       p.element.parentElement.removeChild(p.element);
       this.foldElement.appendChild(p.element);
       this.particles.push(p);

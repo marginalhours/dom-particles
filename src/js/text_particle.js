@@ -17,7 +17,6 @@ export const DEFAULT_PARTICLE_OPTIONS = {
 export default class TextParticle {
   constructor (options) {
     Object.assign(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options});
-    
     this.elapsed = 0;
     this.frameNumber = 0;
     this.updateTransform = this.grid ? this.updateGridTransform : this.updateTransform;
