@@ -23,9 +23,10 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
     
 document.querySelector('button').addEventListener('click', (e) => {
   let k = 1;
-  t.from(document.querySelector('p'), 'character', {
-    ttl: 15000,
-    style: { color: ['#000', 'rgba(200, 0, 0, 1.0)'] }
+  t.from(document.querySelector('p'), 3, {
+    ttl: 5000,
+    get velocity() { return { x: 10, y: 100 * Math.random() } },
+    style: { color: ['#000', 'rgba(200, 0, 0, 0)'] }
   });
 });
 
