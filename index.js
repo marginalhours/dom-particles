@@ -23,9 +23,9 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
     
 document.querySelector('button').addEventListener('click', (e) => {
   let k = 1;
-  t.from(document.querySelector('p'), 3, {
+  t.from(document.querySelector('p'), 2, {
     ttl: 5000,
-    style: { color: ['#000', 'rgba(200, 0, 0, 0)'], rotation: ['0deg', '360deg'] }
+    style: { opacity: [1, 0, 1, 0]}
   });
 });
 
