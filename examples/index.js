@@ -1,6 +1,3 @@
-// import TextParticleManager from './text_particle_manager';
-// import { colourToCSSString, positionFromNode, lerp } from './utilities';
-
 const { colourToCSSString, positionFromNode, lerp } = letterbomb.utilities;
 
 const HEAT_COLOURS = [
