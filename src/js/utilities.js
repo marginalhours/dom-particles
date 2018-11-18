@@ -91,11 +91,30 @@ export const propValueToFunction = (propValue) => {
 
 export const buildOffsets = (text, selector) => {
   // finds all offsets in text when split by selector
+  if (typeof selector === 'number') {
+    return buildChunksOfN(text, selector);
+  } else {
+    return buildChunksFromRegex(text, selector);  
+  }
+}
+
+const buildChunksOfN = (text, n) => {
+  let offsets = [];
+  let l = text.length;
+  
+  for(let i = 0; i < l; i += n){
+    offsets.push([i, i + n]);  
+  }
+  
+  offsets.push([i ,
+}
+
+const buildChunksFromRegex = (text, pattern) => {
   let offsets = [];
   let prev = -1;
   let m;
   do {
-    m = selector.exec(text);
+    m = pattern.exec(text);
     if (m) {      
       let next = m.index;
       if (next > prev + 1) {
