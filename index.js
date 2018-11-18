@@ -21,35 +21,9 @@ const HEAT_COLOURS = [
 let t = new letterbomb({ max: 10000 });
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 
-let theta = 0;
     
 document.querySelector('button').addEventListener('click', (e) => {
-  t.addEmitter({
-    position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
-    emitEvery: 1,
-    onUpdate: (emitter) => {
-      emitter.rotation += 0.01;   
-    },
-    particleOptions: {
-      ttl: 4000,
-      style: { 
-        backgroundColor: ['#f33', '#fefeee'], 
-        width: '24px',
-        height: '24px',
-        scale: [2, 1], 
-      },
-      text: '',
-      get position () { return { x: 120 * (Math.random() - 0.5), y: 120 * (Math.random() - 0.5) } },
-      get velocity () {
-        let h = 100 + (100 * Math.random());
-        h *= (Math.random() > 0.5) ? 1 : -1;
-        return { x: h, y: 0 }
-      },
-      onCreate: (p) => {
-        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-      }
-    }
-  });
+
 });
 
   // let k = 1;
