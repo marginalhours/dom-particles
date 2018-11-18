@@ -23,19 +23,38 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
 
 
 document.querySelector('button').addEventListener('click', (e) => {
-  let k = 1;
-  t.from(document.querySelector('p'), 1, {
-    ttl: 5000,
-    style: { rotation: [0, 2 * Math.PI] },
-    onCreate: (p) => { p.n = k++; },
-    onUpdate: (p) => { 
-      p.position = { 
-        x: p.position.x,
-        y: p.position.y + Math.sin(((p.n) + p.frameNumber) * 0.1)
+  t.createEmitter({
+    position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
+    emitEvery: 2,
+    particleOptions: {
+      grid: 16,
+      get ttl () { return 1500 },
+      get text () { return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]},
+      /* particle position getter is relative to emitter position */
+      get position () { return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get velocity () { return { x: 0, y: -50 } },
+      style: { color: HEAT_COLOURS.map(c => colourToCSSString(c)), fontSize: ['24px', '12px'] },
+      onUpdate: (p) => {
+        if (p.frameNumber % 30 === 0){
+          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+        }
       }
-    }
+    },
   });
 });
+
+  // let k = 1;
+  // t.from(document.querySelector('p'), 1, {
+  //   ttl: 15000,
+  //   style: { rotation: ['0deg', '360deg'] }, 
+  //   onCreate: (p) => { p.n = k++; },
+  //   onUpdate: (p) => { 
+  //     p.position = { 
+  //       x: p.position.x,
+  //       y: p.position.y + Math.sin(((p.n) + p.frameNumber) * 0.1)
+  //     }
+  //   }
+  // });
 
 // // bubbles
   // t.addEmitter({
