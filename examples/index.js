@@ -23,9 +23,10 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
 
 
 document.querySelector('button').addEventListener('click', (e) => {
-  t.from(document.querySelector('p'), /\w+/g, {
+  let k = 1;
+  t.from(document.querySelector('p'), 13, {
     ttl: 60000,
-    get velocity () { return { x: 10 * Math.random(), y: 10 * Math.random() } },
+    get velocity () { k *= -1; return { x: 0, y: k * 10 * Math.random() } },
   });
 });
 

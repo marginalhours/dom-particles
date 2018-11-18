@@ -100,13 +100,23 @@ export const buildOffsets = (text, selector) => {
 
 const buildChunksOfN = (text, n) => {
   let offsets = [];
-  let l = text.length;
+  let chunks = text.length / n;
   
-  for(let i = 0; i < l; i += n){
-    offsets.push([i, i + n]);  
+  for(let i = 0; i < chunks; i++)
+  {
+    offsets.push([i * n, (i + 1) * n]);  
   }
   
-  offsets.push([i ,
+  if (text.length % n !== 0){
+    let last = offsets[offsets.length - 1];
+    
+    offsets.push(last[1], last[1] + (text.length % n));
+  }
+  
+  // let k = offsets[offsets.length - 1][1];
+  // offsets.push([k + 1, l - 1]);
+  
+  return offsets;
 }
 
 const buildChunksFromRegex = (text, pattern) => {
