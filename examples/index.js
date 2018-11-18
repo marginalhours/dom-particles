@@ -23,7 +23,7 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
     
 document.querySelector('button').addEventListener('click', (e) => {
   let k = 1;
-  t.from(document.querySelector('p'), 2, {
+  t.from(document.querySelector('p'), 'word', {
     ttl: 30000
   });
 });

@@ -13,6 +13,7 @@ const DEFAULT_TPM_OPTIONS = {
 const PARTICLE_SKELETON_STYLES = {
   position: 'absolute', 
   display: 'inline-block',
+  marginRight: '-4px',
   pointerEvents: 'none',
   transform: 'translate3d(0,0,0)',
   opacity: 0
