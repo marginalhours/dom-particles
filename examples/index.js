@@ -21,25 +21,34 @@ const HEAT_COLOURS = [
 let t = new letterbomb({ max: 10000 });
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 
+let theta = 0;
 
+t.out = document.querySelector('.out');
+    
 document.querySelector('button').addEventListener('click', (e) => {
-  t.createEmitter({
+  t.addEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
-    emitEvery: 2,
+    emitEvery: 1,
+    MAX_EMIT_PER_STEP: 100,
     particleOptions: {
-      grid: 16,
-      get ttl () { return 1500 },
-      get text () { return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]},
-      /* particle position getter is relative to emitter position */
-      get position () { return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-      get velocity () { return { x: 0, y: -50 } },
-      style: { color: HEAT_COLOURS.map(c => colourToCSSString(c)), fontSize: ['24px', '12px'] },
-      onUpdate: (p) => {
-        if (p.frameNumber % 30 === 0){
-          p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
-        }
+      ttl: 1000,
+      style: { 
+        backgroundColor: ['#f33', '#fefeee'], 
+        width: '16px',
+        height: '16px',
+        scale: [1, 1], 
+      },
+      text: '',
+      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get velocity () {
+        let h = 600 + 100 * Math.random();
+        theta =  2 * Math.PI * Math.random(); //0.1 * Math.PI * Math.random();
+        return { x: h * Math.cos(theta), y: document.body.clientHeight / 2 }
+      },
+      onCreate: (p) => {
+        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
       }
-    },
+    }
   });
 });
 

@@ -31,9 +31,7 @@ export default class TextParticleManager {
     Object.assign(this.foldElement.style, { width: 0, height: 0, position: 'absolute', top: 0, left: 0});
     
     this.allocate(this.preallocate);
-    document.body.appendChild(this.foldElement);
-    
-    
+    document.body.appendChild(this.foldElement);    
     this.frameStart = null;
   }
   
@@ -102,6 +100,8 @@ export default class TextParticleManager {
     });
     
     document.body.appendChild(this.foldElement);
+    
+    document.querySelector('.out').innerText = this.particles.length;
     
     if (this.emitters.length === 0 && this.particles.length === 0){
       cancelAnimationFrame(this.raf);
