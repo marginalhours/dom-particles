@@ -58,10 +58,11 @@ export default class TextParticleManager {
   from (element, pattern, options) {
     let offsets = buildOffsets(element.innerText, pattern);
     offsets.reverse().map(o => { 
+      // should we just build our own whole element here and replace in the DOM in one go?
+      // saves messing about with offsets...
       let r = document.createRange();
       r.setStart(element.childNodes[0], o[0]);
       r.setEnd(element.childNodes[0], o[1]);
-      console.log(o, r.toString());
       let s = document.createElement(this.tagName);
       Object.assign(s.style, {...PARTICLE_SKELETON_STYLES});
       r.surroundContents(s);      
