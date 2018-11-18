@@ -24,8 +24,7 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
 document.querySelector('button').addEventListener('click', (e) => {
   let k = 1;
   t.from(document.querySelector('p'), 2, {
-    ttl: 5000,
-    style: { opacity: [1, 0, 1, 0]}
+    ttl: 30000
   });
 });
 

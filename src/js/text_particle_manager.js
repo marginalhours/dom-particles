@@ -11,8 +11,8 @@ const DEFAULT_TPM_OPTIONS = {
 };
 
 const PARTICLE_SKELETON_STYLES = {
-  display: 'block', 
   position: 'absolute', 
+  display: 'inline-block',
   pointerEvents: 'none',
   transform: 'translate3d(0,0,0)',
   opacity: 0
@@ -57,14 +57,14 @@ export default class TextParticleManager {
   from (element, pattern, options) {
     let offsets = buildOffsets(element.innerText, pattern);
     offsets.reverse().map(o => { 
-      console.log(element.innerText.substring(o[0], o[1]);
       let r = document.createRange();
       r.setStart(element.childNodes[0], o[0]);
       r.setEnd(element.childNodes[0], o[1]);
-      let s = document.createElement('span');
-      r.surroundContents(s);
-      let { x, y, width, height } = s.getBoundingClientRect();
+      let s = document.createElement(this.tagName);
       Object.assign(s.style, {...PARTICLE_SKELETON_STYLES});
+      r.surroundContents(s);      
+      let { x, y, width, height } = s.getBoundingClientRect();
+
       let p = new TextParticle({...options, text: r.toString(), element: s, position: { x, y }, style: {...options.style, width, height }});
       p.element.parentElement.removeChild(p.element);
       this.foldElement.appendChild(p.element);
