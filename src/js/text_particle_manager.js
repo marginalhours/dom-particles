@@ -58,12 +58,14 @@ export default class TextParticleManager {
   
   from (element, pattern, options) {
     let offsets = buildOffsets(element.innerText, pattern);
-    console.log(element.children);
-    offsets.map(o => { 
+    offsets.reverse().map(o => { 
       let r = document.createRange();
       r.setStart(element.childNodes[0], o[0]);
       r.setEnd(element.childNodes[0], o[1]);
-      console.log(r);
+      let s = document.createElement('span');
+      r.surroundContents(s);
+      let { x, y, width, height } = s.getBoundingClientRect();
+      this.particles.push(new TextParticle({text: r.toString(), element: s, position: { x, y }, style: { width, height }}));
     });
   }
   
