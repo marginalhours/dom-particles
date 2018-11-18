@@ -1,4 +1,5 @@
 import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
+import { propValueToFunction } from './utilities';
 
 const DEFAULT_EMITTER_OPTIONS = {
   emitEvery: 500,
