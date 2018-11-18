@@ -4,7 +4,8 @@ const DEFAULT_EMITTER_OPTIONS = {
   emitEvery: 500,
   position: { x: 0, y: 0 },
   velocity: { x: 0, y: 0 },
-  acceleration: { x: 0, y: 0},
+  acceleration: { x: 0, y: 0 },
+  rotation: 0,
   onCreate: () => {},
   onUpdate: () => {},
   particleOptions: { position: { x: 0, y: 0 }, ...DEFAULT_PARTICLE_OPTIONS },
@@ -51,11 +52,16 @@ export default class TextParticleEmitter {
       this.elapsed = 0;
       
       for(let i = 0; i < toEmit; i++){
-        // emit particle
-        this.emitted++;
         let p = this.particleOptions.position || { x: 0, y: 0 };
         let pp = { x: this.position.x + p.x, y: this.position.y + p.y }
-        this.manager.addParticle({...this.particleOptions, position: pp});
+        let v = this.particleOptions.velocity || { x: 0, y: 0 };
+        let vv = {
+          x: v.x * Math.cos(this.rotation),
+          y: v.y * Math.sin(this.rotation)
+        }
+        this.manager.addParticle({ ...this.particleOptions, position: pp, velocity: vv });
+        // emit particle
+        this.emitted++;
       }
     }
     

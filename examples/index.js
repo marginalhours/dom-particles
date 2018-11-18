@@ -22,25 +22,26 @@ let t = new letterbomb({ max: 10000 });
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 
 let theta = 0;
-
-t.out = document.querySelector('.out');
     
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
-    emitEvery: 2,
+    emitEvery: 1,
+    onUpdate: (emitter) => {
+      emitter.rotation += 0.01;   
+    },
     particleOptions: {
-      ttl: 2000,
+      ttl: 4000,
       style: { 
         backgroundColor: ['#f33', '#fefeee'], 
-        width: '16px',
-        height: '16px',
+        width: '24px',
+        height: '24px',
         scale: [2, 1], 
       },
       text: '',
-      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get position () { return { x: 120 * (Math.random() - 0.5), y: 120 * (Math.random() - 0.5) } },
       get velocity () {
-        let h = 100 + (500 * Math.random());
+        let h = 100 + (100 * Math.random());
         h *= (Math.random() > 0.5) ? 1 : -1;
         return { x: h, y: 0 }
       },
