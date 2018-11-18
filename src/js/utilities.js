@@ -114,7 +114,6 @@ const buildChunksOfN = (text, n) => {
   
   if (text.length % n !== 0){
     let last = offsets[offsets.length - 1];
-    
     offsets.push([last[1], last[1] + (text.length % n)]);
   }
   return offsets;

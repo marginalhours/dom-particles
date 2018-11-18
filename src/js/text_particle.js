@@ -1,4 +1,11 @@
-/* Fix scaling! */
+/* 
+*  Basic particle class. 
+*  Configuration: 
+*    position, velocity, acceleration: coordinate-like objects
+*    
+*    style: 
+*
+*/
 
 import { propValueToFunction } from './utilities';
 

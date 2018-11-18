@@ -1,3 +1,9 @@
+/*
+*  Particle emitter. 
+*
+*
+*/
+
 import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
 import { propValueToFunction } from './utilities';
 
