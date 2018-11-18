@@ -28,22 +28,21 @@ t.out = document.querySelector('.out');
 document.querySelector('button').addEventListener('click', (e) => {
   t.addEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
-    emitEvery: 1,
-    MAX_EMIT_PER_STEP: 100,
+    emitEvery: 2,
     particleOptions: {
-      ttl: 1000,
+      ttl: 2000,
       style: { 
         backgroundColor: ['#f33', '#fefeee'], 
         width: '16px',
         height: '16px',
-        scale: [1, 1], 
+        scale: [2, 1], 
       },
       text: '',
       get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
       get velocity () {
-        let h = 600 + 100 * Math.random();
-        theta =  2 * Math.PI * Math.random(); //0.1 * Math.PI * Math.random();
-        return { x: h * Math.cos(theta), y: document.body.clientHeight / 2 }
+        let h = 100 + (500 * Math.random());
+        h *= (Math.random() > 0.5) ? 1 : -1;
+        return { x: h, y: 0 }
       },
       onCreate: (p) => {
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
