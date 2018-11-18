@@ -24,13 +24,8 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
 document.querySelector('button').addEventListener('click', (e) => {
   let k = 1;
   t.from(document.querySelector('p'), 'character', {
-    ttl: 15000,    
-    onUpdate: (p) => { 
-      p.position = {
-        x: lerp(p.position.x, e.clientX, 0.5),
-        y: lerp(p.position.y, e.clientY, 0.5)
-      }
-    }
+    ttl: 15000,
+    style: { color: ['#000', 'rgba(200, 0, 0, 1.0)'] }
   });
 });
 

@@ -71,7 +71,6 @@ export default class TextParticleManager {
     this.start();
   }
   
-  
   start () {
     this.raf = requestAnimationFrame((t) => this.update(t));
   }
