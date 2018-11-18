@@ -24,30 +24,31 @@ const HEAT_COLOURS = [
 let t = new letterbomb({ max: 10000 });
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 
-let theta = 0;
-let i = 0;
 
 document.querySelector('button').addEventListener('click', (e) => {
-  t.addEmitter({
-    position: positionFromNode(document.querySelector('button'), 0, 0),
-    emitEvery: 100,
-    particleOptions: {
-      text: '', 
-      get ttl () { return 1000 + (500 * Math.random()) },
-      get position () { return { x: 100 * (Math.random()), y: -20}},
-      get velocity () { return { x: 0, y: -10 } },
-      get acceleration () { return { x: 0, y: -100 } },
-      style: { 
-        get scale () { return 0.75 * Math.random() },
-        opacity: [0, 1, 1, 1, 0.5, 0],
-        border: '2px solid rgba(192, 192, 200, 1.0)',
-        width: '16px',
-        height: '16px',
-        borderRadius: '16px'
-      },
-    }
-  });
+
 });
+
+// // bubbles
+  // t.addEmitter({
+  //   position: positionFromNode(document.querySelector('button'), 0, 0),
+  //   emitEvery: 100,
+  //   particleOptions: {
+  //     text: '', 
+  //     get ttl () { return 1000 + (500 * Math.random()) },
+  //     get position () { return { x: 100 * (Math.random()), y: -20}},
+  //     get velocity () { return { x: 0, y: -10 } },
+  //     get acceleration () { return { x: 0, y: -100 } },
+  //     style: { 
+  //       get scale () { return 0.75 * Math.random() },
+  //       opacity: [0, 1, 1, 1, 0.5, 0],
+  //       border: '2px solid rgba(192, 192, 200, 1.0)',
+  //       width: '16px',
+  //       height: '16px',
+  //       borderRadius: '16px'
+  //     },
+  //   }
+  // });
 
     // particleOptions: {
     //   ttl: 1000,
