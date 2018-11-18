@@ -40,7 +40,7 @@ document.querySelector('button').addEventListener('click', (e) => {
       style: { 
         get scale () { return 0.75 * Math.random() },
         opacity: [0, 1, 1, 1, 0.5, 0],
-        border: '1px solid rgba(192, 192, 200, 0.9)',
+        border: '2px solid rgba(192, 192, 200, 1.0)',
         width: '16px',
         height: '16px',
         borderRadius: '16px'
