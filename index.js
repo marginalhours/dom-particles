@@ -23,7 +23,10 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
 
 
 document.querySelector('button').addEventListener('click', (e) => {
-  t.from(document.querySelector('p'), /\w+/g, );
+  t.from(document.querySelector('p'), /\w+/g, {
+    ttl: 60000,
+    get velocity () { return { x: 10 * Math.random(), y: 10 * Math.random() } },
+  });
 });
 
 // // bubbles
