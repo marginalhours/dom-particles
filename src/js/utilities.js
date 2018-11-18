@@ -89,8 +89,14 @@ export const propValueToFunction = (propValue) => {
   } 
 }
 
+const selectorMap = {
+  'character': 1,
+  'word': /\w+/g
+}
+
 export const buildOffsets = (text, selector) => {
-  // finds all offsets in text when split by selector
+  if (typeof selector === 'string') { selector = selectorMap[selector] }
+  
   if (typeof selector === 'number') {
     return buildChunksOfN(text, selector);
   } else {
@@ -116,21 +122,28 @@ const buildChunksOfN = (text, n) => {
 
 const buildChunksFromRegex = (text, pattern) => {
   let offsets = [];
-  let prev = -1;
+  let prev = 0;
   let m;
   do {
     m = pattern.exec(text);
     if (m) {      
       let next = m.index;
-      if (next > prev + 1) {
-        offsets.push([prev + 1, next - 1]);  
+      // Push in-between match
+      if (next > prev) {
+        offsets.push([prev, next]);  
       }
       let end = m.index + m[0].length;
       offsets.push([m.index, end]);
-      
       prev = end;
     }
   } while (m);
+  
+  // Cleanup remainder
+  let final = offsets[offsets.length - 1];
+  if (final[1] < text.length) {
+    offsets.push([final[1], text.length]);  
+  }
+  
   return offsets;
 }
 
