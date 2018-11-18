@@ -38,6 +38,36 @@ export default class TextParticleManager {
     this.frameStart = null;
   }
   
+  addParticle (options) {
+    if (this.particles.length < this.max) {
+      let p = this.particles.push(new TextParticle({...options, element: this.pop()}));
+      if (!this.raf && this.autoStart) {
+        this.start();  
+      }
+      return p;
+    }
+  }
+  
+  addEmitter (options) {
+    let e = this.emitters.push(new TextParticleEmitter({...options, manager: this}));
+    if (!this.raf && this.autoStart){
+      this.start();
+    }
+    return e;
+  }
+  
+  from (element, pattern, options) {
+    let offsets = buildOffsets(element.innerText, pattern);
+    console.log(element.children);
+    offsets.map(o => { 
+      let r = document.createRange();
+      r.setStart(element.childNodes[0], o[0]);
+      r.setEnd(element.childNodes[0], o[1]);
+      console.log(r);
+    });
+  }
+  
+  
   start () {
     this.raf = requestAnimationFrame((t) => this.update(t));
   }
@@ -73,29 +103,6 @@ export default class TextParticleManager {
     }
   }
   
-  addParticle (options) {
-    if (this.particles.length < this.max) {
-      let p = this.particles.push(new TextParticle({...options, element: this.pop()}));
-      if (!this.raf && this.autoStart) {
-        this.start();  
-      }
-      return p;
-    }
-  }
-  
-  addEmitter (options) {
-    let e = this.emitters.push(new TextParticleEmitter({...options, manager: this}));
-    if (!this.raf && this.autoStart){
-      this.start();
-    }
-    return e;
-  }
-  
-  from (element, pattern, options) {
-    let offsets = buildOffsets(element.innerText, pattern);
-    // at this point, range.setStart() and setEnd() will give you your wrapped object, then we can start playing with it.
-  }
-    
   push (el) {
     this._pool.push(el);
   }

@@ -92,7 +92,8 @@ export const propValueToFunction = (propValue) => {
 export const buildOffsets = (text, selector) => {
   // finds all offsets in text when split by selector
   let offsets = [];
-  let m, prev;
+  let prev = -1;
+  let m;
   do {
     m = selector.exec(text);
     if (m) {      
