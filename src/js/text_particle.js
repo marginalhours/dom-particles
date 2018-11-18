@@ -5,7 +5,7 @@ import { propValueToFunction } from './utilities';
 export const DEFAULT_PARTICLE_OPTIONS = {
   get velocity() { return  { x: 0, y: 0 } }, 
   get acceleration () { return { x: 0, y: 0 } },
-  heading: 0,
+  rotation: 0,
   ttl: 1000,
   text: '.',
   grid: false,
@@ -83,22 +83,23 @@ export default class TextParticle {
   }
   
   getScaledTransform(snapshot) {
-    let { scaleX, scaleY, scale, } = snapshot;
+    let { rotation, scale, scaleX, scaleY } = snapshot;
+    rotation = rotation || 0;
     scale = scale || 1.0;
     scaleX = scaleX || scale;
     scaleY = scaleY || scale;
     
-    return this.getTransform(scaleX, scaleY);
+    return this.getTransform(scaleX, scaleY, rotation);
   }
   
-  getTransform (scaleX, scaleY) {    
-    return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${this.heading}rad) scale(${scaleX}, ${scaleY})`;
+  getTransform (scaleX, scaleY, rotation) {
+    return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
   }
   
-  getGridTransform (scaleX, scaleY) {
+  getGridTransform (scaleX, scaleY, rotation) {
     let x = this.position.x - (this.position.x % this.grid);
     let y = this.position.y - (this.position.y % this.grid);
-    return `translate3d(${x}px, ${y}px, 0) rotateZ(${this.heading}rad) scale(${this.scale.x}, ${this.scale.y})`;
+    return `translate3d(${x}px, ${y}px, 0) rotateZ(${rotation}) scale(${this.scale.x}, ${this.scale.y})`;
   }
     
   update (f) {

@@ -84,6 +84,8 @@ export default class TextParticleManager {
     this.frameStart = timestamp;
     let f = (dt/1000);
     
+    document.body.removeChild(this.foldElement);
+    
     this.particles = this.particles.filter(p => {
       p.update(f);
       if (p.alive) { return true; }
@@ -98,6 +100,8 @@ export default class TextParticleManager {
       e.update(f);
       return e.alive;
     });
+    
+    document.body.appendChild(this.foldElement);
     
     if (this.emitters.length === 0 && this.particles.length === 0){
       cancelAnimationFrame(this.raf);
