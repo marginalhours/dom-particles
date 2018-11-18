@@ -11,12 +11,11 @@ const DEFAULT_TPM_OPTIONS = {
 };
 
 const PARTICLE_SKELETON_STYLES = {
-  position: 'absolute', 
-  display: 'inline-block',
-  marginRight: '-4px',
+  // position: 'absolute', 
+  display: 'inline',
   pointerEvents: 'none',
   transform: 'translate3d(0,0,0)',
-  opacity: 0
+  // opacity: 0
 }
 
 export default class TextParticleManager {
@@ -65,6 +64,7 @@ export default class TextParticleManager {
       Object.assign(s.style, {...PARTICLE_SKELETON_STYLES});
       r.surroundContents(s);      
       let { x, y, width, height } = s.getBoundingClientRect();
+      Object.assign(s.style, { width, height });
 
       let p = new TextParticle({...options, text: r.toString(), element: s, position: { x, y }, style: {...options.style, width, height }});
       p.element.parentElement.removeChild(p.element);
