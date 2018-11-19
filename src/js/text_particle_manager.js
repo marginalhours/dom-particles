@@ -16,6 +16,7 @@ const PARTICLE_SKELETON_STYLES = {
   pointerEvents: 'none',
   whiteSpace: 'pre-wrap',
   transform: 'translate3d(0,0,0)',
+  boxSizing: 'border-box'
   // opacity: 0
 }
 

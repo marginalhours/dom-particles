@@ -72,19 +72,19 @@ document.querySelector('button').addEventListener('click', (e) => {
       }
     });
       
+    let k = 0;
     t.addEmitter({
       position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 10},
       emitEvery: 200,
       particleOptions: {
         ttl: 1000,
         style: { 
-          get backgroundColor () { return  ['#aaa', '#fff'] }, 
-          width: '8px',
-          height: '48px',
-          scale: [1, 3, 1, 3, 1]
+          backgroundColor: ['#aaa', '#fff'],
+          width: '16px',
+          get height() { return (20 + 100 * Math.sin(k++)) + 'px' }
         },
         text: '',
-        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) - (50 * Math.sin(k)) } },
         get velocity () {
           let h = -1 * (500 + (100 * Math.random()));
           return { x: h, y: 0 }
