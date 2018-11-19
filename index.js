@@ -22,20 +22,21 @@ let t = new letterbomb({ max: 10000 });
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
     
 document.querySelector('button').addEventListener('click', (e) => {
-  // let k = 1;
-  // t.from(document.querySelector('p'), 'word', {
-  //   ttl: 30000
-  // });
+    
+    let k = 0;
+    let l = -400;
+  
     t.addEmitter({
       position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 100},
       emitEvery: 8,
       onUpdate: (emitter) => {   
-        emitter.position.y = emitter.position.y + (10 * Math.sin(emitter.frameNumber/10));
+        emitter.position.y = emitter.position.y + (10 * Math.sin(k++/10));
       },
       particleOptions: {
         ttl: 1000,
         style: { 
           get backgroundColor () { return  ['#f33', '#fefeee'] }, 
+          boxShadow: '1px 1px 1px #333',
           width: '12px',
           height: '12px',
           scale: [2, 1], 
@@ -44,7 +45,7 @@ document.querySelector('button').addEventListener('click', (e) => {
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
         get velocity () {
           let h = -1 * (500 + (100 * Math.random()));
-          return { x: h, y: 0 }
+          return { x: l, y: 0 }
         }
       }
     });
@@ -53,12 +54,13 @@ document.querySelector('button').addEventListener('click', (e) => {
       position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 + 100},
       emitEvery: 8,
       onUpdate: (emitter) => {   
-        emitter.position.y = emitter.position.y + (10 * Math.sin(Math.PI + emitter.frameNumber/10));
+        emitter.position.y = emitter.position.y + (10 * Math.sin(Math.PI + k/10));
       },
       particleOptions: {
         ttl: 1000,
         style: { 
           get backgroundColor () { return  ['#33f', '#eefefe'] }, 
+          boxShadow: '1px 1px 1px #333',
           width: '12px',
           height: '12px',
           scale: [2, 1], 
@@ -67,30 +69,29 @@ document.querySelector('button').addEventListener('click', (e) => {
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
         get velocity () {
           let h = -1 * (500 + (100 * Math.random()));
-          return { x: h, y: 0 }
+          return { x: l, y: 0 }
         }
       }
     });
       
-    let k = 0;
-    t.addEmitter({
-      position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 10},
-      emitEvery: 200,
-      particleOptions: {
-        ttl: 1000,
-        style: { 
-          backgroundColor: ['#aaa', '#fff'],
-          width: '16px',
-          get height() { return (20 + 100 * Math.sin(k++)) + 'px' }
-        },
-        text: '',
-        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) - (50 * Math.sin(k)) } },
-        get velocity () {
-          let h = -1 * (500 + (100 * Math.random()));
-          return { x: h, y: 0 }
-        }
-      }
-    });
+    // t.addEmitter({
+    //   position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 10},
+    //   emitEvery: 16 * 8,
+    //   particleOptions: {
+    //     ttl: 1000,
+    //     style: { 
+    //       backgroundColor: '#fff',
+    //       width: '24px',
+    //       get height() { return (20 + Math.abs(120 * Math.cos(k/10))) + 'px' }
+    //     },
+    //     text: '',
+    //     get position () { return { x: 1 * (Math.random() - 0.5), y: - (60 * Math.abs(Math.cos(k/10))) } },
+    //     get velocity () {
+    //       let h = -1 * (500 + (100 * Math.random()));
+    //       return { x: l, y: 0 }
+    //     }
+    //   }
+    // });
   
 });
 
