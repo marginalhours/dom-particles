@@ -14,6 +14,7 @@
 *         (3) Arrays of numbers / colours / css values, which will be animated as a fraction of particle TTL
 *    onCreate: function called during particle creation. Takes one argument, the particle object.
 *    onUpdate: function called every frame during particle lifespan. Takes one argument, the particle object.
+*  Needs a better reset on exit
 */
 
 import { propValueToFunction } from './utilities';
