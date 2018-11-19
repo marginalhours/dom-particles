@@ -25,18 +25,19 @@ document.querySelector('button').addEventListener('click', (e) => {
     
     let k = 0;
     let l = -400;
+    let m = 120;
+    let n = 16;
   
     t.addEmitter({
-      position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 100},
+      position: {...c},
       emitEvery: 8,
       onUpdate: (emitter) => {   
-        emitter.position.y = emitter.position.y + (10 * Math.sin(k++/10));
+        emitter.position.y = c.y + (m * Math.sin(k++/n));
       },
       particleOptions: {
         ttl: 1000,
         style: { 
-          get backgroundColor () { return  ['#f33', '#fefeee'] }, 
-          boxShadow: '1px 1px 1px #333',
+          get backgroundColor () { return  ['#f33', '#fefeee'] },
           width: '12px',
           height: '12px',
           scale: [2, 1], 
@@ -51,16 +52,15 @@ document.querySelector('button').addEventListener('click', (e) => {
     });
   
     t.addEmitter({
-      position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 + 100},
+      position: {...c},
       emitEvery: 8,
       onUpdate: (emitter) => {   
-        emitter.position.y = emitter.position.y + (10 * Math.sin(Math.PI + k/10));
+        emitter.position.y = c.y + (m * Math.sin(Math.PI + k/n));
       },
       particleOptions: {
         ttl: 1000,
         style: { 
-          get backgroundColor () { return  ['#33f', '#eefefe'] }, 
-          boxShadow: '1px 1px 1px #333',
+          get backgroundColor () { return  ['#33f', '#eefefe'] },
           width: '12px',
           height: '12px',
           scale: [2, 1], 
@@ -74,24 +74,24 @@ document.querySelector('button').addEventListener('click', (e) => {
       }
     });
       
-    // t.addEmitter({
-    //   position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 10},
-    //   emitEvery: 16 * 8,
-    //   particleOptions: {
-    //     ttl: 1000,
-    //     style: { 
-    //       backgroundColor: '#fff',
-    //       width: '24px',
-    //       get height() { return (20 + Math.abs(120 * Math.cos(k/10))) + 'px' }
-    //     },
-    //     text: '',
-    //     get position () { return { x: 1 * (Math.random() - 0.5), y: - (60 * Math.abs(Math.cos(k/10))) } },
-    //     get velocity () {
-    //       let h = -1 * (500 + (100 * Math.random()));
-    //       return { x: l, y: 0 }
-    //     }
-    //   }
-    // });
+    t.addEmitter({
+      position: {...c},
+      emitEvery: 16 * 8,
+      particleOptions: {
+        ttl: 1000,
+        style: { 
+          backgroundColor: '#fff',
+          width: '24px',
+          get height() { return (20 + Math.abs(120 * Math.cos(k/10))) + 'px' }
+        },
+        text: '',
+        get position () { return { x: 1 * (Math.random() - 0.5), y: - (60 * Math.abs(Math.cos(k/n))) } },
+        get velocity () {
+          let h = -1 * (500 + (100 * Math.random()));
+          return { x: l, y: 0 }
+        }
+      }
+    });
   
 });
 
