@@ -28,7 +28,7 @@ document.querySelector('button').addEventListener('click', (e) => {
   // });
     t.addEmitter({
     position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 20},
-    emitEvery: 4,
+    emitEvery: 8,
     onUpdate: (emitter) => {   
       emitter.position.y = emitter.position.y + (10 * Math.sin(emitter.frameNumber/10));
     },
