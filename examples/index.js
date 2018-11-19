@@ -35,7 +35,7 @@ document.querySelector('button').addEventListener('click', (e) => {
     particleOptions: {
       ttl: 1000,
       style: { 
-        backgroundColor: ['#f33', '#fefeee'], 
+        get backgroundColor () { return  ['#f33', '#fefeee'] }, 
         width: '12px',
         height: '12px',
         scale: [2, 1], 
