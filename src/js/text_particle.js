@@ -55,6 +55,7 @@ export default class TextParticle {
     this.nextProps = this.getSnapshot();
     this.onCreate(this);    
     Object.assign(this.element.style, this.nextProps);
+    this.element.style.display = 'inline-block';
   }
   
   get alive () {
@@ -108,7 +109,7 @@ export default class TextParticle {
   
   getScaledTransform(snapshot) {
     let { rotation, scale, scaleX, scaleY } = snapshot;
-    rotation = rotation || 0;
+    rotation = rotation || `${this.heading}rad` || 0;
     scale = scale || 1.0;
     scaleX = scaleX || scale;
     scaleY = scaleY || scale;

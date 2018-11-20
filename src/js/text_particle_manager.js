@@ -105,7 +105,7 @@ export default class TextParticleManager {
       
       // disappear and return to pool
       Object.assign(p.element.style, PARTICLE_SKELETON_STYLES);
-      p.element.style.opacity = 0;
+      p.element.style.display = 'none';
       this.push(p.element);
       return false;
     });

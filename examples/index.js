@@ -32,9 +32,9 @@ document.querySelector('button').addEventListener('click', (e) => {
       emitEvery: 100,
       particleOptions: {
         text: '==>',
-        get velocity () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-        onUpdate: (p) => {
-          p.nextProps.rotation = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+        get velocity () { return { x: 100 * (Math.random() - 0.5), y: 100 * (Math.random() - 0.5) } },
+        onCreate: (p) => {
+          p.heading = Math.atan2(p.velocity.y, p.velocity.x);
         }
       }
     });
