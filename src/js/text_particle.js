@@ -19,9 +19,11 @@
 
 import { propValueToFunction } from './utilities';
 
+const zeroVector = { x: 0, y: 0, z: 0 }
+
 export const DEFAULT_PARTICLE_OPTIONS = {
-  get velocity() { return  { x: 0, y: 0 } }, 
-  get acceleration () { return { x: 0, y: 0 } },
+  get velocity() { return  {...zeroVector} }, 
+  get acceleration () { return {...zeroVector} },
   ttl: 1000,
   text: '.',
   grid: false,
@@ -30,9 +32,15 @@ export const DEFAULT_PARTICLE_OPTIONS = {
   onUpdate: () => {},
 }
 
+
 export default class TextParticle {
   constructor (options) {
-    Object.assign(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options});
+    Object.assign(this, { 
+      ...DEFAULT_PARTICLE_OPTIONS, 
+      ...options, 
+      velocity: {...zeroVector, 
+      position: {...zeroVector, ...options.position}
+    });
     this.elapsed = 0;
     this.frameNumber = 0;
     this.getTransform = this.grid ? this.getGridTransform : this.getTransform;
@@ -109,13 +117,14 @@ export default class TextParticle {
   }
   
   getTransform (scaleX, scaleY, rotation) {
-    return `translate3d(${this.position.x}px, ${this.position.y}px, ${this.position.x}px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
+    return `translate3d(${this.position.x}px, ${this.position.y}px, ${this.position.z}px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
   }
   
   getGridTransform (scaleX, scaleY, rotation) {
     let x = this.position.x - (this.position.x % this.grid);
     let y = this.position.y - (this.position.y % this.grid);
-    return `translate3d(${x}px, ${y}px, 0) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
+    let z = this.position.z - (this.position.z % this.grid);
+    return `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
   }
     
   update (f) {
@@ -125,9 +134,12 @@ export default class TextParticle {
     // Standard motion update
     this.velocity.x += this.acceleration.x * f;
     this.velocity.y += this.acceleration.y * f;
+    this.velocity.z += this.acceleration.z * f;
+    
     this.position.x += this.velocity.x * f;
     this.position.y += this.velocity.y * f;
-
+    this.position.z += this.velocity.z * f;
+    
     // Get current props, call user onUpdate(), assign them
     this.nextProps = this.getSnapshot();
     this.onUpdate(this);
