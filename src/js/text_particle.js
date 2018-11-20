@@ -109,7 +109,7 @@ export default class TextParticle {
   }
   
   getTransform (scaleX, scaleY, rotation) {
-    return `translate3d(${this.position.x}px, ${this.position.y}px, 0) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
+    return `translate3d(${this.position.x}px, ${this.position.y}px, ${this.position.x}px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
   }
   
   getGridTransform (scaleX, scaleY, rotation) {

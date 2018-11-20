@@ -42,6 +42,7 @@ document.querySelector('button').addEventListener('click', (e) => {
           width: '12px',
           height: '12px',
           scale: [2, 0.1], 
+          zIndex: 100
         },
         text: '',
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
@@ -66,6 +67,7 @@ document.querySelector('button').addEventListener('click', (e) => {
           width: '12px',
           height: '12px',
           scale: [2, 0.1], 
+          zIndex: 50
         },
         text: '',
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },

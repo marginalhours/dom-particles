@@ -20,6 +20,15 @@ const PARTICLE_SKELETON_STYLES = {
   // opacity: 0
 }
 
+const FOLD_STYLES = { 
+  width: 0, 
+  height: 0, 
+  position: 'absolute', 
+  top: 0, 
+  left: 0,
+  perspective: '1000px'
+}
+
 export default class TextParticleManager {
   constructor (options) {
     Object.assign(this, { ...DEFAULT_TPM_OPTIONS, ...options });
@@ -30,7 +39,7 @@ export default class TextParticleManager {
     
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
-    Object.assign(this.foldElement.style, { width: 0, height: 0, position: 'absolute', top: 0, left: 0});
+    Object.assign(this.foldElement.style, FOLD_STYLES);
     
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);    
