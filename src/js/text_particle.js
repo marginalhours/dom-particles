@@ -35,7 +35,7 @@ export default class TextParticle {
     Object.assign(this, { ...DEFAULT_PARTICLE_OPTIONS, ...options});
     this.elapsed = 0;
     this.frameNumber = 0;
-    this.updateTransform = this.grid ? this.updateGridTransform : this.updateTransform;
+    this.getTransform = this.grid ? this.getGridTransform : this.getTransform;
 
     // By default, at this point opacity will be 0, so set it to 1
     this.element.style.opacity = 1;
@@ -115,7 +115,7 @@ export default class TextParticle {
   getGridTransform (scaleX, scaleY, rotation) {
     let x = this.position.x - (this.position.x % this.grid);
     let y = this.position.y - (this.position.y % this.grid);
-    return `translate3d(${x}px, ${y}px, 0) rotateZ(${rotation}) scale(${this.scale.x}, ${this.scale.y})`;
+    return `translate3d(${x}px, ${y}px, 0) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
   }
     
   update (f) {
