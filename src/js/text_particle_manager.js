@@ -7,7 +7,10 @@ const DEFAULT_TPM_OPTIONS = {
   max: 100, 
   preallocate: 10, 
   tagName: 'span',
-  autoStart: true
+  autoStart: true,
+  perspective: 0,
+  perspectiveOrigin: '50% 50%',
+  transformStyle: 'preserve-3d'
 };
 
 const PARTICLE_SKELETON_STYLES = {
@@ -26,7 +29,6 @@ const FOLD_STYLES = {
   position: 'absolute', 
   top: 0, 
   left: 0,
-  perspective: '1000px'
 }
 
 export default class TextParticleManager {
@@ -39,7 +41,11 @@ export default class TextParticleManager {
     
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
-    Object.assign(this.foldElement.style, FOLD_STYLES);
+    Object.assign(this.foldElement.style, {
+      ...FOLD_STYLES, 
+      perspective: this.perspective, 
+      perspectiveOrigin: this.perspectiveOrigin
+    });
     
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);    
