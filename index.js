@@ -20,70 +20,22 @@ const HEAT_COLOURS = [
 
 let t = new letterbomb({ 
   max: 10000, 
-  // perspective: '1000px',
-  // perspectiveOrigin: 'top left' 
+  perspective: '1000px',
+  perspectiveOrigin: 'top left' 
 });
 
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
     
 document.querySelector('button').addEventListener('click', (e) => {
-    
-    let k = 0;
-    let l = -400;
-    let m = 120;
-    let n = 16;
-  
-    // t.addEmitter({
-    //   ttl: 10000,
-    //   position: {...c},
-    //   emitEvery: 8,
-    //   onUpdate: (emitter) => {   
-    //     emitter.position.y = c.y + (m * Math.sin(k++/n));
-    //   },
-    //   particleOptions: {
-    //     ttl: 1000,
-    //     style: { 
-    //       get backgroundColor () { return  ['#f33', '#fefeee'] },
-    //       width: '12px',
-    //       height: '12px',
-    //       scale: [2, 0.1], 
-    //       zIndex: 100
-    //     },
-    //     text: '',
-    //     get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
-    //     get velocity () {
-    //       let h = -1 * (500 + (100 * Math.random()));
-    //       return { x: l, y: 0, z: 0 }
-    //     }
-    //   }
-    // });
-  
-    // t.addEmitter({
-    //   ttl: 10000,
-    //   position: {...c},
-    //   emitEvery: 8,
-    //   onUpdate: (emitter) => {   
-    //     emitter.position.y = c.y + (m * Math.sin(Math.PI + k/n));
-    //     emitter.position.z = 100 * Math.sin(Math.PI + k / n);
-    //   },
-    //   particleOptions: {
-    //     ttl: 1000,
-    //     style: { 
-    //       get backgroundColor () { return  ['#33f', '#eefefe'] },
-    //       width: '12px',
-    //       height: '12px',
-    //       scale: [2, 0.1], 
-    //       zIndex: 50
-    //     },
-    //     text: '',
-    //     get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-    //     get velocity () {
-    //       let h = -1 * (500 + (100 * Math.random()));
-    //       return { x: l, y: 0 }
-    //     }
-    //   }
-    // });
-  
+    t.addEmitter({
+      position: {...c},
+      emitEvery: 100,
+      velocity: { x: 100 },
+      particleOptions: {
+        text: '!',
+        get velocity () { return { x: 0, y: 0, z: 2} }
+      }
+    });
 });
 
   // t.addEmitter({
@@ -184,3 +136,62 @@ document.querySelector('button').addEventListener('click', (e) => {
   //     }
   //   },
   // });
+
+// trails 
+
+//     let k = 0;
+//     let l = -400;
+//     let m = 120;
+//     let n = 16;
+  
+
+    // t.addEmitter({
+    //   ttl: 10000,
+    //   position: {...c},
+    //   emitEvery: 8,
+    //   onUpdate: (emitter) => {   
+    //     emitter.position.y = c.y + (m * Math.sin(k++/n));
+    //   },
+    //   particleOptions: {
+    //     ttl: 1000,
+    //     style: { 
+    //       get backgroundColor () { return  ['#f33', '#fefeee'] },
+    //       width: '12px',
+    //       height: '12px',
+    //       scale: [2, 0.1], 
+    //       zIndex: 100
+    //     },
+    //     text: '',
+    //     get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
+    //     get velocity () {
+    //       let h = -1 * (500 + (100 * Math.random()));
+    //       return { x: l, y: 0, z: 0 }
+    //     }
+    //   }
+    // });
+  
+    // t.addEmitter({
+    //   ttl: 10000,
+    //   position: {...c},
+    //   emitEvery: 8,
+    //   onUpdate: (emitter) => {   
+    //     emitter.position.y = c.y + (m * Math.sin(Math.PI + k/n));
+    //     emitter.position.z = 100 * Math.sin(Math.PI + k / n);
+    //   },
+    //   particleOptions: {
+    //     ttl: 1000,
+    //     style: { 
+    //       get backgroundColor () { return  ['#33f', '#eefefe'] },
+    //       width: '12px',
+    //       height: '12px',
+    //       scale: [2, 0.1], 
+    //       zIndex: 50
+    //     },
+    //     text: '',
+    //     get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+    //     get velocity () {
+    //       let h = -1 * (500 + (100 * Math.random()));
+    //       return { x: l, y: 0 }
+    //     }
+    //   }
+    // });
