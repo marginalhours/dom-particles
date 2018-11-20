@@ -16,7 +16,7 @@
 import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
 import { propValueToFunction } from './utilities';
 
-const zeroVector = { x: 0, y: 0, z: 0 }
+const zeroVector = { x: 0, y: 0 }
 
 const DEFAULT_EMITTER_OPTIONS = {
   maxEmissions: false,
@@ -77,7 +77,7 @@ export default class TextParticleEmitter {
       
       for(let i = 0; i < toEmit; i++){
         let p = { ...zeroVector, ...this.particleOptions.position };
-        let pp = { x: this.position.x + p.x, y: this.position.y + p.y, z: this.position.z + p.z }
+        let pp = { x: this.position.x + p.x, y: this.position.y + p.y }
         
         let v = { ...zeroVector, ...this.particleOptions.velocity };
         let v_angle = Math.atan2(v.y, v.x);
@@ -86,8 +86,7 @@ export default class TextParticleEmitter {
         
         let vv = {
           x: v_magna * Math.cos(v_angle + t_angle),
-          y: v_magna * Math.sin(v_angle + t_angle),
-          z: v.z
+          y: v_magna * Math.sin(v_angle + t_angle)
         }
         
         this.manager.addParticle({ ...this.particleOptions, position: pp, velocity: vv });

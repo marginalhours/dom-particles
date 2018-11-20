@@ -8,9 +8,6 @@ const DEFAULT_TPM_OPTIONS = {
   preallocate: 10, 
   tagName: 'span',
   autoStart: true,
-  perspective: 0,
-  perspectiveOrigin: '50% 50%',
-  transformStyle: 'preserve-3d'
 };
 
 const PARTICLE_SKELETON_STYLES = {

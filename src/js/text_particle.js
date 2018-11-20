@@ -19,7 +19,7 @@
 
 import { propValueToFunction } from './utilities';
 
-const zeroVector = { x: 0, y: 0, z: 0 }
+const zeroVector = { x: 0, y: 0 }
 
 export const DEFAULT_PARTICLE_OPTIONS = {
   ttl: 1000,
@@ -117,14 +117,13 @@ export default class TextParticle {
   }
   
   getTransform (scaleX, scaleY, rotation) {
-    return `translate3d(${this.position.x}px, ${this.position.y}px, ${this.position.z}px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
+    return `translate3d(${this.position.x}px, ${this.position.y}px, 0px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
   }
   
   getGridTransform (scaleX, scaleY, rotation) {
     let x = this.position.x - (this.position.x % this.grid);
     let y = this.position.y - (this.position.y % this.grid);
-    let z = this.position.z - (this.position.z % this.grid);
-    return `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
+    return `translate3d(${x}px, ${y}px, 0px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
   }
     
   update (f) {
@@ -134,11 +133,8 @@ export default class TextParticle {
     // Standard motion update
     this.velocity.x += this.acceleration.x * f;
     this.velocity.y += this.acceleration.y * f;
-    this.velocity.z += this.acceleration.z * f;
-    
     this.position.x += this.velocity.x * f;
     this.position.y += this.velocity.y * f;
-    this.position.z += this.velocity.z * f;
     
     // Get current props, call user onUpdate(), assign them
     this.nextProps = this.getSnapshot();

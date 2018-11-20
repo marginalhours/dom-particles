@@ -30,10 +30,12 @@ document.querySelector('button').addEventListener('click', (e) => {
     t.addEmitter({
       position: {...c},
       emitEvery: 100,
-      velocity: { x: 100 },
       particleOptions: {
-        text: '!',
-        get velocity () { return { x: 0, y: 0, z: 2} }
+        text: '==>',
+        get velocity () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+        onUpdate: (p) => {
+          p.nextProps.rotation = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+        }
       }
     });
 });
