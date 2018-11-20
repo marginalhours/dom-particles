@@ -22,8 +22,6 @@ import { propValueToFunction } from './utilities';
 const zeroVector = { x: 0, y: 0, z: 0 }
 
 export const DEFAULT_PARTICLE_OPTIONS = {
-  get velocity() { return  {...zeroVector} }, 
-  get acceleration () { return {...zeroVector} },
   ttl: 1000,
   text: '.',
   grid: false,
@@ -38,9 +36,11 @@ export default class TextParticle {
     Object.assign(this, { 
       ...DEFAULT_PARTICLE_OPTIONS, 
       ...options, 
-      velocity: {...zeroVector, 
-      position: {...zeroVector, ...options.position}
+      velocity: { ...zeroVector, ...options.velocity },
+      position: { ...zeroVector, ...options.position },
+      acceleration: { ...zeroVector, ...options.acceleration }
     });
+    
     this.elapsed = 0;
     this.frameNumber = 0;
     this.getTransform = this.grid ? this.getGridTransform : this.getTransform;

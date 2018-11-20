@@ -59,6 +59,7 @@ document.querySelector('button').addEventListener('click', (e) => {
       emitEvery: 8,
       onUpdate: (emitter) => {   
         emitter.position.y = c.y + (m * Math.sin(Math.PI + k/n));
+        emitter.position.z = 1 * Math.sin(Math.PI + k / n);
       },
       particleOptions: {
         ttl: 1000,

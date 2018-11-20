@@ -16,15 +16,14 @@
 import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
 import { propValueToFunction } from './utilities';
 
+const zeroVector = { x: 0, y: 0, z: 0 }
+
 const DEFAULT_EMITTER_OPTIONS = {
-  position: { x: 0, y: 0 },
-  velocity: { x: 0, y: 0 },
-  acceleration: { x: 0, y: 0 },
   maxEmissions: false,
   ttl: false,
   emitEvery: 500,
   rotation: 0,
-  particleOptions: { position: { x: 0, y: 0 }, ...DEFAULT_PARTICLE_OPTIONS },
+  particleOptions: { ...DEFAULT_PARTICLE_OPTIONS },
   onCreate: () => {},
   onUpdate: () => {},
   MAX_EMIT_PER_STEP: 16, /* Prevent thundering herds on tab switch */
@@ -32,7 +31,13 @@ const DEFAULT_EMITTER_OPTIONS = {
 
 export default class TextParticleEmitter {
   constructor (options) {
-    Object.assign(this, {...DEFAULT_EMITTER_OPTIONS, ...options});
+    Object.assign(this, {
+      ...DEFAULT_EMITTER_OPTIONS, 
+      ...options,
+      position: { ...zeroVector, ...options.position },
+      velocity: { ...zeroVector, ...options.velocity },
+      acceleration: { ...zeroVector, ...options.acceleration },
+    });
     
     this.manager = options.manager;
     this.totalElapsed = 0;
