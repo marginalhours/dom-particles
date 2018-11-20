@@ -76,16 +76,18 @@ export default class TextParticleEmitter {
       this.elapsed = 0;
       
       for(let i = 0; i < toEmit; i++){
-        let p = this.particleOptions.position || { x: 0, y: 0 };
-        let pp = { x: this.position.x + p.x, y: this.position.y + p.y }
+        let p = { ...zeroVector, ...this.particleOptions.position };
+        let pp = { x: this.position.x + p.x, y: this.position.y + p.y, z: this.position.z + p.z }
         
-        let v = this.particleOptions.velocity || { x: 0, y: 0 };
+        let v = { ...zeroVector, ...this.particleOptions.velocity };
         let v_angle = Math.atan2(v.y, v.x);
         let v_magna = Math.sqrt((v.x * v.x) + (v.y * v.y));
         let t_angle = (this.rotation / 180) * Math.PI;
+        
         let vv = {
           x: v_magna * Math.cos(v_angle + t_angle),
-          y: v_magna * Math.sin(v_angle + t_angle)
+          y: v_magna * Math.sin(v_angle + t_angle),
+          z: v.z
         }
         
         this.manager.addParticle({ ...this.particleOptions, position: pp, velocity: vv });
