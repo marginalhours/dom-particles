@@ -20,7 +20,6 @@ const PARTICLE_SKELETON_STYLES = {
   whiteSpace: 'pre-wrap',
   transform: 'translate3d(0,0,0)',
   boxSizing: 'border-box'
-  // opacity: 0
 }
 
 const FOLD_STYLES = { 
@@ -109,6 +108,7 @@ export default class TextParticleManager {
       
       // disappear and return to pool
       Object.assign(p.element.style, PARTICLE_SKELETON_STYLES);
+      p.element.style.opacity = 0;
       this.push(p.element);
       return false;
     });
