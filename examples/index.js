@@ -30,13 +30,11 @@ document.querySelector('button').addEventListener('click', (e) => {
       emitEvery: 100,
       particleOptions: {
         text: 'yes',
+        style: { rotation: ['0deg', '360deg'] },
         get velocity () { 
           let k = 100 + 100 * Math.random();
           let theta = 2 * Math.PI * Math.random();
           return { x: k * Math.cos(theta), y: k * Math.sin(theta) }
-        },
-        onCreate: (p) => {
-          // p.heading = Math.atan2(p.velocity.y, p.velocity.x);
         }
       }
     });

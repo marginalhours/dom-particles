@@ -110,7 +110,7 @@ export default class TextParticle {
   
   getScaledTransform(snapshot) {
     let { rotation, scale, scaleX, scaleY } = snapshot;
-    rotation = `${this.heading}rad` || rotation || 0;
+    rotation = (this.heading && `${this.heading}rad`) || rotation || 0;
     scale = scale || 1.0;
     scaleX = scaleX || scale;
     scaleY = scaleY || scale;
