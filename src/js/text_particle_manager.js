@@ -12,19 +12,19 @@ const DEFAULT_TPM_OPTIONS = {
 
 const PARTICLE_SKELETON_STYLES = {
   position: 'absolute', 
-  display: 'inline-block',
+  display: 'none',
   pointerEvents: 'none',
   whiteSpace: 'pre-wrap',
   transform: 'translate3d(0,0,0)',
-  boxSizing: 'border-box'
+  boxSizing: 'border-box',
 }
 
 const FOLD_STYLES = { 
   width: 0, 
   height: 0, 
   position: 'absolute', 
-  top: 0, 
-  left: 0,
+  top: '-100px', 
+  left: '-100px',
 }
 
 export default class TextParticleManager {
@@ -37,14 +37,11 @@ export default class TextParticleManager {
     
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
-    Object.assign(this.foldElement.style, {
-      ...FOLD_STYLES, 
-      perspective: this.perspective, 
-      perspectiveOrigin: this.perspectiveOrigin
-    });
+    Object.assign(this.foldElement.style, FOLD_STYLES);
     
     this.allocate(this.preallocate);
-    document.body.appendChild(this.foldElement);    
+    document.body.appendChild(this.foldElement);
+    
     this.frameStart = null;
   }
   
@@ -105,7 +102,6 @@ export default class TextParticleManager {
       
       // disappear and return to pool
       Object.assign(p.element.style, PARTICLE_SKELETON_STYLES);
-      p.element.style.display = 'none';
       this.push(p.element);
       return false;
     });
@@ -137,9 +133,9 @@ export default class TextParticleManager {
     
   create () {
     let element = document.createElement(this.tagName);
-    this.foldElement.appendChild(element);    
     Object.assign(element.style, PARTICLE_SKELETON_STYLES);
     
+    this.foldElement.appendChild(element);    
     return element;
   }
   
