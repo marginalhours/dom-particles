@@ -4,6 +4,7 @@
   "description": "a webpack template for glitch",
   "main": "server.js",
   "scripts": {
+    "test": "mocha --require @babel/register",
     "start": "./start.sh",
     "serve": "node server.js",
     "dev": "webpack --progress --colors --watch --mode=development",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
     "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "express": "^4.15.3",
     "mocha": "^5.2.0",
     "webpack": "^4.25.1",
