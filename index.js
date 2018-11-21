@@ -19,9 +19,7 @@ const HEAT_COLOURS = [
 ].reverse();
 
 let t = new letterbomb({ 
-  max: 10000, 
-  perspective: '1000px',
-  perspectiveOrigin: 'top left' 
+  max: 10000,
 });
 
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
@@ -31,10 +29,14 @@ document.querySelector('button').addEventListener('click', (e) => {
       position: {...c},
       emitEvery: 100,
       particleOptions: {
-        text: '==>',
-        get velocity () { return { x: 100 * (Math.random() - 0.5), y: 100 * (Math.random() - 0.5) } },
+        text: 'yes',
+        get velocity () { 
+          let k = 100 + 100 * Math.random();
+          let theta = 2 * Math.PI * Math.random();
+          return { x: k * Math.cos(theta), y: k * Math.sin(theta) }
+        },
         onCreate: (p) => {
-          p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+          // p.heading = Math.atan2(p.velocity.y, p.velocity.x);
         }
       }
     });
