@@ -1,0 +1,4 @@
+- unit tests for particle / emitter / manager
+- better fromDOMNode functionality (ideally, get it working, like, at all) 
+- currently out of scope:
+  - full 3d (with z-coord)
