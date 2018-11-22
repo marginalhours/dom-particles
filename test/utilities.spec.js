@@ -110,4 +110,14 @@ describe('utilities', () => {
     });
   });
   
+  describe('#easeArray', () => {
+    it('should ease an array', () => {
+      let vals = [1, 3, 5];
+      let start = utilities.easeArray(vals, utilities.lerp, 0);
+      assert.equal(start, 1);
+      let end = utilities.easeArray(vals, utilities.lerp, 1);
+      assert.equal(end, 5);
+    });
+  });
+  
 });
