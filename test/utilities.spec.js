@@ -112,11 +112,26 @@ describe('utilities', () => {
   
   describe('#easeArray', () => {
     it('should ease an array', () => {
-      let vals = [1, 3, 5];
-      let start = utilities.easeArray(vals, utilities.lerp, 0);
-      assert.equal(start, 1);
-      let end = utilities.easeArray(vals, utilities.lerp, 1);
-      assert.equal(end, 5);
+      let vals = [];
+      
+      for(let i = 0; i < 5; i++){
+          vals.push(Math.floor(1000 * Math.random());
+      }
+      
+      let val = utilities.easeArray(vals, utilities.lerp, 0);
+      assert.equal(val, 1);
+      
+      val = utilities.easeArray(vals, utilities.lerp, 0.25);
+      assert.equal(val, 3);
+      
+      val = utilities.easeArray(vals, utilities.lerp, 0.5);
+      assert.equal(val, 5);
+      
+      val = utilities.easeArray(vals, utilities.lerp, 0.75);
+      assert.equal(val, 7);
+      
+      val = utilities.easeArray(vals, utilities.lerp, 1);
+      assert.equal(val, 9);
     });
   });
   
