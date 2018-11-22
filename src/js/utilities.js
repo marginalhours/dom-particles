@@ -20,10 +20,10 @@ export const rgbToNumbers = (string) => {
 export const rgbaToNumbers = (string) => {
   try {
     let [_, r, g, b, a] = RGBA_PATTERN.exec(string);
-    return [r, g, b, a].filter(v => v).map(v => parseInt(v)) 
+    return [...[r, g, b].map(v => parseInt(v)), parseFloat(a)] 
   }
   catch (err){
-    console.log(err);
+    console.log(`Invalid RGB value: ${string}`);
     return false;
   }
 }
@@ -34,7 +34,7 @@ export const hexToNumbers = (string) => {
     return [...[r, g, b].map(x => parseInt(x, 16) * ((x.length === 1) ? 0x11 : 0x1)), 1.0];
   } 
   catch (err) {
-    console.log(err);
+    console.log(`Invalid RGBA value: ${string}`);
     return false;  
   }
 }
