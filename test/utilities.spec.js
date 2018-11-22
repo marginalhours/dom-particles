@@ -53,8 +53,12 @@ describe('utilities', () => {
       let r = Math.floor(256 * Math.random());
       let g = Math.floor(256 * Math.random());
       let b = Math.floor(256 * Math.random());
+      
+      let rString = ('00' + r.toString(16)).substr(-2); 
+      let gString = ('00' + g.toString(16)).substr(-2); 
+      let bString = ('00' + b.toString(16)).substr(-2); 
                          
-      let k = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+      let k = `#${rString}${gString}${bString}`;
       
       let s = utilities.hexToNumbers(k);
       assert.deepEqual(s, [r, g, b, 1]);
