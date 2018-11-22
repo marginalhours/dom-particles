@@ -65,4 +65,45 @@ describe('utilities', () => {
       assert.equal(s, false);
     });
   });
+  
+  describe('#valueToNumberAndUnit', () => {
+    it('should convert a decimal value with unit', () => {
+      let r = 10 * Math.random();
+      
+      let s = utilities.valueToNumberAndUnit(`${r}px`);
+      
+      assert.deepEqual(s, [r, 'px']);
+    });
+    
+    it('should convert an integer value with unit', () => {
+      let r = Math.floor(1000 * Math.random());
+      
+      let s = utilities.valueToNumberAndUnit(`${r}em`);
+      
+      assert.deepEqual(s, [r, 'em']);
+    });
+    
+    it('should handle bare integers', () => {
+      let r = Math.floor(1000 * Math.random());
+      
+      let s = utilities.valueToNumberAndUnit(`${r}`);
+      
+      assert.deepEqual(s, [r, '']);
+    });
+    
+    it('should handle bare floats', () => {
+      let r = 1000 * Math.random();
+      
+      let s = utilities.valueToNumberAndUnit(`${r}`);
+      
+      assert.deepEqual(s, [r, '']);
+    });
+    
+    it('should return false for unparseable strings', () => {
+      let s = utilities.valueToNumberAndUnit('invalid-unit-string');
+      
+      assert.equal(s, false);
+    });
+  });
+  
 });
