@@ -28,14 +28,14 @@ document.querySelector('button').addEventListener('click', (e) => {
   let theta = 0;
   t.addEmitter({
     position: {...c},
-    emitEvery: 2,
+    emitEvery: 0.1,
     particleOptions: {
       ttl: 1000,
       style: { 
         backgroundColor: ['#f33', '#fefeee'], 
         width: '16px',
         height: '16px',
-        // scale: [0.1, 20], 
+        scale: [1, 20], 
       },
       text: '',
       get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
