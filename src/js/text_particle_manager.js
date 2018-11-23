@@ -98,22 +98,30 @@ export default class TextParticleManager {
     this.frameStart = timestamp;
     let f = (dt/1000);
     
-    this.survivingparticles = this.particles.filter(p => {
+    let particlesToDestroy = [];
+    this.particles = this.particles.filter(p => {
       p.update(f);
-      if (p.alive) { return true; }
-      
+      if (!p.alive) { particlesToDestroy.push(p) }
+      return p.alive;
+    });
+    
+    particlesToDestroy.map(p => {
       // reset styles and return to pool
       p.element.setAttribute('style', '');
       Object.assign(p.element.style, {...PARTICLE_SKELETON_STYLES});
       this.push(p.element);
-      
-      return false;
+      // call onDestroy hooks for dead particles
+      p.onDestroy(p)
     });
     
+    let emittersToDestroy = [];
     this.emitters = this.emitters.filter(e => {
       e.update(f);
+      if (!e.alive) { emittersToDestroy.push(e); }
       return e.alive;
     });
+    
+    emittersToDestroy.map(e => e.onDestroy(e));
 
     if (this.emitters.length === 0 && this.particles.length === 0){
       cancelAnimationFrame(this.raf);

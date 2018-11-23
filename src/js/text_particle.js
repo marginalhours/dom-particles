@@ -28,6 +28,7 @@ export const DEFAULT_PARTICLE_OPTIONS = {
   style: {},
   onCreate: () => {},
   onUpdate: () => {},
+  onDestroy: () => {},
   heading: false
 }
 

@@ -26,6 +26,7 @@ const DEFAULT_EMITTER_OPTIONS = {
   particleOptions: { ...DEFAULT_PARTICLE_OPTIONS },
   onCreate: () => {},
   onUpdate: () => {},
+  onDestroy: () => {},
   MAX_EMIT_PER_STEP: 16, /* Prevent thundering herds on tab switch */
 }
 
