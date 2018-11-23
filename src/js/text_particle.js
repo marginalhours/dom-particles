@@ -46,8 +46,6 @@ export default class TextParticle {
     this.frameNumber = 0;
     this.getTransform = this.grid ? this.getGridTransform : this.getTransform;
 
-    // By default, at this point opacity will be 0, so set it to 1
-    this.element.style.opacity = 1;
     // Populate initial text content
     this.setText(this.text);
  
@@ -56,6 +54,8 @@ export default class TextParticle {
     this.nextProps = this.getSnapshot();
     this.onCreate(this);    
     Object.assign(this.element.style, this.nextProps);
+    
+    // show element in DOM
     this.element.style.display = 'inline-block';
   }
   
