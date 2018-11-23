@@ -39,6 +39,13 @@ export default class TextParticleManager {
     this.foldElement.className = 'text-particle-manager-reservoir';
     Object.assign(this.foldElement.style, FOLD_STYLES);
     
+    let dummy = document.createElement('span');
+    Object.assign(dummy.style, PARTICLE_SKELETON_STYLES);
+    console.log(dummy);
+    this.particleStyleString = dummy.getAttribute('style');
+    console.log(this.particleStyleString);
+    
+    
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
     
@@ -107,8 +114,7 @@ export default class TextParticleManager {
     
     particlesToDestroy.map(p => {
       // reset styles and return to pool
-      p.element.setAttribute('style', '');
-      Object.assign(p.element.style, {...PARTICLE_SKELETON_STYLES});
+      p.element.setAttribute('style', this.particleStringStyle);
       this.push(p.element);
       // call onDestroy hooks for dead particles
       p.onDestroy(p)
