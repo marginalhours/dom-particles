@@ -154,5 +154,6 @@ const buildChunksFromRegex = (text, pattern) => {
 
 export const positionFromNode = (element, xOffset, yOffset) => {
   let rect = element.getBoundingClientRect();
+  console.log(rect);
   return { x: rect.x + xOffset, y: rect.y + yOffset}
 }
