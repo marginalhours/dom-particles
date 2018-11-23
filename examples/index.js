@@ -51,11 +51,12 @@ document.querySelector('button').addEventListener('click', (e) => {
             onCreate: (p) => {
               // p.heading = Math.atan2(p.velocity.y, p.velocity.x);
             },
+            style: { },
             onUpdate: (p) => {
               console.log("?");
             },
           });
-          console.log(s);
+          console.log(t);
         }
       }
     }

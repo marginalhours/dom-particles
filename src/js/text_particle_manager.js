@@ -98,13 +98,15 @@ export default class TextParticleManager {
     this.frameStart = timestamp;
     let f = (dt/1000);
     
-    this.particles = this.particles.filter(p => {
+    this.survivingparticles = this.particles.filter(p => {
       p.update(f);
       if (p.alive) { return true; }
       
-      // disappear and return to pool
-      p.element.setAttribute('style', PARTICLE_SKELETON_STYLES);
+      // reset styles and return to pool
+      p.element.setAttribute('style', '');
+      Object.assign(p.element.style, {...PARTICLE_SKELETON_STYLES});
       this.push(p.element);
+      
       return false;
     });
     
@@ -112,7 +114,7 @@ export default class TextParticleManager {
       e.update(f);
       return e.alive;
     });
-    
+
     if (this.emitters.length === 0 && this.particles.length === 0){
       cancelAnimationFrame(this.raf);
       this.raf = false;
