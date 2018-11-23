@@ -31,7 +31,7 @@ document.querySelector('button').addEventListener('click', (e) => {
     particleOptions: {
       text: '', 
       get position () { return { x: 100 * Math.random() } },
-      get ttl () { return 1500 + (1000 * Math.random()) },
+      get ttl () { return 1500 + (500 * Math.random()) },
       get velocity () { return { x: 0, y: -10 } },
       get acceleration () { return { x: 0, y: -100 } },
       style: { 
@@ -44,7 +44,7 @@ document.querySelector('button').addEventListener('click', (e) => {
       },
       onDestroy: (p) => {
           let k = 100;
-          let m = Math.random() * Math.PI / 6;
+          let m = Math.random() * Math.PI / 4;
           for(var i = 0; i < 4; i++){
             let s = t.addParticle({
               ttl: 500,

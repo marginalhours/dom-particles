@@ -90,6 +90,8 @@ export default class TextParticleEmitter {
           y: v_magna * Math.sin(v_angle + t_angle)
         }
         
+        console.log(pp);
+        
         this.manager.addParticle({ ...this.particleOptions, position: pp, velocity: vv });
         // emit particle
         this.emitted ++;

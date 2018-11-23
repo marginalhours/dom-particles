@@ -22,9 +22,7 @@ const PARTICLE_SKELETON_STYLES = {
 const FOLD_STYLES = { 
   width: 0, 
   height: 0, 
-  position: 'absolute', 
-  top: '-100px', 
-  left: '-100px',
+  position: 'absolute'
 }
 
 export default class TextParticleManager {
