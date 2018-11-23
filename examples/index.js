@@ -42,6 +42,22 @@ document.querySelector('button').addEventListener('click', (e) => {
         height: '16px',
         borderRadius: '16px'
       },
+      onUpdate: (p) => {
+        if (!p.alive) {
+          let k = 100;
+          for(var i = 0; i < 4; i++){
+            t.addParticle({
+              ttl: 100,
+              position: { x: p.position.x + 8, y: p.position.y + 8 },
+              velocity: { x: k * Math.sin(i * Math.PI / 2), y: k * Math.cos(i * Math.PI / 2) },
+              text: '—',
+              onCreate: (p) => {
+                p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+              }
+            });
+          }
+        }
+      }
     }
   });
 });

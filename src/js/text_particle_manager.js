@@ -101,7 +101,7 @@ export default class TextParticleManager {
       if (p.alive) { return true; }
       
       // disappear and return to pool
-      Object.assign(p.element.style, PARTICLE_SKELETON_STYLES);
+      p.element.setAttribute('style', PARTICLE_SKELETON_STYLES);
       this.push(p.element);
       return false;
     });
