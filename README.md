@@ -1,4 +1,4 @@
-Unicode (or just string!) particle effects for the DOM
+Unicode particle effects for the DOM
 
 API
 ---
