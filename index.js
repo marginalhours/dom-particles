@@ -25,39 +25,37 @@ let t = new letterbomb({
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
     
 document.querySelector('button').addEventListener('click', (e) => {
-  t.addParticle({
+  t.addEmitter({
     position: positionFromNode(document.querySelector('button'), 0, 0),
-    text: '', 
-    get ttl () { return 1000 + (500 * Math.random()) },
-    get velocity () { return { x: 0, y: -10 } },
-    get acceleration () { return { x: 0, y: -100 } },
-    style: { 
-      get scale () { return 0.75 * Math.random() },
-      opacity: [0, 1, 1, 1, 0.5, 0],
-      border: '2px solid rgba(192, 192, 200, 1.0)',
-      width: '16px',
-      height: '16px',
-      borderRadius: '16px'
-    },
-    onUpdate: (p) => {
-      if (!p.alive) {
-        let k = 100;
-        for(var i = 0; i < 4; i++){
-          let s = t.addParticle({
-            ttl: 1000,
-            position: { x: p.position.x + 8, y: p.position.y + 8 },
-            velocity: { x: k * Math.sin(i * Math.PI / 2), y: k * Math.cos(i * Math.PI / 2) },
-            text: '—',
-            onCreate: (p) => {
-              // p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-            },
-            style: { },
-            onUpdate: (p) => {
-              console.log("?");
-            },
-          });
-          console.log(t);
-        }
+    emitEvery: 500,
+    particleOptions: {
+      text: '', 
+      get position () { return { x: 100 * (Math.random() - 0.5) } },
+      get ttl () { return 1000 + (1000 * Math.random()) },
+      get velocity () { return { x: 0, y: -10 } },
+      get acceleration () { return { x: 0, y: -100 } },
+      style: { 
+        get scale () { return 0.75 * Math.random() },
+        opacity: [0, 1, 1, 1, 0.5, 0],
+        border: '2px solid rgba(192, 192, 200, 1.0)',
+        width: '16px',
+        height: '16px',
+        borderRadius: '16px'
+      },
+      onDestroy: (p) => {
+          let k = 100;
+          for(var i = 0; i < 4; i++){
+            let s = t.addParticle({
+              ttl: 1000,
+              position: { x: p.position.x + 8, y: p.position.y + 8 },
+              velocity: { x: k * Math.sin(i * Math.PI / 2 + Math.PI / 8), y: k * Math.cos(i * Math.PI / 2 + Math.PI / 8) },
+              text: '-',
+              onCreate: (p) => {
+                p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+              },
+              style: { opacity: [1, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.scale },
+            });
+          }
       }
     }
   });
