@@ -47,7 +47,8 @@ export default class TextParticleManager {
   
   addParticle (options) {
     if (this.particles.length < this.max) {
-      let p = this.particles.push(new TextParticle({...options, element: this.pop()}));
+      let p = new TextParticle({...options, element: this.pop()});
+      this.particles.push(p);
 
       if (!this.raf && this.autoStart) {
         this.start();  
