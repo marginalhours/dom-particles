@@ -41,7 +41,7 @@ export default class TextParticleManager {
     
     let temp = document.createElement('span');
     Object.assign(temp.style, PARTICLE_SKELETON_STYLES);
-    this.skeletonCSSString = temp.getAttribute('style');
+    this.skeletonCSSString = temp.getAttribute('style');    
 
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
@@ -147,7 +147,8 @@ export default class TextParticleManager {
     
   create () {
     let element = document.createElement(this.tagName);
-    element.style.cssString = this.skeletonCSSString;
+    
+    element.style.cssText = this.skeletonCSSString;
     
     this.foldElement.appendChild(element);    
     return element;

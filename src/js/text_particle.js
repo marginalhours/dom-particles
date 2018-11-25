@@ -25,7 +25,7 @@ export const DEFAULT_PARTICLE_OPTIONS = {
   ttl: 1000,
   text: '.',
   grid: false,
-  style: {},
+  style: { display: 'inline-block' },
   onCreate: () => {},
   onUpdate: () => {},
   onDestroy: () => {},
@@ -40,7 +40,8 @@ export default class TextParticle {
       ...options, 
       velocity: { ...zeroVector, ...options.velocity },
       position: { ...zeroVector, ...options.position },
-      acceleration: { ...zeroVector, ...options.acceleration }
+      acceleration: { ...zeroVector, ...options.acceleration },
+      style: {...DEFAULT_PARTICLE_OPTIONS.style, ...options.style}
     });
     
     this.elapsed = 0;
@@ -55,9 +56,6 @@ export default class TextParticle {
     this.nextProps = this.getSnapshot();
     this.onCreate(this);    
     Object.assign(this.element.style, this.nextProps);
-    
-    // show element in DOM
-    this.element.style.display = 'inline-block';
   }
   
   get alive () {
