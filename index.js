@@ -38,11 +38,11 @@ document.querySelector('button').addEventListener('click', (e) => {
         scale: [1, 20], 
       },
       text: '',
-      get position () { return { x: 0, y: 0 } },
+      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
       get velocity () {
         let h = 800 + 100 * Math.random();
         // theta += 0.1 * Math.PI * Math.random();
-        // theta = 2 * Math.random() * Math.PI;
+        theta = 2 * Math.random() * Math.PI;
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },
       onCreate: (p) => {
