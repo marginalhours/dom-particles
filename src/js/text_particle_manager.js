@@ -110,6 +110,7 @@ export default class TextParticleManager {
     
     particlesToDestroy.map(p => {
       // reset styles and return to pool
+      p.
       p.element.style.cssText = this.skeletonCSSString;
       this.push(p.element);
       // call onDestroy hooks for dead particles
