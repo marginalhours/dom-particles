@@ -7,25 +7,8 @@ const DEFAULT_TPM_OPTIONS = {
   max: 100, 
   preallocate: 10, 
   tagName: 'span',
-  autoStart: true,
+  autostart: true,
 };
-
-const PARTICLE_SKELETON_STYLES = {
-  position: 'absolute', 
-  display: 'none',
-  pointerEvents: 'none',
-  whiteSpace: 'pre-wrap',
-  transform: 'translate3d(0,0,0)',
-  boxSizing: 'border-box',
-}
-
-const FOLD_STYLES = { 
-  width: 0, 
-  height: 0, 
-  position: 'absolute',
-  top: 0,
-  left: 0
-}
 
 export default class TextParticleManager {
   constructor (options) {
@@ -37,9 +20,9 @@ export default class TextParticleManager {
     
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
-    this.foldElement.style.cssText = `width: 0, height: 0; position: absolute; top: 0; left: 0`;
+    this.foldElement.style.cssText = `position: absolute; width: 0; height: 0; top: 0; left: 0`;
     
-    this.skeletonCSSString = `position: absolute; display: none; pointer-events: none; white-space: pre-wrap; transform: translate3d(0px, 0px, 0px); box-sizing: border-box;`
+    this.reservoirCSS = `position: absolute; display: none; pointer-events: none; white-space: pre-wrap; transform: translate3d(0px, 0px, 0px); box-sizing: border-box;`
 
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
@@ -52,7 +35,7 @@ export default class TextParticleManager {
       let p = new TextParticle({...options, element: this.pop()});
       this.particles.push(p);
 
-      if (!this.raf && this.autoStart) {
+      if (!this.raf && this.autostart) {
         this.start();  
       }
       return p;
@@ -61,7 +44,7 @@ export default class TextParticleManager {
   
   addEmitter (options) {
     let e = this.emitters.push(new TextParticleEmitter({...options, manager: this}));
-    if (!this.raf && this.autoStart){
+    if (!this.raf && this.autostart){
       this.start();
     }
     return e;
@@ -108,10 +91,10 @@ export default class TextParticleManager {
     
     particlesToDestroy.map(p => {
       // reset styles and return to pool
-      p.setText('');
-      p.setStyleText(this.skeletonCSSString);
       p.onDestroy(p);
-      
+      p.setText('');
+      p.setStyleText(this.reservoirCSS);
+
       this.push(p.element);
     });
     
@@ -146,9 +129,7 @@ export default class TextParticleManager {
     
   create () {
     let element = document.createElement(this.tagName);
-    
-    element.style.cssText = this.skeletonCSSString;
-    
+    element.style.cssText = this.reservoirCSS;
     this.foldElement.appendChild(element);    
     return element;
   }
