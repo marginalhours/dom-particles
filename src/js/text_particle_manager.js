@@ -37,11 +37,9 @@ export default class TextParticleManager {
     
     this.foldElement = document.createElement('div');
     this.foldElement.className = 'text-particle-manager-reservoir';
-    Object.assign(this.foldElement.style, FOLD_STYLES);
+    this.foldElement.style.cssText = `width: 0, height: 0; position: absolute; top: 0; left: 0`;
     
-    let temp = document.createElement('span');
-    Object.assign(temp.style, PARTICLE_SKELETON_STYLES);
-    this.skeletonCSSString = temp.getAttribute('style');    
+    this.skeletonCSSString = `position: absolute; display: none; pointer-events: none; white-space: pre-wrap; transform: translate3d(0px, 0px, 0px); box-sizing: border-box;`
 
     this.allocate(this.preallocate);
     document.body.appendChild(this.foldElement);
@@ -92,11 +90,11 @@ export default class TextParticleManager {
   }
   
   start () {
+    this.frameStart = performance.now();
     this.raf = requestAnimationFrame((t) => this.update(t));
   }
   
   update(timestamp) {
-    if (!this.frameStart) this.frameStart = timestamp;
     let dt = timestamp - this.frameStart;
     this.frameStart = timestamp;
     let f = (dt/1000);
@@ -110,11 +108,11 @@ export default class TextParticleManager {
     
     particlesToDestroy.map(p => {
       // reset styles and return to pool
-      p.
-      p.element.style.cssText = this.skeletonCSSString;
-      this.push(p.element);
-      // call onDestroy hooks for dead particles
+      p.setText('');
+      p.setStyleText(this.skeletonCSSString);
       p.onDestroy(p);
+      
+      this.push(p.element);
     });
     
     let emittersToDestroy = [];

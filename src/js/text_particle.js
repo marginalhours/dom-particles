@@ -95,6 +95,10 @@ export default class TextParticle {
     this.element.innerText = text;
   }
   
+  setStyleText (text) {
+      this.element.style.cssText = text;  
+  }
+  
   getSnapshot () {
     let lifeFrac = this.lifeFrac;
     
