@@ -19,8 +19,7 @@ const HEAT_COLOURS = [
 ].reverse();
 
 let t = new letterbomb({ 
-  max: 10000,
-  autostart: false
+  max: 10000
 });
 
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
