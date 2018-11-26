@@ -20,6 +20,7 @@ const HEAT_COLOURS = [
 
 let t = new letterbomb({ 
   max: 10000,
+  autostart: false
 });
 
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
@@ -35,7 +36,7 @@ document.querySelector('button').addEventListener('click', (e) => {
       scale: [2, 1, 1],
       fontWeight: 'bold',
       fontFamily: 'monospace',
-      textShadow: '2px 2px 0px #f00',
+      textShadow: '1px 1px 0px #f00',
       color: '#fff'
     }
   });
