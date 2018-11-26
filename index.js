@@ -25,34 +25,48 @@ let t = new letterbomb({
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
     
 document.querySelector('button').addEventListener('click', (e) => {
-  let theta = 0;
-  t.addEmitter({
-    position: {...c},
-    emitEvery: 0.1,
-    particleOptions: {
-      ttl: 1000,
-      style: { 
-        backgroundColor: ['#f33', '#fefeee'], 
-        width: '16px',
-        height: '16px',
-        scale: [1, 20], 
-      },
-      text: '',
-      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-      get velocity () {
-        let h = 800 + 100 * Math.random();
-        // theta += 0.1 * Math.PI * Math.random();
-        theta = 2 * Math.random() * Math.PI;
-        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-      },
-      onCreate: (p) => {
-        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-      }
+  t.addParticle({
+    position: positionFromNode(document.querySelector('button'), 0, -10),
+    get text () { return Math.floor(200 * Math.random()) }, 
+    ttl: 500,
+    get velocity () { return { x: 0, y: -10 } },
+    get acceleration () { return { x: 0, y: -100 } },
+    style: { 
+      scale: [2, 1, 1],
+      fontWeight: 'bold',
+      fontFamily: 'monospace',
+      textShadow: '2px 2px 0px #f00',
+      color: '#fff'
     }
-  })
+  });
 });
 
-
+// blossom
+  // let theta = 0;
+  // t.addEmitter({
+  //   position: {...c},
+  //   emitEvery: 0.1,
+  //   particleOptions: {
+  //     ttl: 1000,
+  //     style: { 
+  //       backgroundColor: ['#f33', '#fefeee'], 
+  //       width: '16px',
+  //       height: '16px',
+  //       scale: [1, 20], 
+  //     },
+  //     text: '',
+  //     get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+  //     get velocity () {
+  //       let h = 800 + 100 * Math.random();
+  //       // theta += 0.1 * Math.PI * Math.random();
+  //       theta = 2 * Math.random() * Math.PI;
+  //       return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+  //     },
+  //     onCreate: (p) => {
+  //       p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+  //     }
+  //   }
+  // })
 
   // t.addEmitter({
   //   position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 20},
