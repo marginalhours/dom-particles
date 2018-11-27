@@ -32,8 +32,9 @@ document.querySelector('.examples-select').addEventListener('change', (e) => {
 let winder = document.querySelector('.main')
 let code = document.querySelector('.code')
 
-const examples = {
-  'metroidvania': () => {
+const examples = {};
+
+examples['metroidvania'] = () => {
     
     winder.innerHTML = `<button class='main-button'>Hit Me</button>`;
     
@@ -43,8 +44,22 @@ const examples = {
     });
     
     code.innerText = `
-
-
+      document.querySelector('button').addEventListener('click', (e) => {
+          t.addParticle({
+            position: { x: e.clientX, y: e.clientY },
+            get text () { return Math.floor(200 * Math.random()) }, 
+            ttl: 1000,
+            velocity: { x: 0, y: -10 },
+            acceleration: { x: 0, y: -100 },
+            style: { 
+              scale: [2, 1, 1],
+              fontWeight: 'bold',
+              fontFamily: 'monospace',
+              textShadow: '1px 1px 0px #f00',
+              color: '#fff'
+            }
+          });
+        });
     `;
     
     document.querySelector('button').addEventListener('click', (e) => {
@@ -63,44 +78,16 @@ const examples = {
         }
       });
     });
-  }
 }
 
-document.querySelector('button').addEventListener('click', (e) => {
-  // t.addParticle({
-  //   position: { x: e.clientX, y: e.clientY - 30 },
-  //   get text () { return Math.floor(200 * Math.random()) }, 
-  //   ttl: 1000,
-  //   velocity: { x: 0, y: -10 },
-  //   acceleration: { x: 0, y: -100 },
-  //   style: { 
-  //     scale: [2, 1, 1],
-  //     fontWeight: 'bold',
-  //     fontFamily: 'monospace',
-  //     textShadow: '1px 1px 0px #f00',
-  //     color: '#fff'
-  //   }
-  // });
-    // t.addEmitter({
-    // position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
-    // emitEvery: 2,
-    // particleOptions: {
-    //   grid: false,
-    //   get ttl () { return 1500 },
-    //   get text () { return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]},
-    //   /* particle position getter is relative to emitter position */
-    //   get position () { return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-    //   get velocity () { return { x: 0, y: -50 } },
-    //   style: { color: HEAT_COLOURS.map(c => colourToCSSString(c)), fontSize: ['24px', '12px'] },
-    //   onUpdate: (p) => {
-    //     if (p.frameNumber % 30 === 0){
-    //       p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
-    //     }
-    //   }
-    // },
-    // });
+examples['trails'] = () => {
+    
+    let t = new letterbomb({ 
+      max: 10000,
+      container: winder
+    });  
   
-      let k = 0;
+    let k = 0;
     let l = -400;
     let m = 120;
     let n = 16;
@@ -156,6 +143,43 @@ document.querySelector('button').addEventListener('click', (e) => {
         }
       }
     });
+}
+
+document.querySelector('button').addEventListener('click', (e) => {
+  // t.addParticle({
+  //   position: { x: e.clientX, y: e.clientY - 30 },
+  //   get text () { return Math.floor(200 * Math.random()) }, 
+  //   ttl: 1000,
+  //   velocity: { x: 0, y: -10 },
+  //   acceleration: { x: 0, y: -100 },
+  //   style: { 
+  //     scale: [2, 1, 1],
+  //     fontWeight: 'bold',
+  //     fontFamily: 'monospace',
+  //     textShadow: '1px 1px 0px #f00',
+  //     color: '#fff'
+  //   }
+  // });
+    // t.addEmitter({
+    // position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
+    // emitEvery: 2,
+    // particleOptions: {
+    //   grid: false,
+    //   get ttl () { return 1500 },
+    //   get text () { return ['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]},
+    //   /* particle position getter is relative to emitter position */
+    //   get position () { return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+    //   get velocity () { return { x: 0, y: -50 } },
+    //   style: { color: HEAT_COLOURS.map(c => colourToCSSString(c)), fontSize: ['24px', '12px'] },
+    //   onUpdate: (p) => {
+    //     if (p.frameNumber % 30 === 0){
+    //       p.setText(['#', '!', '$', '%', '?'][Math.floor(5 * Math.random())]);
+    //     }
+    //   }
+    // },
+    // });
+  
+
 });
 
 // blossom
