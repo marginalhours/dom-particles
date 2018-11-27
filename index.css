@@ -23,11 +23,12 @@ html, body {
   height: 30px;
   padding: 5px 10px;
   margin-top: 8px;
-  -webkit-appearance: none;
+  border-radius: 5px;
   text-align-last: center;
   text-transform: uppercase;
   background: #555;
   color: #fff;
+  font-weight: bold;
   outline: none;
   border: none;
 }
@@ -56,4 +57,8 @@ html, body {
 
 .main-button:hover {
   background-color: #bbb;  
+}
+
+.main-button:active {
+  background-color: #888;  
 }
