@@ -63,3 +63,8 @@ html, body {
 .main-button:active {
   background-color: #888;  
 }
+
+.body-wrapper {
+  display: grid;
+  height: 100%;
+}
