@@ -33,6 +33,12 @@ html, body {
   border: none;
 }
 
+.body-wrapper {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  height: 100%;
+}
+
 .main {
   display: grid;
   justify-items: center;
@@ -64,7 +70,8 @@ html, body {
   background-color: #888;  
 }
 
-.body-wrapper {
-  display: grid;
-  height: 100%;
+
+.code {
+  overflow-y: scroll;
+  font-size: 11px;
 }
