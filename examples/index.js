@@ -54,7 +54,8 @@ examples['number-goes-up'] = () => {
 
 examples['metroidvania'] = () => {
     
-    winder.innerHTML = `<button class='main-button'>Hit Me</button>`;
+  winder.style.background = '#fff';
+  winder.innerHTML = `<button class='main-button'>Hit Me</button>`;
     
     let t = new letterbomb({ 
       max: 10000,
@@ -99,11 +100,12 @@ examples['metroidvania'] = () => {
 }
 
 examples['trails'] = () => {
-    
+    winder.style.background = '#fff';
+  
     let t = new letterbomb({ 
       max: 10000,
       container: winder
-    });  
+    }); 
   
     let k = 0;
     let l = -400;
@@ -112,8 +114,7 @@ examples['trails'] = () => {
   
 
     t.addEmitter({
-      ttl: 10000,
-      position: {...c},
+      position: { x: winder.clientWidth / 2, y: winder.clientWidth / 2 },
       emitEvery: 8,
       onUpdate: (emitter) => {   
         emitter.position.y = c.y + (m * Math.sin(k++/n));
@@ -137,8 +138,7 @@ examples['trails'] = () => {
     });
   
     t.addEmitter({
-      ttl: 10000,
-      position: {...c},
+      position: { x: winder.clientWidth / 2, y: winder.clientWidth / 2 },
       emitEvery: 8,
       onUpdate: (emitter) => {   
         emitter.position.y = c.y + (m * Math.sin(Math.PI + k/n));
@@ -172,16 +172,61 @@ examples['flame'] = () => {
   winder.style.backgroundColor = '#000';
   
   t.addEmitter({
-    position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2},
-    emitEvery: 16,
+    position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+    emitEvery: 8,
     particleOptions: {
       text: '',
       ttl: 1500,
-      get position () { return { x: 100 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get position () { return { x: 32 * (Math.random() - 0.5), y: 15 * (Math.random() - 0.5) } },
       velocity: { x: 0, y: -66 },
       style: { backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)), width: '8px', height: '8px', scale: [2, 1], borderRadius: '8px' },
     },
   });  
+}
+
+examples['bubbles'] = () => {
+  winder.style.backgroundColor = '#fff';
+  
+  let t = new letterbomb({ 
+    max: 10000,
+    container: winder
+  });  
+  
+  t.addEmitter({
+    position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+    emitEvery: 500,
+    particleOptions: {
+      text: '', 
+      get position () { return { x: 100 * Math.random() } },
+      get ttl () { return 1500 + (250 * Math.random()) },
+      get velocity () { return { x: 0, y: -10 } },
+      get acceleration () { return { x: 0, y: -100 } },
+      style: { 
+        get scale () { return 0.75 * Math.random() },
+        opacity: [0.5, 1, 1, 1, 0.5],
+        border: '2px solid rgba(192, 192, 200, 1.0)',
+        width: '32px',
+        height: '32px',
+        borderRadius: '16px'
+      },
+      onDestroy: (p) => {
+          let k = 60;
+          let m = Math.random() * Math.PI / 4;
+          for(var i = 0; i < 4; i++){
+            let s = t.addParticle({
+              ttl: 400,
+              position: { x: p.position.x + 8, y: p.position.y + 8 },
+              velocity: { x: k * Math.sin(i * Math.PI / 2 + m), y: k * Math.cos(i * Math.PI / 2 + m) },
+              text: '-',
+              onCreate: (p) => {
+                p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+              },
+              style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.scale },
+            });
+          }
+      }
+    }
+  }); 
 }
 
 // blossom
@@ -270,101 +315,3 @@ examples['flame'] = () => {
     //     p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
     //   }
     // }
-
-
-
-// trails 
-
-//     let k = 0;
-//     let l = -400;
-//     let m = 120;
-//     let n = 16;
-  
-
-    // t.addEmitter({
-    //   ttl: 10000,
-    //   position: {...c},
-    //   emitEvery: 8,
-    //   onUpdate: (emitter) => {   
-    //     emitter.position.y = c.y + (m * Math.sin(k++/n));
-    //   },
-    //   particleOptions: {
-    //     ttl: 1000,
-    //     style: { 
-    //       get backgroundColor () { return  ['#f33', '#fefeee'] },
-    //       width: '12px',
-    //       height: '12px',
-    //       scale: [2, 0.1], 
-    //       zIndex: 100
-    //     },
-    //     text: '',
-    //     get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
-    //     get velocity () {
-    //       let h = -1 * (500 + (100 * Math.random()));
-    //       return { x: l, y: 0, z: 0 }
-    //     }
-    //   }
-    // });
-  
-    // t.addEmitter({
-    //   ttl: 10000,
-    //   position: {...c},
-    //   emitEvery: 8,
-    //   onUpdate: (emitter) => {   
-    //     emitter.position.y = c.y + (m * Math.sin(Math.PI + k/n));
-    //     emitter.position.z = 100 * Math.sin(Math.PI + k / n);
-    //   },
-    //   particleOptions: {
-    //     ttl: 1000,
-    //     style: { 
-    //       get backgroundColor () { return  ['#33f', '#eefefe'] },
-    //       width: '12px',
-    //       height: '12px',
-    //       scale: [2, 0.1], 
-    //       zIndex: 50
-    //     },
-    //     text: '',
-    //     get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-    //     get velocity () {
-    //       let h = -1 * (500 + (100 * Math.random()));
-    //       return { x: l, y: 0 }
-    //     }
-    //   }
-    // });
-
-// Bubbles
-  // t.addEmitter({
-  //   position: positionFromNode(document.querySelector('button'), 0, 0),
-  //   emitEvery: 500,
-  //   particleOptions: {
-  //     text: '', 
-  //     get position () { return { x: 100 * Math.random() } },
-  //     get ttl () { return 750 + (250 * Math.random()) },
-  //     get velocity () { return { x: 0, y: -10 } },
-  //     get acceleration () { return { x: 0, y: -100 } },
-  //     style: { 
-  //       get scale () { return 0.75 * Math.random() },
-  //       opacity: [0, 1, 1, 1, 0.5],
-  //       border: '2px solid rgba(192, 192, 200, 1.0)',
-  //       width: '16px',
-  //       height: '16px',
-  //       borderRadius: '16px'
-  //     },
-  //     onDestroy: (p) => {
-  //         let k = 60;
-  //         let m = Math.random() * Math.PI / 4;
-  //         for(var i = 0; i < 4; i++){
-  //           let s = t.addParticle({
-  //             ttl: 400,
-  //             position: { x: p.position.x + 8, y: p.position.y + 8 },
-  //             velocity: { x: k * Math.sin(i * Math.PI / 2 + m), y: k * Math.cos(i * Math.PI / 2 + m) },
-  //             text: '-',
-  //             onCreate: (p) => {
-  //               p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-  //             },
-  //             style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.scale },
-  //           });
-  //         }
-  //     }
-  //   }
-  // });

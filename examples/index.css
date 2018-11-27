@@ -45,6 +45,7 @@ html, body {
   align-items: center;
   height: 100%;
   position: relative;
+  transition: background-color 300ms ease-in-out;
 }
 
 .main-button {
