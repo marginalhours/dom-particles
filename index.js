@@ -89,7 +89,6 @@ examples['metroidvania'] = () => {
         velocity: { x: 0, y: -10 },
         acceleration: { x: 0, y: -100 },
         style: { 
-          grid: '12px',
           scale: [2, 1, 1],
           fontWeight: 'bold',
           fontFamily: 'monospace',
@@ -195,7 +194,7 @@ examples['bubbles'] = () => {
   
   t.addEmitter({
     position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: 100,
+    emitEvery: 200,
     particleOptions: {
       text: '', 
       get position () { return { x: 0.167 * winder.clientWidth * (Math.random() - 0.5) } },
@@ -230,32 +229,80 @@ examples['bubbles'] = () => {
   }); 
 }
 
+examples['blossom'] = () => {
+  winder.style.backgroundColor = '#fefeee';
+  
+  let t = new letterbomb({ 
+    max: 10000,
+    container: winder
+  });  
+  
+  let theta = 0;
+  t.addEmitter({
+    position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+    emitEvery: 3,
+    particleOptions: {
+      ttl: 800,
+      style: { 
+        backgroundColor: ['#f33', '#fefeee'], 
+        width: '16px',
+        height: '16px',
+        scale: [0, 20], 
+      },
+      text: '',
+      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get velocity () {
+        let h = 800 + 100 * Math.random();
+        // theta += 0.01 * Math.PI * Math.random();
+        theta = 2 * Math.random() * Math.PI;
+        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+      },
+      onCreate: (p) => {
+        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+      }
+    }
+  }) 
+  
+}
+
+examples['you-know-i-had-to-do-it-to-em'] = () => {
+  winder.style.backgroundColor = '#01010f';
+  
+  let t = new letterbomb({ 
+    max: 10000,
+    container: winder
+  });  
+  
+  let theta = 0;
+  t.addEmitter({
+    position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+    emitEvery: 3,
+    particleOptions: {
+      ttl: 800,
+      style: { 
+        backgroundColor: ['#eef', '#fff'], 
+        width: '16px',
+        height: '16px',
+        scale: [0, 1], 
+      },
+      text: '.',
+      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get velocity () {
+        let h = 800 + 100 * Math.random();
+        theta = 2 * Math.random() * Math.PI;
+        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+      },
+      onCreate: (p) => {
+        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+        p.acceleration = { x: -p.velocity.x, y: -p.velocity.y }
+      }
+    }
+  }) 
+  
+}
+
 // blossom
-  // let theta = 0;
-  // t.addEmitter({
-  //   position: {...c},
-  //   emitEvery: 0.1,
-  //   particleOptions: {
-  //     ttl: 1000,
-  //     style: { 
-  //       backgroundColor: ['#f33', '#fefeee'], 
-  //       width: '16px',
-  //       height: '16px',
-  //       scale: [1, 20], 
-  //     },
-  //     text: '',
-  //     get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-  //     get velocity () {
-  //       let h = 800 + 100 * Math.random();
-  //       // theta += 0.1 * Math.PI * Math.random();
-  //       theta = 2 * Math.random() * Math.PI;
-  //       return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-  //     },
-  //     onCreate: (p) => {
-  //       p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-  //     }
-  //   }
-  // })
+
 
   // t.addEmitter({
   //   position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 20},
