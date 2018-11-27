@@ -79,6 +79,21 @@ export default class TextParticleManager {
     this.raf = requestAnimationFrame((t) => this.update(t));
   }
   
+  reset () {
+    if (this.raf) { cancelAnimationFrame(this.raf) }
+    this.particles.map(p => {
+      p.onDestroy(p);
+      p.setText('');
+      p.setStyleText(this.reservoirCSS);
+      
+      this.push(p.element);
+    });
+    this.particles = [];
+    
+    this.emitters.map(e => e.onDestroy(e));
+    this.emitters = [];
+  }
+  
   update(timestamp) {
     let dt = timestamp - this.frameStart;
     this.frameStart = timestamp;
