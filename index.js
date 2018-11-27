@@ -18,13 +18,54 @@ const HEAT_COLOURS = [
   [254, 254, 254, 1.0], // white
 ].reverse();
 
-let t = new letterbomb({ 
-  max: 10000,
-  container: document.querySelector('.main')
-});
-
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
     
+document.querySelector('.examples-select').addEventListener('change', (e) => {
+  // clear out current examples
+  
+  winder.innerHTML = '';
+  code.innerHTML = '';
+  
+  examples[e.target.value]();
+});
+
+let winder = document.querySelector('.main')
+let code = document.querySelector('.code')
+
+const examples = {
+  'metroidvania': () => {
+    
+    winder.innerHTML = `<button class='main-button'>Hit Me</button>`;
+    
+    let t = new letterbomb({ 
+      max: 10000,
+      container: winder
+    });
+    
+    code.innerText = `
+
+
+    `;
+    
+    document.querySelector('button').addEventListener('click', (e) => {
+      t.addParticle({
+        position: { x: e.clientX, y: c.y - 50 },
+        get text () { return Math.floor(200 * Math.random()) }, 
+        ttl: 1000,
+        velocity: { x: 0, y: -10 },
+        acceleration: { x: 0, y: -100 },
+        style: { 
+          scale: [2, 1, 1],
+          fontWeight: 'bold',
+          fontFamily: 'monospace',
+          textShadow: '1px 1px 0px #f00',
+          color: '#fff'
+        }
+      });
+    });
+  }
+}
+
 document.querySelector('button').addEventListener('click', (e) => {
   // t.addParticle({
   //   position: { x: e.clientX, y: e.clientY - 30 },
