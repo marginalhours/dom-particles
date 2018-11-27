@@ -34,6 +34,24 @@ let code = document.querySelector('.code')
 
 const examples = {};
 
+examples['number-goes-up'] = () => {
+  winder.innerHTML = `<button class='main-button'>Press to Go Up</button>`; 
+  
+  let t = new letterbomb({ 
+    max: 10000,
+    container: winder
+  });
+  
+  document.querySelector('button').addEventListener('click', (e) => {   
+    t.addParticle({
+      position: { x: e.clientX, y: e.clientY },
+      text: '+1', 
+      velocity: { x: 0, y: -10 },
+      acceleration: { x: 0, y: -100 },
+    })
+  });
+}
+
 examples['metroidvania'] = () => {
     
     winder.innerHTML = `<button class='main-button'>Hit Me</button>`;
@@ -64,7 +82,7 @@ examples['metroidvania'] = () => {
     
     document.querySelector('button').addEventListener('click', (e) => {
       t.addParticle({
-        position: { x: e.clientX, y: c.y - 50 },
+        position: { x: e.layerX, y: e.layerY },
         get text () { return Math.floor(200 * Math.random()) }, 
         ttl: 1000,
         velocity: { x: 0, y: -10 },
