@@ -276,25 +276,24 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   let theta = 0;
   t.addEmitter({
     position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: 3,
+    emitEvery: 16,
     particleOptions: {
       ttl: 800,
       style: { 
-        backgroundColor: ['#eef', '#fff'], 
-        width: '16px',
-        height: '16px',
-        scale: [0, 1], 
+        color: ['#eef', '#fff'], 
+        fontSize: '16px',
+        scale: [1, 2], 
       },
       text: '.',
       get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
       get velocity () {
-        let h = 800 + 100 * Math.random();
-        theta = 2 * Math.random() * Math.PI;
+        let h = 500 + 300 * Math.random();
+        theta += 0.1 * Math.random();
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },
       onCreate: (p) => {
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-        p.acceleration = { x: -p.velocity.x, y: -p.velocity.y }
+        p.acceleration = { x: -2 * p.velocity.x, y: -2 * p.velocity.y }
       }
     }
   }) 
