@@ -26,9 +26,9 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
     
 document.querySelector('button').addEventListener('click', (e) => {
   t.addParticle({
-    position: positionFromNode(document.querySelector('button'), 0, -10),
+    position: { x: e.clientX, y: e.clientY },
     get text () { return Math.floor(200 * Math.random()) }, 
-    ttl: 500,
+    ttl: 1000,
     get velocity () { return { x: 0, y: -10 } },
     get acceleration () { return { x: 0, y: -100 } },
     style: { 
