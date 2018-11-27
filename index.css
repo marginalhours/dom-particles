@@ -20,14 +20,16 @@ html, body {
 }
 
 .examples-select {
-  height: 40px;
-  margin-top: 4px;
+  height: 30px;
+  padding: 5px 10px;
+  margin-top: 8px;
   -webkit-appearance: none;
   text-align-last: center;
   text-transform: uppercase;
   background: #555;
   color: #fff;
   outline: none;
+  border: none;
 }
 
 .main {
