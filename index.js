@@ -89,6 +89,7 @@ examples['metroidvania'] = () => {
         velocity: { x: 0, y: -10 },
         acceleration: { x: 0, y: -100 },
         style: { 
+          grid: '12px',
           scale: [2, 1, 1],
           fontWeight: 'bold',
           fontFamily: 'monospace',
@@ -185,7 +186,7 @@ examples['flame'] = () => {
 }
 
 examples['bubbles'] = () => {
-  winder.style.backgroundColor = '#fff';
+  winder.style.backgroundColor = '#113';
   
   let t = new letterbomb({ 
     max: 10000,
@@ -194,34 +195,34 @@ examples['bubbles'] = () => {
   
   t.addEmitter({
     position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: 500,
+    emitEvery: 100,
     particleOptions: {
       text: '', 
-      get position () { return { x: 100 * Math.random() } },
+      get position () { return { x: 0.167 * winder.clientWidth * (Math.random() - 0.5) } },
       get ttl () { return 1500 + (250 * Math.random()) },
-      get velocity () { return { x: 0, y: -10 } },
+      get velocity () { return { y: -10 } },
       get acceleration () { return { x: 0, y: -100 } },
       style: { 
-        get scale () { return 0.75 * Math.random() },
-        opacity: [0.5, 1, 1, 1, 0.5],
+        get scale () { return Math.random() },
+        opacity: [0.5, 1, 1, 1, 0.9],
         border: '2px solid rgba(192, 192, 200, 1.0)',
         width: '32px',
         height: '32px',
         borderRadius: '16px'
       },
       onDestroy: (p) => {
-          let k = 60;
+          let k = 32;
           let m = Math.random() * Math.PI / 4;
           for(var i = 0; i < 4; i++){
             let s = t.addParticle({
-              ttl: 400,
-              position: { x: p.position.x + 8, y: p.position.y + 8 },
+              ttl: 600,
+              position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
               velocity: { x: k * Math.sin(i * Math.PI / 2 + m), y: k * Math.cos(i * Math.PI / 2 + m) },
               text: '-',
               onCreate: (p) => {
                 p.heading = Math.atan2(p.velocity.y, p.velocity.x);
               },
-              style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.scale },
+              style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
             });
           }
       }
