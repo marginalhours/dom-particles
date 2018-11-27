@@ -14,6 +14,8 @@ export default class TextParticleManager {
   constructor (options) {
     Object.assign(this, { ...DEFAULT_TPM_OPTIONS, ...options });
     
+    this.container = this.container || document.querySelector('body');
+    
     this._pool = [];
     this.particles = [];
     this.emitters = [];
@@ -25,7 +27,7 @@ export default class TextParticleManager {
     this.reservoirCSS = `position: absolute; display: none; pointer-events: none; white-space: pre-wrap; transform: translate3d(0px, 0px, 0px); box-sizing: border-box;`
 
     this.allocate(this.preallocate);
-    document.body.appendChild(this.foldElement);
+    this.container.appendChild(this.foldElement);
     
     this.frameStart = null;
   }

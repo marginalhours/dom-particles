@@ -38,6 +38,7 @@ html, body {
   justify-items: center;
   align-items: center;
   height: 100%;
+  position: relative;
 }
 
 .main-button {
