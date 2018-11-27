@@ -1,28 +1,23 @@
 <html>
   <head>
     <title>Demo</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
     <script type="text/javascript" src='../lib/letterbomb.js'></script>
   </head>
-  <body style="overflow:hidden; background: #fefeee">
-    <button style="left: 400px; top: 400px; position: relative; width: 100px; display: block">
-      Go
-    </button>
-    <p>In attempting to describe the experience, we ran into the most fundamental limitations. Words shook free of their senses like skyscrapers in an earthquake. Whole fortresses of concepts came loose in our minds and tumbled into the void below.</p>
-    <script type="text/javascript" src="./index.js"></script>
-    <select class='examples'>
-      <option value='metroidvania'>Metroidvania Damage</option>
-      <option value='ascii-flame'>ASCII Flame</option>
-      <option value='shopping-cart'>Shopping Cart</option>
-      <option value='pastel'>Pink Squares</option>
-      <option value='trails'>Trails</option>
-      <option value='bees'>BEES</option>
-    </select>
-    <div class='examples-wrapper'>
-      <div class='code'>
-      </div>
-      <div class='out'>
-        
-      </div>
+  <body style="background: #fefeee">
+    <div class='header-bar'>
+      <select class='examples'>
+        <option value='metroidvania'>Metroidvania Damage</option>
+        <option value='ascii-flame'>ASCII Flame</option>
+        <option value='shopping-cart'>Shopping Cart</option>
+        <option value='pastel'>Pink Squares</option>
+        <option value='trails'>Trails</option>
+        <option value='bees'>BEES</option>
+      </select>      
     </div>
+    <div class='main'>
+      <button class='main-button'>Go</button>
+    </div>
+    <script type="text/javascript" src="./index.js"></script>
   </body>
 </html>
