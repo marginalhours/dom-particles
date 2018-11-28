@@ -293,27 +293,33 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
     position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
     emitEvery: 8,
     particleOptions: {
-      get ttl () { }
+      get ttl () { return MOVING ? 800 : 10000 },
       style: { 
         color: ['#eef', '#fff'], 
         fontSize: '16px',
         scale: [1, 2], 
+        get opacity () { return MOVING ? 1 : [1, 1, 0] }
       },
       text: '.',
       get position () { 
         if (MOVING) { 
           return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
         } else {
+          return { x: winder.clientWidth * (Math.random() - 0.5), y: winder.clientHeight * (Math.random() - 0.5) }
         }
       },
       get velocity () {
         let h = 800 + 300 * Math.random();
+        h = MOVING ? h : 0;
         theta += 2 * Math.PI * Math.random();
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },
       onCreate: (p) => {
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-        p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
+        
+      },
+      onUpdate: (p) => {
+        // p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
       }
     }
   }); 
