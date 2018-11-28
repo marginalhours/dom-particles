@@ -22,7 +22,7 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
     
 let winder = document.querySelector('.main')
 let code = document.querySelector('.code')
-let goButton = document.querySelector('.button')
+let goButton = document.querySelector('.main-button')
 
 let t = new letterbomb({ 
   max: 10000,
@@ -164,59 +164,74 @@ examples['trails'] = () => {
 examples['flame'] = () => {
   
   winder.style.backgroundColor = '#000';
+  setButtonText('Hold to Burn');
   
-  t.addEmitter({
-    position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: 8,
-    particleOptions: {
-      text: '',
-      ttl: 1500,
-      get position () { return { x: 32 * (Math.random() - 0.5), y: 15 * (Math.random() - 0.5) } },
-      velocity: { x: 0, y: -66 },
-      style: { backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)), width: '8px', height: '8px', scale: [2, 1], borderRadius: '8px' },
-    },
-  });  
+  goButton.addEventListener('mousedown', () => {
+    t.addEmitter({
+      position: { x: winder.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60 },
+      emitEvery: 8,
+      particleOptions: {
+        text: '',
+        ttl: 1500,
+        get position () { return { x: 64 * (Math.random() - 0.5), y: 15 * (Math.random() - 0.5) } },
+        velocity: { x: 0, y: -66 },
+        style: { backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)), width: '8px', height: '8px', scale: [2, 1], borderRadius: '8px' },
+      },
+    });  
+  });
+  
+  goButton.addEventListener('mouseup', () => {
+    t.emitters = [];
+  });
 }
 
 examples['bubbles'] = () => {
   winder.style.backgroundColor = '#113';
 
+  setButtonText('Hold to Bubble');
+  goButton.addEventListener('mousedown', () => {
+    
   t.addEmitter({
-    position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: 200,
-    particleOptions: {
-      text: '', 
-      get position () { return { x: 0.167 * winder.clientWidth * (Math.random() - 0.5) } },
-      get ttl () { return 1500 + (250 * Math.random()) },
-      get velocity () { return { y: -10 } },
-      get acceleration () { return { x: 0, y: -100 } },
-      style: { 
-        get scale () { return Math.random() },
-        opacity: [0.5, 1, 1, 1, 0.9],
-        border: '2px solid rgba(192, 192, 200, 1.0)',
-        width: '32px',
-        height: '32px',
-        borderRadius: '16px'
-      },
-      onDestroy: (p) => {
-          let k = 32;
-          let x = 6;
-          let m = Math.random() * Math.PI / x;
-          for(var i = 0; i < x; i++){
-            let s = t.addParticle({
-              ttl: 600,
-              position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
-              velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
-              text: '-',
-              onCreate: (p) => {
-                p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-              },
-              style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
-            });
-          }
+      position: { x: winder.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
+      emitEvery: 200,
+      particleOptions: {
+        text: '', 
+        get position () { return { x: 0.167 * winder.clientWidth * (Math.random() - 0.5) } },
+        get ttl () { return 1500 + (250 * Math.random()) },
+        get velocity () { return { y: -10 } },
+        get acceleration () { return { x: 0, y: -100 } },
+        style: { 
+          get scale () { return Math.random() },
+          opacity: [0.5, 1, 1, 1, 0.9],
+          border: '2px solid rgba(192, 192, 200, 1.0)',
+          width: '32px',
+          height: '32px',
+          borderRadius: '16px'
+        },
+        onDestroy: (p) => {
+            let k = 32;
+            let x = 6;
+            let m = Math.random() * Math.PI / x;
+            for(var i = 0; i < x; i++){
+              let s = t.addParticle({
+                ttl: 600,
+                position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
+                velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
+                text: '-',
+                onCreate: (p) => {
+                  p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+                },
+                style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
+              });
+            }
+        }
       }
-    }
-  }); 
+    });
+  });
+  
+  goButton.addEventListener('mouseup', () => {
+    t.emitters = [];
+  });
 }
 
 examples['blossom'] = () => {
