@@ -37,9 +37,9 @@ const setButtonText = (text) => {
 document.querySelector('.examples-select').addEventListener('change', (e) => {
   // clear out current examples
   t.reset();
-  goButton.onClick = null;
-  goButton.onMouseDown = null;
-  goButton.onMouseUp = null;
+  goButton.onclick = null;
+  goButton.onmousedown = null;
+  goButton.onmouseup = null;
   
   examples[e.target.value]();
 });
@@ -48,8 +48,8 @@ document.querySelector('.examples-select').addEventListener('change', (e) => {
 const examples = {};
 
 examples['number-goes-up'] = () => {
-  // winder.innerHTML = `<button class='main-button'>Press to Go Up</button>`; 
-
+  setButtonText('Press to go up');
+  
   document.querySelector('button').addEventListener('click', (e) => {   
     t.addParticle({
       position: { x: e.layerX, y: e.layerY },
