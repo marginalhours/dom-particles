@@ -245,58 +245,75 @@ examples['bubbles'] = () => {
 examples['blossom'] = () => {
   winder.style.backgroundColor = '#fefeee';
 
-  let theta = 0;
-  t.addEmitter({
-    position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: 3,
-    particleOptions: {
-      ttl: 800,
-      style: { 
-        backgroundColor: ['#f33', '#fefeee'], 
-        width: '16px',
-        height: '16px',
-        scale: [0, 20], 
-      },
-      text: '',
-      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-      get velocity () {
-        let h = 800 + 100 * Math.random();
-        // theta += 0.01 * Math.PI * Math.random();
-        theta = 2 * Math.random() * Math.PI;
-        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-      },
-      onCreate: (p) => {
-        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+  goButton.addEventListener('mousedown', () => {
+    let theta = 0;
+    t.addEmitter({
+      position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+      emitEvery: 3,
+      particleOptions: {
+        ttl: 800,
+        style: { 
+          backgroundColor: ['#f33', '#fefeee'], 
+          width: '16px',
+          height: '16px',
+          scale: [0, 20], 
+        },
+        text: '',
+        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+        get velocity () {
+          let h = 800 + 100 * Math.random();
+          // theta += 0.01 * Math.PI * Math.random();
+          theta = 2 * Math.random() * Math.PI;
+          return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+        },
+        onCreate: (p) => {
+          p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+        }
       }
-    }
-  }) 
+    }); 
+  });
   
+  goButton.addEventListener('mouseup', () => {
+    t.emitters = [];
+  });
 }
 
 examples['you-know-i-had-to-do-it-to-em'] = () => {
   winder.style.backgroundColor = '#01010f';
+  setButtonText('Hold to Lightspeed');
   
+  const MOVING = false;
+  
+  goButton.addEventListener('mousedown', () => MOVING = true);
+  goButton.addEventListener('mouseup', () => MOVING = false);
+  
+
   let theta = 0;
   t.addEmitter({
     position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: 16,
+    emitEvery: 8,
     particleOptions: {
-      ttl: 800,
+      get ttl () { }
       style: { 
         color: ['#eef', '#fff'], 
         fontSize: '16px',
         scale: [1, 2], 
       },
       text: '.',
-      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get position () { 
+        if (MOVING) { 
+          return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
+        } else {
+        }
+      },
       get velocity () {
-        let h = 500 + 300 * Math.random();
-        theta += 0.1 * Math.random();
+        let h = 800 + 300 * Math.random();
+        theta += 2 * Math.PI * Math.random();
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },
       onCreate: (p) => {
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-        p.acceleration = { x: -2 * p.velocity.x, y: -2 * p.velocity.y }
+        p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
       }
     }
   }); 
@@ -333,66 +350,3 @@ examples['chess'] = () => {
     }
   });
 }
-
-// blossom
-
-
-  // t.addEmitter({
-  //   position: { x: document.body.clientWidth / 2 - 50, y: document.body.clientHeight / 2 - 20},
-  //   emitEvery: 4,
-  //   onUpdate: (emitter) => {   
-  //     emitter.position.y = emitter.position.y + (10 * Math.sin(emitter.frameNumber/10));
-  //   },
-  //   particleOptions: {
-  //     ttl: 1000,
-  //     style: { 
-  //       backgroundColor: ['#f33', '#fefeee'], 
-  //       width: '12px',
-  //       height: '12px',
-  //       scale: [2, 1], 
-  //     },
-  //     text: '',
-  //     get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-  //     get velocity () {
-  //       let h = -1 * (500 + (100 * Math.random()));
-  //       return { x: h, y: 0 }
-  //     },
-  //     onCreate: (p) => {
-  //       p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-  //     }
-  //   }
-  // });
-
-  // let k = 1;
-  // t.from(document.querySelector('p'), 1, {
-  //   ttl: 15000,
-  //   style: { rotation: ['0deg', '360deg'] }, 
-  //   onCreate: (p) => { p.n = k++; },
-  //   onUpdate: (p) => { 
-  //     p.position = { 
-  //       x: p.position.x,
-  //       y: p.position.y + Math.sin(((p.n) + p.frameNumber) * 0.1)
-  //     }
-  //   }
-  // });
-
-
-    // particleOptions: {
-    //   ttl: 1000,
-    //   style: { 
-    //     backgroundColor: ['#f33', '#fefeee'], 
-    //     width: '16px',
-    //     height: '16px',
-    //     scale: [0.1, 20], 
-    //   },
-    //   text: '',
-    //   get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-    //   get velocity () {
-    //     let h = 600 + 100 * Math.random();
-    //     theta += 0.1 * Math.PI * Math.random();
-    //     return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-    //   },
-    //   onCreate: (p) => {
-    //     p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-    //   }
-    // }
