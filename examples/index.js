@@ -22,7 +22,7 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
     
 let winder = document.querySelector('.main')
 let code = document.querySelector('.code')
-let goButton = document.querySelector('.main-button')
+let goButton = document.querySelector('.main-button');
 
 let t = new letterbomb({ 
   max: 10000,
@@ -37,9 +37,10 @@ const setButtonText = (text) => {
 document.querySelector('.examples-select').addEventListener('change', (e) => {
   // clear out current examples
   t.reset();
-  goButton.onclick = null;
-  goButton.onmousedown = null;
-  goButton.onmouseup = null;
+  
+  let newButton = goButton.cloneNode(true);
+  goButton.parentNode.replaceChild(newButton, goButton);
+  goButton = document.querySelector('.main-button');
   
   examples[e.target.value]();
 });
@@ -50,7 +51,7 @@ const examples = {};
 examples['number-goes-up'] = () => {
   setButtonText('Press to go up');
   
-  document.querySelector('button').addEventListener('click', (e) => {   
+  goButton.addEventListener('click', (e) => {   
     t.addParticle({
       position: { x: e.layerX, y: e.layerY },
       text: '+1', 
@@ -61,9 +62,9 @@ examples['number-goes-up'] = () => {
 }
 
 examples['metroidvania'] = () => {
-    
+  setButtonText('Press to attack');
+  
   winder.style.background = '#fff';
-  // winder.innerHTML = `<button class='main-button'>Hit Me</button>`;
     
   code.innerText = `
     document.querySelector('button').addEventListener('click', (e) => {
@@ -84,7 +85,7 @@ examples['metroidvania'] = () => {
       });
   `;
 
-  document.querySelector('button').addEventListener('click', (e) => {
+  goButton.addEventListener('click', (e) => {
     t.addParticle({
       position: { x: e.layerX, y: e.layerY },
       get text () { return Math.floor(200 * Math.random()) }, 
@@ -102,7 +103,9 @@ examples['metroidvania'] = () => {
   });
 }
 
-examples['trails'] = () => {
+examples['trails'] = () => {  
+    setButtonText('Hold to trail');
+  
     winder.style.background = '#fff';
   
     let k = 0;
@@ -110,54 +113,59 @@ examples['trails'] = () => {
     let m = 120;
     let n = 16;
   
-
-    t.addEmitter({
-      position: { x: winder.clientWidth / 2, y: winder.clientWidth / 2 },
-      emitEvery: 8,
-      onUpdate: (emitter) => {   
-        emitter.position.y = c.y + (m * Math.sin(k++/n));
-      },
-      particleOptions: {
-        ttl: 1000,
-        style: { 
-          get backgroundColor () { return  ['#f33', '#fefeee'] },
-          width: '12px',
-          height: '12px',
-          scale: [2, 0.1], 
-          zIndex: 100
+    goButton.addEventListener('mousedown', () => {
+      t.addEmitter({
+        position: { x: winder.clientWidth / 2, y: winder.clientWidth / 2 },
+        emitEvery: 8,
+        onUpdate: (emitter) => {   
+          emitter.position.y = c.y + (m * Math.sin(k++/n));
         },
-        text: '',
-        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
-        get velocity () {
-          let h = -1 * (500 + (100 * Math.random()));
-          return { x: l, y: 0, z: 0 }
+        particleOptions: {
+          ttl: 1000,
+          style: { 
+            get backgroundColor () { return  ['#f33', '#fefeee'] },
+            width: '12px',
+            height: '12px',
+            scale: [2, 0.1], 
+            zIndex: 100
+          },
+          text: '',
+          get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
+          get velocity () {
+            let h = -1 * (500 + (100 * Math.random()));
+            return { x: l, y: 0, z: 0 }
+          }
         }
-      }
+      });
+
+      t.addEmitter({
+        position: { x: winder.clientWidth / 2, y: winder.clientWidth / 2 },
+        emitEvery: 8,
+        onUpdate: (emitter) => {   
+          emitter.position.y = c.y + (m * Math.sin(Math.PI + k/n));
+          emitter.position.z = 100 * Math.sin(Math.PI + k / n);
+        },
+        particleOptions: {
+          ttl: 1000,
+          style: { 
+            get backgroundColor () { return  ['#33f', '#eefefe'] },
+            width: '12px',
+            height: '12px',
+            scale: [2, 0.1], 
+            zIndex: 50
+          },
+          text: '',
+          get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+          get velocity () {
+            let h = -1 * (500 + (100 * Math.random()));
+            return { x: l, y: 0 }
+          }
+        }
+      });
     });
   
-    t.addEmitter({
-      position: { x: winder.clientWidth / 2, y: winder.clientWidth / 2 },
-      emitEvery: 8,
-      onUpdate: (emitter) => {   
-        emitter.position.y = c.y + (m * Math.sin(Math.PI + k/n));
-        emitter.position.z = 100 * Math.sin(Math.PI + k / n);
-      },
-      particleOptions: {
-        ttl: 1000,
-        style: { 
-          get backgroundColor () { return  ['#33f', '#eefefe'] },
-          width: '12px',
-          height: '12px',
-          scale: [2, 0.1], 
-          zIndex: 50
-        },
-        text: '',
-        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-        get velocity () {
-          let h = -1 * (500 + (100 * Math.random()));
-          return { x: l, y: 0 }
-        }
-      }
+    goButton.addEventListener('mouseup', () => {
+      t.emitters = [];
     });
 }
 
