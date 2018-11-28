@@ -1,6 +1,7 @@
 - unit tests for particle / emitter / manager
 - better fromDOMNode functionality (ideally, get it working, like, at all) 
-- some kind of hack to allow for reverse timestep / jump to point in lifespan (or is this getting too generic, functionality-wise) (wait, this is insanely hard to do, what about particles you add at a later date?)
+- finish examples page (maybe make source code editable too?)
+
 - currently out of scope:
   - full 3d (with z-coord)
   - probably the timing thing (see above) - the broader point is if there's no time-control etc, then the autostart argument is pretty redundant

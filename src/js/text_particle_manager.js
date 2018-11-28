@@ -82,7 +82,7 @@ export default class TextParticleManager {
   reset () {
     if (this.raf) { cancelAnimationFrame(this.raf) }
     this.particles.map(p => {
-      p.onDestroy(p);
+      // p.onDestroy(p);
       p.setText('');
       p.setStyleText(this.reservoirCSS);
       

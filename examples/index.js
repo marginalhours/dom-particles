@@ -193,12 +193,13 @@ examples['bubbles'] = () => {
       },
       onDestroy: (p) => {
           let k = 32;
-          let m = Math.random() * Math.PI / 4;
-          for(var i = 0; i < 4; i++){
+          let x = 6;
+          let m = Math.random() * Math.PI / x;
+          for(var i = 0; i < x; i++){
             let s = t.addParticle({
               ttl: 600,
               position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
-              velocity: { x: k * Math.sin(i * Math.PI / 2 + m), y: k * Math.cos(i * Math.PI / 2 + m) },
+              velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
               text: '-',
               onCreate: (p) => {
                 p.heading = Math.atan2(p.velocity.y, p.velocity.x);
@@ -268,7 +269,10 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         p.acceleration = { x: -2 * p.velocity.x, y: -2 * p.velocity.y }
       }
     }
-  }) 
+  }); 
+}
+
+examples['fireworks'] = () => {
   
 }
 
