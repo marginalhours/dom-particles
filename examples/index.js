@@ -279,24 +279,26 @@ examples['fireworks'] = () => {
 examples['chess'] = () => {
   t.addEmitter({
      position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: 16,
+    emitEvery: 200,
     particleOptions: {
-      ttl: 800,
+      ttl: 20000,
       style: { 
-        color: ['#eef', '#fff'], 
-        fontSize: '16px',
-        scale: [1, 2], 
+        color: '#000', 
+        fontSize: '32px', 
+        width: '32px',
+        height: '32px',
+        get scale() { return 10 * Math.random() }
       },
-      get text () { return ['♔','♕','♖','♗','♘','♙','♚','♛','♜', } ,
-      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get text () { return ['♔','♕','♖','♗','♘','♙','♚','♛','♜','♝','♞','♟'][Math.floor(12 * Math.random())] } ,
+      get position () { return { x: 128 * (Math.random() - 0.5) } },
       get velocity () {
-        let h = 500 + 300 * Math.random();
-        theta += 0.1 * Math.random();
+        let theta = 2 * Math.PI * Math.random();
+        let h = 100 + 10 * Math.random();
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },
-      onCreate: (p) => {
-        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-        p.acceleration = { x: -2 * p.velocity.x, y: -2 * p.velocity.y }
+
+      onUpdate: (p) => {
+        p.heading += 0.01;
       }
     }
   });
