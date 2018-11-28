@@ -22,6 +22,7 @@ let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 }
     
 let winder = document.querySelector('.main')
 let code = document.querySelector('.code')
+let goButton = document.querySelector('.button')
 
 let t = new letterbomb({ 
   max: 10000,
@@ -29,10 +30,16 @@ let t = new letterbomb({
 });
   
 
+const setButtonText = (text) => {
+ goButton.innerText = text; 
+}
+
 document.querySelector('.examples-select').addEventListener('change', (e) => {
   // clear out current examples
-  
-   t.reset();
+  t.reset();
+  goButton.onClick = null;
+  goButton.onMouseDown = null;
+  goButton.onMouseUp = null;
   
   examples[e.target.value]();
 });
@@ -281,7 +288,7 @@ examples['chess'] = () => {
      position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
     emitEvery: 200,
     particleOptions: {
-      ttl: 20000,
+      ttl: 1000,
       style: { 
         color: '#000', 
         fontSize: '32px', 
@@ -289,7 +296,7 @@ examples['chess'] = () => {
         height: '32px',
         get scale() { return 10 * Math.random() }
       },
-      get text () { return ['♔','♕','♖','♗','♘','♙','♚','♛','♜','♝','♞','♟'][Math.floor(12 * Math.random())] } ,
+      get text () { return ['⏣', '♔','♕','♖','♗','♘','♙','♚','♛','♜','♝','♞','♟'][Math.floor(12 * Math.random())] } ,
       get position () { return { x: 128 * (Math.random() - 0.5) } },
       get velocity () {
         let theta = 2 * Math.PI * Math.random();
