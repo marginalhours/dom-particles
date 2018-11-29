@@ -244,6 +244,8 @@ examples['bubbles'] = () => {
 
 examples['blossom'] = () => {
   winder.style.backgroundColor = '#fefeee';
+  
+  setButtonText('Hold to Blossom');
 
   goButton.addEventListener('mousedown', () => {
     let theta = 0;
@@ -283,17 +285,12 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   setButtonText('Hold to Lightspeed');
   
   let MOVING = false;
-  
-  goButton.addEventListener('mousedown', () => MOVING = true);
-  goButton.addEventListener('mouseup', () => MOVING = false);
-  
 
   let theta = 0;
-  t.addEmitter({
+  let emitter = t.addEmitter({
     position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
     emitEvery: 800,
     particleOptions: {
-      get ttl () { return MOVING ? 800 : 10000 },
       style: { 
         color: ['#eef', '#fff'], 
         fontSize: '16px',
@@ -322,13 +319,19 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
       onUpdate: (p) => {
         if (this.state != MOVING){
           if (this.state == false) {
-            this.ttl = 800;  
+            this.ttl = 800;
+          } else {
+            this.ttl = 10000;
+            this.velocity = 0;
           }
         }
         // p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
       }
     }
   }); 
+  
+  goButton.addEventListener('mousedown', () => { MOVING = true; emitter.emitEvery = 16; });
+  goButton.addEventListener('mouseup', () => { MOVING = false; emitter.emitEvery = 400; });
 }
 
 examples['fireworks'] = () => {
