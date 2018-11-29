@@ -364,3 +364,41 @@ examples['chess'] = () => {
     }
   });
 }
+
+examples['bees'] => {
+  winder.style.backgroundColor = '#fefeee';
+  
+  setButtonText('Hold to Swarm');
+
+  goButton.addEventListener('mousedown', () => {
+    let theta = 0;
+    t.addEmitter({
+      position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+      emitEvery: 3,
+      particleOptions: {
+        ttl: 800,
+        style: { 
+          backgroundColor: ['#f33', '#fefeee'], 
+          width: '16px',
+          height: '16px',
+          scale: [0, 20], 
+        },
+        text: '',
+        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+        get velocity () {
+          let h = 800 + 100 * Math.random();
+          // theta += 0.01 * Math.PI * Math.random();
+          theta = 2 * Math.random() * Math.PI;
+          return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+        },
+        onCreate: (p) => {
+          p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+        }
+      }
+    }); 
+  });
+  
+  goButton.addEventListener('mouseup', () => {
+    t.emitters = [];
+  });  
+}
