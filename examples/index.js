@@ -282,7 +282,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   winder.style.backgroundColor = '#01010f';
   setButtonText('Hold to Lightspeed');
   
-  const MOVING = false;
+  let MOVING = false;
   
   goButton.addEventListener('mousedown', () => MOVING = true);
   goButton.addEventListener('mouseup', () => MOVING = false);
@@ -291,7 +291,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   let theta = 0;
   t.addEmitter({
     position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: 8,
+    emitEvery: ,
     particleOptions: {
       get ttl () { return MOVING ? 800 : 10000 },
       style: { 
