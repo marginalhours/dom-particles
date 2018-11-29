@@ -365,7 +365,7 @@ examples['chess'] = () => {
   });
 }
 
-examples['bees'] => {
+examples['bees'] = () => {
   winder.style.backgroundColor = '#fefeee';
   
   setButtonText('Hold to Swarm');
@@ -377,22 +377,21 @@ examples['bees'] => {
       emitEvery: 3,
       particleOptions: {
         ttl: 800,
+        text: '🐝',
         style: { 
-          backgroundColor: ['#f33', '#fefeee'], 
           width: '16px',
           height: '16px',
-          scale: [0, 20], 
+          get scale () { return 1 + Math.random() }
         },
-        text: '',
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
         get velocity () {
-          let h = 800 + 100 * Math.random();
+          let h = 100 + 100 * Math.random();
           // theta += 0.01 * Math.PI * Math.random();
           theta = 2 * Math.random() * Math.PI;
           return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
         },
         onCreate: (p) => {
-          p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
+          p.heading = Math.atan2(p.velocity.y, p.velocity.x) + 5 * Math.PI / 6;
         }
       }
     }); 
