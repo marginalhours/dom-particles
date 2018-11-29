@@ -115,10 +115,10 @@ examples['trails'] = () => {
   
     goButton.addEventListener('mousedown', () => {
       t.addEmitter({
-        position: { x: winder.clientWidth / 2, y: winder.clientWidth / 2 },
+        position: { x: winder.clientWidth / 2, y: winder.clientWidth / 4 },
         emitEvery: 8,
         onUpdate: (emitter) => {   
-          emitter.position.y = c.y + (m * Math.sin(k++/n));
+          emitter.position.x = winder.clientWidth / 2 + (m * Math.sin(k++/n));
         },
         particleOptions: {
           ttl: 1000,
@@ -132,18 +132,17 @@ examples['trails'] = () => {
           text: '',
           get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
           get velocity () {
-            let h = -1 * (500 + (100 * Math.random()));
-            return { x: l, y: 0, z: 0 }
+            let h = (500 + (100 * Math.random()));
+            return { y: h }
           }
         }
       });
 
       t.addEmitter({
-        position: { x: winder.clientWidth / 2, y: winder.clientWidth / 2 },
+        position: { x: winder.clientWidth / 2, y: winder.clientWidth / 4 },
         emitEvery: 8,
         onUpdate: (emitter) => {   
-          emitter.position.y = c.y + (m * Math.sin(Math.PI + k/n));
-          emitter.position.z = 100 * Math.sin(Math.PI + k / n);
+          emitter.position.x = winder.clientWidth / 2 + (m * Math.sin(Math.PI + k/n));
         },
         particleOptions: {
           ttl: 1000,
@@ -157,8 +156,8 @@ examples['trails'] = () => {
           text: '',
           get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
           get velocity () {
-            let h = -1 * (500 + (100 * Math.random()));
-            return { x: l, y: 0 }
+            let h = (500 + (100 * Math.random()));
+            return { y: h }
           }
         }
       });
@@ -209,7 +208,7 @@ examples['bubbles'] = () => {
         get velocity () { return { y: -10 } },
         get acceleration () { return { x: 0, y: -100 } },
         style: { 
-          get scale () { return Math.random() },
+          get scale () { return 0.25 + Math.random() },
           opacity: [0.5, 1, 1, 1, 0.9],
           border: '2px solid rgba(192, 192, 200, 1.0)',
           width: '32px',
