@@ -110,7 +110,7 @@ examples['trails'] = () => {
   
     let k = 0;
     let l = -400;
-    let m = 120;
+    let m = 200;
     let n = 16;
   
     goButton.addEventListener('mousedown', () => {
