@@ -63,19 +63,18 @@ examples['number-goes-up'] = () => {
 
 examples['metroidvania'] = () => {
   setButtonText('Press to attack');
-  
-  winder.style.background = '#fff';
+  winder.style.backgroundColor = '#113';
     
   code.innerText = `
     document.querySelector('button').addEventListener('click', (e) => {
         t.addParticle({
           position: { x: e.layerX, y: e.layerY },
           get text () { return Math.floor(200 * Math.random()) }, 
-          ttl: 1000,
-          velocity: { x: 0, y: -10 },
+          ttl: 500,
+          velocity: { x: 0, y: -20 },
           acceleration: { x: 0, y: -100 },
           style: { 
-            scale: [2, 1, 1],
+            scale: [2, 1, 1, 1, 1, 1, 1],
             fontWeight: 'bold',
             fontFamily: 'monospace',
             textShadow: '1px 1px 0px #f00',
@@ -87,14 +86,15 @@ examples['metroidvania'] = () => {
 
   goButton.addEventListener('click', (e) => {
     t.addParticle({
-      position: { x: e.layerX, y: e.layerY },
+      position: { x: e.layerX, y: goButton.getBoundingClientRect().y - 60 },
       get text () { return Math.floor(200 * Math.random()) }, 
-      ttl: 1000,
-      velocity: { x: 0, y: -10 },
+      ttl: 800,
+      velocity: { x: 0, y: -25 },
       acceleration: { x: 0, y: -100 },
       style: { 
-        scale: [2, 1, 1],
+        scale: [2.5, 1, 1, 1, 1, 1, 1],
         fontWeight: 'bold',
+        fontSize: '18px',
         fontFamily: 'monospace',
         textShadow: '1px 1px 0px #f00',
         color: '#fff'
@@ -291,7 +291,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   let theta = 0;
   t.addEmitter({
     position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
-    emitEvery: ,
+    emitEvery: 800,
     particleOptions: {
       get ttl () { return MOVING ? 800 : 10000 },
       style: { 
@@ -315,10 +315,16 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },
       onCreate: (p) => {
+        this.state = MOVING;
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
         
       },
       onUpdate: (p) => {
+        if (this.state != MOVING){
+          if (this.state == false) {
+            this.ttl = 800;  
+          }
+        }
         // p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
       }
     }
