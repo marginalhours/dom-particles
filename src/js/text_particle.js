@@ -24,12 +24,12 @@ const zeroVector = { x: 0, y: 0 }
 export const DEFAULT_PARTICLE_OPTIONS = {
   ttl: 1000,
   text: '.',
-  grid: false,
   style: { display: 'inline-block' },
   onCreate: () => {},
   onUpdate: () => {},
   onDestroy: () => {},
-  heading: false
+  heading: false,
+  grid: false,
 }
 
 
