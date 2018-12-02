@@ -35,7 +35,7 @@ html, body {
 
 .body-wrapper {
   display: grid;
-  grid-template-columns: 480px 1fr;
+  grid-template-columns: 640px 1fr;
   height: 100%;
 }
 
@@ -72,8 +72,19 @@ html, body {
   background-color: #888;  
 }
 
-
 .code {
   overflow-y: scroll;
   font-size: 11px;
+  white-space: pre-wrap;
+  padding: 0px 50px;
+}
+
+@media only screen and (max-width: 500px) {
+  .body-wrapper {
+    grid-template-columns: 1fr;  
+  }
+  
+  .code {
+    display: none;  
+  }
 }
