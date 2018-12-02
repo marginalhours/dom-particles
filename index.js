@@ -20,28 +20,37 @@ const HEAT_COLOURS = [
 
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
     
-let winder = document.querySelector('.main')
+let mainWindow = document.querySelector('.main')
 let code = document.querySelector('.code')
 let goButton = document.querySelector('.main-button');
 
 let t = new letterbomb({ 
   max: 10000,
-  container: winder
+  container: mainWindow
 });
   
+const setBackgroundColor = (color) => {
+  mainWindow.style.backgroundColor = color;  
+}
 
 const setButtonText = (text) => {
- goButton.innerText = text; 
+  goButton.innerText = text; 
+}
+
+const setCode = (text) => {
+  code.innerText = text; 
 }
 
 document.querySelector('.examples-select').addEventListener('change', (e) => {
   // clear out current examples
   t.reset();
   
+  // replace event handlers
   let newButton = goButton.cloneNode(true);
   goButton.parentNode.replaceChild(newButton, goButton);
   goButton = document.querySelector('.main-button');
   
+  // pick example
   examples[e.target.value]();
 });
 
@@ -50,6 +59,17 @@ const examples = {};
 
 examples['number-goes-up'] = () => {
   setButtonText('Press to go up');
+  
+  setCode(`
+    goButton.addEventListener('click', (e) => {   
+      t.addParticle({
+        position: { x: e.layerX, y: e.layerY },
+        text: '+1', 
+        velocity: { x: 0, y: -10 },
+        acceleration: { x: 0, y: -100 },
+      })
+    });
+  `);
   
   goButton.addEventListener('click', (e) => {   
     t.addParticle({
@@ -63,7 +83,7 @@ examples['number-goes-up'] = () => {
 
 examples['metroidvania'] = () => {
   setButtonText('Press to attack');
-  winder.style.backgroundColor = '#113';
+  setBackgroundColor('#113');
     
   code.innerText = `
     document.querySelector('button').addEventListener('click', (e) => {
@@ -339,7 +359,7 @@ examples['fireworks'] = () => {
 
 examples['chess'] = () => {
   t.addEmitter({
-     position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+     position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
     emitEvery: 200,
     particleOptions: {
       ttl: 1000,
@@ -366,14 +386,14 @@ examples['chess'] = () => {
 }
 
 examples['bees'] = () => {
-  winder.style.backgroundColor = '#fefeee';
+  mainWindow.style.backgroundColor = '#fefeee';
   
   setButtonText('Hold to Swarm');
 
   goButton.addEventListener('mousedown', () => {
     let theta = 0;
     t.addEmitter({
-      position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+      position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
       emitEvery: 3,
       particleOptions: {
         ttl: 800,
