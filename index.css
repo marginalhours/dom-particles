@@ -35,7 +35,7 @@ html, body {
 
 .body-wrapper {
   display: grid;
-  grid-template-columns: 640px 1fr;
+  grid-template-columns: 1fr 480px;
   height: 100%;
 }
 
@@ -62,6 +62,7 @@ html, body {
   color: #fff;
   font-size: 24px;
   font-weight: bold;
+  user-select: none;
 }
 
 .main-button:hover {
@@ -76,7 +77,7 @@ html, body {
   overflow-y: scroll;
   font-size: 11px;
   white-space: pre-wrap;
-  padding: 0px 50px;
+  padding: 0px 20px;
 }
 
 @media only screen and (max-width: 500px) {

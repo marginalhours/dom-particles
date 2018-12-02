@@ -60,15 +60,13 @@ const examples = {};
 examples['number-goes-up'] = () => {
   setButtonText('Press to go up');
   
-  setCode(`
-    goButton.addEventListener('click', (e) => {   
-      t.addParticle({
-        position: { x: e.layerX, y: e.layerY },
-        text: '+1', 
-        velocity: { x: 0, y: -10 },
-        acceleration: { x: 0, y: -100 },
-      })
-    });
+  setCode(`  
+    t.addParticle({
+      position: { x: e.layerX, y: e.layerY },
+      text: '+1', 
+      velocity: { x: 0, y: -10 },
+      acceleration: { x: 0, y: -100 },
+    })
   `);
   
   goButton.addEventListener('click', (e) => {   
@@ -86,7 +84,7 @@ examples['metroidvania'] = () => {
   setBackgroundColor('#113');
     
   setCode(`
-    document.querySelector('button').addEventListener('click', (e) => {
+    goButton.addEventListener('click', (e) => {
         t.addParticle({
           position: { x: e.layerX, y: e.layerY },
           get text () { return Math.floor(200 * Math.random()) }, 
@@ -274,7 +272,7 @@ examples['bubbles'] = () => {
     });
   `);
   
-  goButton.addEventListener('mousedown', () => {
+  let f = () => {
     t.addEmitter({
         position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
         emitEvery: 200,
@@ -312,11 +310,16 @@ examples['bubbles'] = () => {
           }
         }
       });
-    });
+  }
   
-  goButton.addEventListener('mouseup', () => {
-    t.emitters = [];
-  });
+  let g = () => {
+    t.emitters = [];  
+  }
+  
+  goButton.addEventListener('mousedown', f);
+  goButton.addEventListener('touchstart', f);
+  goButton.addEventListener('mouseup', g);
+  goButton.addEventListener('touchend', g);
 }
 
 examples['blossom'] = () => {
