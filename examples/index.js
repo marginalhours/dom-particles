@@ -85,7 +85,7 @@ examples['metroidvania'] = () => {
   setButtonText('Press to attack');
   setBackgroundColor('#113');
     
-  code.innerText = `
+  setCode(`
     document.querySelector('button').addEventListener('click', (e) => {
         t.addParticle({
           position: { x: e.layerX, y: e.layerY },
@@ -102,7 +102,7 @@ examples['metroidvania'] = () => {
           }
         });
       });
-  `;
+  `);
 
   goButton.addEventListener('click', (e) => {
     t.addParticle({
@@ -125,8 +125,7 @@ examples['metroidvania'] = () => {
 
 examples['trails'] = () => {  
     setButtonText('Hold to trail');
-  
-    winder.style.background = '#fff';
+    setBackgroundColor('#fff');
   
     let k = 0;
     let l = -400;
@@ -135,7 +134,7 @@ examples['trails'] = () => {
   
     goButton.addEventListener('mousedown', () => {
       t.addEmitter({
-        position: { x: winder.clientWidth / 2, y: winder.clientWidth / 4 },
+        position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientWidth / 4 },
         emitEvery: 8,
         onUpdate: (emitter) => {   
           emitter.position.x = winder.clientWidth / 2 + (m * Math.sin(k++/n));
@@ -159,10 +158,10 @@ examples['trails'] = () => {
       });
 
       t.addEmitter({
-        position: { x: winder.clientWidth / 2, y: winder.clientWidth / 4 },
+        position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientWidth / 4 },
         emitEvery: 8,
         onUpdate: (emitter) => {   
-          emitter.position.x = winder.clientWidth / 2 + (m * Math.sin(Math.PI + k/n));
+          emitter.position.x = mainWindow.clientWidth / 2 + (m * Math.sin(Math.PI + k/n));
         },
         particleOptions: {
           ttl: 1000,
@@ -189,9 +188,9 @@ examples['trails'] = () => {
 }
 
 examples['flame'] = () => {
-  
-  winder.style.backgroundColor = '#000';
   setButtonText('Hold to Burn');
+  setBackgroundColor('#000');
+  
   
   goButton.addEventListener('mousedown', () => {
     t.addEmitter({
