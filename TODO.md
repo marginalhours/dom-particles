@@ -7,3 +7,5 @@
 - currently out of scope:
   - full 3d (with z-coord)
   - probably the timing thing (see above) - the broader point is if there's no time-control etc, then the autostart argument is pretty redundant
+  
+  https://codepen.io/MacSlow/pen/NbpMoE -- firework example of some kind
