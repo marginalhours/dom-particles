@@ -83,7 +83,7 @@ export default class TextParticleManager {
     if (this.raf) { cancelAnimationFrame(this.raf) }
     this.particles.map(p => {
       // p.onDestroy(p);
-      p.setText('');
+      p.setContents('');
       p.setStyleText(this.reservoirCSS);
       
       this.push(p.element);
@@ -109,7 +109,7 @@ export default class TextParticleManager {
     particlesToDestroy.map(p => {
       // reset styles and return to pool
       p.onDestroy(p);
-      p.setText('');
+      p.setContents('');
       p.setStyleText(this.reservoirCSS);
 
       this.push(p.element);

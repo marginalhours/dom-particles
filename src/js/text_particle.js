@@ -23,7 +23,7 @@ const zeroVector = { x: 0, y: 0 }
 
 export const DEFAULT_PARTICLE_OPTIONS = {
   ttl: 1000,
-  text: '.',
+  contents: '.',
   style: { display: 'inline-block' },
   onCreate: () => {},
   onUpdate: () => {},
@@ -49,7 +49,7 @@ export default class TextParticle {
     this.getTransform = this.grid ? this.getGridTransform : this.getTransform;
 
     // Populate initial text content
-    this.setText(this.text);
+    this.setContents(this.contents);
  
     // Fetch initial style snapshot, call user onCreate(), assign styles
     this.buildProps(this.style);
@@ -91,8 +91,8 @@ export default class TextParticle {
     this.fixedProps = fixedProps;
   }
   
-  setText (text) {
-    this.element.innerText = text;
+  setContents (text) {
+    this.element.innerHTML = text;
   }
   
   setStyleText (text) {

@@ -30,7 +30,7 @@ Particle Options
 
 | Name      | Default                   | Remarks                             |
 | ----      | -------                   | ----------------------------------- |
-| `text`      | `'.'`                     | Text content of the particle element |
+| `contents`      | `'.'`                     | innerHTML of the particle element |
 | `ttl`       | `1000`                    | Lifespan of particle in milliseconds |
 | `onCreate`  | N/A                       | Callback function on particle creation - called with the particle object as its first argument | 
 | `onUpdate`  | N/A                       | Callback function on particle update - called with the particle object as its first argument |

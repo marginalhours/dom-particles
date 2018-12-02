@@ -63,7 +63,7 @@ examples['number-goes-up'] = () => {
   setCode(`  
     t.addParticle({
       position: { x: e.layerX, y: e.layerY },
-      text: '+1', 
+      contents: '+1', 
       velocity: { x: 0, y: -10 },
       acceleration: { x: 0, y: -100 },
     })
@@ -72,7 +72,7 @@ examples['number-goes-up'] = () => {
   goButton.addEventListener('click', (e) => {   
     t.addParticle({
       position: { x: e.layerX, y: e.layerY },
-      text: '+1', 
+      contents: '+1', 
       velocity: { x: 0, y: -10 },
       acceleration: { x: 0, y: -100 },
     })
@@ -87,7 +87,7 @@ examples['metroidvania'] = () => {
     goButton.addEventListener('click', (e) => {
         t.addParticle({
           position: { x: e.layerX, y: e.layerY },
-          get text () { return Math.floor(200 * Math.random()) }, 
+          get contents () { return Math.floor(200 * Math.random()) }, 
           ttl: 500,
           velocity: { x: 0, y: -20 },
           acceleration: { x: 0, y: -100 },
@@ -105,7 +105,7 @@ examples['metroidvania'] = () => {
   goButton.addEventListener('click', (e) => {
     t.addParticle({
       position: { x: e.layerX, y: goButton.getBoundingClientRect().y - 60 },
-      get text () { return Math.floor(200 * Math.random()) }, 
+      get contents () { return Math.floor(200 * Math.random()) }, 
       ttl: 800,
       velocity: { x: 0, y: -25 },
       acceleration: { x: 0, y: -100 },
@@ -146,7 +146,7 @@ examples['trails'] = () => {
             scale: [2, 0.1], 
             zIndex: 100
           },
-          text: '',
+          contents: '',
           get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
           get velocity () {
             let h = (500 + (100 * Math.random()));
@@ -170,7 +170,7 @@ examples['trails'] = () => {
             scale: [2, 0.1], 
             zIndex: 50
           },
-          text: '',
+          contents: '',
           get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
           get velocity () {
             let h = (500 + (100 * Math.random()));
@@ -195,7 +195,7 @@ examples['flame'] = () => {
         position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60 },
         emitEvery: 8,
         particleOptions: {
-          text: '',
+          contents: '',
           ttl: 1500,
           get position () { return { x: 64 * (Math.random() - 0.5), y: 15 * (Math.random() - 0.5) } },
           velocity: { x: 0, y: -66 },
@@ -214,7 +214,7 @@ examples['flame'] = () => {
       position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60 },
       emitEvery: 8,
       particleOptions: {
-        text: '',
+        contents: '',
         ttl: 1500,
         get position () { return { x: 64 * (Math.random() - 0.5), y: 15 * (Math.random() - 0.5) } },
         velocity: { x: 0, y: -66 },
@@ -237,7 +237,7 @@ examples['bubbles'] = () => {
       position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
       emitEvery: 200,
       particleOptions: {
-        text: '', 
+        contents: '', 
         get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
         get ttl () { return 1500 + (250 * Math.random()) },
         get velocity () { return { y: -10 } },
@@ -260,7 +260,7 @@ examples['bubbles'] = () => {
                 ttl: 600,
                 position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
                 velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
-                text: '-',
+                contents: '-',
                 onCreate: (p) => {
                   p.heading = Math.atan2(p.velocity.y, p.velocity.x);
                 },
@@ -277,7 +277,7 @@ examples['bubbles'] = () => {
         position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
         emitEvery: 200,
         particleOptions: {
-          text: '', 
+          contents: '', 
           get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
           get ttl () { return 1500 + (250 * Math.random()) },
           get velocity () { return { y: -10 } },
@@ -300,7 +300,7 @@ examples['bubbles'] = () => {
                   ttl: 600,
                   position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
                   velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
-                  text: '-',
+                  contents: '-',
                   onCreate: (p) => {
                     p.heading = Math.atan2(p.velocity.y, p.velocity.x);
                   },
@@ -340,7 +340,7 @@ examples['blossom'] = () => {
           height: '16px',
           scale: [0, 20], 
         },
-        text: '',
+        contents: '',
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
         get velocity () {
           let h = 800 + 100 * Math.random();
@@ -377,7 +377,6 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         scale: [1, 2], 
         get opacity () { return MOVING ? 1 : [1, 1, 0] }
       },
-      text: '.',
       get position () { 
         if (MOVING) { 
           return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
@@ -431,7 +430,7 @@ examples['chess'] = () => {
         height: '32px',
         get scale() { return 10 * Math.random() }
       },
-      get text () { return ['⏣', '♔','♕','♖','♗','♘','♙','♚','♛','♜','♝','♞','♟'][Math.floor(12 * Math.random())] } ,
+      get contents () { return ['⏣', '♔','♕','♖','♗','♘','♙','♚','♛','♜','♝','♞','♟'][Math.floor(12 * Math.random())] } ,
       get position () { return { x: 128 * (Math.random() - 0.5) } },
       get velocity () {
         let theta = 2 * Math.PI * Math.random();
@@ -458,11 +457,11 @@ examples['bees'] = () => {
       emitEvery: 3,
       particleOptions: {
         ttl: 800,
-        text: '🐝',
-        style: { 
+        contents: `<img src='https://www.gstatic.com/webp/gallery3/1.sm.png'>`, //🐝'
+        style: {
           width: '16px',
           height: '16px',
-          get scale () { return 1 + Math.random() }
+          get scale () { return 1; }
         },
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
         get velocity () {
@@ -472,6 +471,8 @@ examples['bees'] = () => {
           return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
         },
         onCreate: (p) => {
+          p.element.querySelector('img').style.width = '64px';
+          p.element.querySelector('img').style.height = '64px';
           p.heading = Math.atan2(p.velocity.y, p.velocity.x) + 5 * Math.PI / 6;
         }
       }
