@@ -135,7 +135,7 @@ examples['trails'] = () => {
         position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientWidth / 4 },
         emitEvery: 8,
         onUpdate: (emitter) => {   
-          emitter.position.x = winder.clientWidth / 2 + (m * Math.sin(k++/n));
+          emitter.position.x = mainWindow.clientWidth / 2 + (m * Math.sin(k++/n));
         },
         particleOptions: {
           ttl: 1000,
@@ -192,7 +192,7 @@ examples['flame'] = () => {
   setCode(`
     goButton.addEventListener('mousedown', () => {
       t.addEmitter({
-        position: { x: winder.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60 },
+        position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60 },
         emitEvery: 8,
         particleOptions: {
           text: '',
@@ -323,14 +323,14 @@ examples['bubbles'] = () => {
 }
 
 examples['blossom'] = () => {
-  winder.style.backgroundColor = '#fefeee';
+  mainWindow.style.backgroundColor = '#fefeee';
   
   setButtonText('Hold to Blossom');
 
   goButton.addEventListener('mousedown', () => {
     let theta = 0;
     t.addEmitter({
-      position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+      position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
       emitEvery: 3,
       particleOptions: {
         ttl: 800,
@@ -361,14 +361,14 @@ examples['blossom'] = () => {
 }
 
 examples['you-know-i-had-to-do-it-to-em'] = () => {
-  winder.style.backgroundColor = '#01010f';
+  setBackgroundColor('#01010f');
   setButtonText('Hold to Lightspeed');
   
   let MOVING = false;
 
   let theta = 0;
   let emitter = t.addEmitter({
-    position: { x: winder.clientWidth / 2, y: winder.clientHeight / 2 },
+    position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
     emitEvery: 800,
     particleOptions: {
       style: { 
@@ -382,7 +382,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         if (MOVING) { 
           return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
         } else {
-          return { x: winder.clientWidth * (Math.random() - 0.5), y: winder.clientHeight * (Math.random() - 0.5) }
+          return { x: mainWindow.clientWidth * (Math.random() - 0.5), y: mainWindow.clientHeight * (Math.random() - 0.5) }
         }
       },
       get velocity () {
