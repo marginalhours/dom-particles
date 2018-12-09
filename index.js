@@ -104,6 +104,7 @@ examples['metroidvania'] = () => {
 
   goButton.addEventListener('click', (e) => {
     t.addParticle({
+      trail: 3,
       position: { x: e.layerX, y: goButton.getBoundingClientRect().y - 60 },
       get contents () { return Math.floor(200 * Math.random()) }, 
       ttl: 800,
@@ -422,7 +423,6 @@ examples['fireworks'] = () => {
         position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight },
         emitEvery: 100,
         particleOptions: {
-          trail: 4,
           contents: '', 
           get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
           get ttl () { return 1500 + (250 * Math.random()) },
@@ -437,14 +437,14 @@ examples['fireworks'] = () => {
             opacity: [1, 1, 0],
             width: '5px',
             height: '5px',            
-            borderRadius: '5px'
+            borderRadius: '5px',
+            // boxShadow: '1px 1px #888888'
           },
           onDestroy: (p) => {
               let k = 100;
               let x = 24;
               for(var i = 0; i < x; i++){
                 t.addParticle({
-                  trail: 1,
                   ttl: 1200,
                   position: { x: p.position.x, y: p.position.y },
                   velocity: { x: k * Math.sin(2 * i * Math.PI / x), y: k * Math.cos(2 * i * Math.PI / x) },
