@@ -10,6 +10,7 @@ export const DEFAULT_PARTICLE_OPTIONS = {
   onUpdate: () => {},
   onDestroy: () => {},
   trail: 0,
+  trailGap: 4,
   heading: false,
   grid: false,
 }
@@ -130,7 +131,9 @@ export default class TextParticle {
       for(let i = 1; i < this.trailElements.length; i++){
         Object.assign(this.trailElements[i].style, this.trailElements[i - 1].style);
       }
-      Object.assign(this.trailElements[0].style, this.element.style);
+      if (this.frameNumber % this.trailGap === 0){
+        Object.assign(this.trailElements[0].style, this.element.style);
+      }
     }
     
     // Get current props, call user onUpdate(), assign them

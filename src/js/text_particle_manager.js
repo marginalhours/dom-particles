@@ -34,6 +34,8 @@ export default class TextParticleManager {
   
   addParticle (options) {
     if (this.particles.length < this.max) {
+      let particleElement = this.pop();
+      
       let trailElements = [];
       
       if (options.trail) {
@@ -42,7 +44,7 @@ export default class TextParticleManager {
         }
       }
       
-      let p = new TextParticle({...options, element: this.pop(), trailElements: trailElements });
+      let p = new TextParticle({...options, element: particleElement, trailElements: trailElements });
       
       this.particles.push(p);
 
