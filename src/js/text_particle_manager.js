@@ -148,7 +148,7 @@ export default class TextParticleManager {
   create () {
     let element = document.createElement(this.tagName);
     element.style.cssText = this.reservoirCSS;
-    this.foldElement.prepend(element);    
+    this.foldElement.appendChild(element);    
     return element;
   }
   
