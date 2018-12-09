@@ -419,36 +419,39 @@ examples['fireworks'] = () => {
   
   let f = () => {
     t.addEmitter({
-        position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
-        emitEvery: 200,
+        position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight },
+        emitEvery: 100,
         particleOptions: {
           contents: '', 
           get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
           get ttl () { return 1500 + (250 * Math.random()) },
-          get velocity () { return { y: -10 } },
-          get acceleration () { return { x: 0, y: 100 } },
+          get velocity () { 
+            let theta = (3/2) * Math.PI + (Math.PI / 6) * (Math.random() - 0.5);
+            let k = 500;
+            return { x: k * Math.cos(theta),  y: k * Math.sin(theta) } 
+          },
+          get acceleration () { return { x: 0, y: 200 } },
           style: { 
-            get scale () { return 0.25 + Math.random() },
-            get backgroundColor () { return ['rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)'][Math.floor(3 * Math.random())] },
-            width: '32px',
-            height: '32px',
-            borderRadius: '16px'
+            get backgroundColor () { return ['rgb(255, 0, 0)', 'rgb(255, 255, 255)', 'rgb(0, 0, 255)'][Math.floor(3 * Math.random())] },
+            opacity: [1, 1, 0],
+            width: '5px',
+            height: '5px',
+            borderRadius: '5px'
           },
           onDestroy: (p) => {
-              let k = 32;
-              let x = 6;
-              let m = Math.random() * Math.PI / x;
+              let k = 100;
+              let x = 24;
               for(var i = 0; i < x; i++){
                 /* radial fragments */
                 let s = t.addParticle({
-                  ttl: 600,
-                  position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
-                  velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
-                  contents: '-',
+                  ttl: 1200,
+                  position: { x: p.position.x, y: p.position.y },
+                  velocity: { x: k * Math.sin(2 * i * Math.PI / x), y: k * Math.cos(2 * i * Math.PI / x) },
+                  get acceleration () { return { x: 0, y: 150 } },
                   onCreate: (p) => {
                     p.heading = Math.atan2(p.velocity.y, p.velocity.x);
                   },
-                  style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
+                  style: { ...p.style, scale: 0.5, opacity: [1, 0] },
                 });
               }
           }
