@@ -9,6 +9,7 @@ export const DEFAULT_PARTICLE_OPTIONS = {
   onCreate: () => {},
   onUpdate: () => {},
   onDestroy: () => {},
+  trail: 0,
   heading: false,
   grid: false,
 }

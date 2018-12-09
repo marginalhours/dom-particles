@@ -413,8 +413,8 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   goButton.addEventListener('mouseup', () => { MOVING = false; emitter.emitEvery = 400; });
 }
 
-examples['fireworks'] = () => {
-  setBackgroundColor('#01010f');
+examples['fireworks'] = () => {  
+  setBackgroundColor('#112');  
   setButtonText('Hold to 4th of July');
   
   let f = () => {
@@ -427,23 +427,22 @@ examples['fireworks'] = () => {
           get ttl () { return 1500 + (250 * Math.random()) },
           get velocity () { 
             let theta = (3/2) * Math.PI + (Math.PI / 6) * (Math.random() - 0.5);
-            let k = 500;
+            let k = 800;
             return { x: k * Math.cos(theta),  y: k * Math.sin(theta) } 
           },
-          get acceleration () { return { x: 0, y: 200 } },
+          get acceleration () { return { y: 600 } },
           style: { 
             get backgroundColor () { return ['rgb(255, 0, 0)', 'rgb(255, 255, 255)', 'rgb(0, 0, 255)'][Math.floor(3 * Math.random())] },
             opacity: [1, 1, 0],
             width: '5px',
             height: '5px',
-            borderRadius: '5px'
+            // borderRadius: '5px'
           },
           onDestroy: (p) => {
               let k = 100;
               let x = 24;
               for(var i = 0; i < x; i++){
-                /* radial fragments */
-                let s = t.addParticle({
+                t.addParticle({
                   ttl: 1200,
                   position: { x: p.position.x, y: p.position.y },
                   velocity: { x: k * Math.sin(2 * i * Math.PI / x), y: k * Math.cos(2 * i * Math.PI / x) },
