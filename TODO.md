@@ -9,3 +9,5 @@
   - probably the timing thing (see above) - the broader point is if there's no time-control etc, then the autostart argument is pretty redundant
   
   https://codepen.io/MacSlow/pen/NbpMoE -- firework example of some kind
+  
+  Particles: .from(selector, splitPattern/) would be a cool way to extend it. Think hard about APIs (there is that codepen one, I guess):
