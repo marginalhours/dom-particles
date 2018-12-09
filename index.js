@@ -414,7 +414,54 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
 }
 
 examples['fireworks'] = () => {
+  setBackgroundColor('#01010f');
+  setButtonText('Hold to 4th of July');
   
+  let f = () => {
+    t.addEmitter({
+        position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
+        emitEvery: 200,
+        particleOptions: {
+          contents: '', 
+          get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
+          get ttl () { return 1500 + (250 * Math.random()) },
+          get velocity () { return { y: -10 } },
+          get acceleration () { return { x: 0, y: 100 } },
+          style: { 
+            get scale () { return 0.25 + Math.random() },
+            get backgroundColor () { return ['rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)'][Math.floor(3 * Math.random())] },
+            width: '32px',
+            height: '32px',
+            borderRadius: '16px'
+          },
+          onDestroy: (p) => {
+              let k = 32;
+              let x = 6;
+              let m = Math.random() * Math.PI / x;
+              for(var i = 0; i < x; i++){
+                /* radial fragments */
+                let s = t.addParticle({
+                  ttl: 600,
+                  position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
+                  velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
+                  contents: '-',
+                  onCreate: (p) => {
+                    p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+                  },
+                  style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
+                });
+              }
+          }
+        }
+      });
+  }
+  
+  let g = () => {
+    t.emitters = [];  
+  }
+  
+  goButton.addEventListener('mousedown', f);
+  goButton.addEventListener('mouseup', g);
 }
 
 examples['chess'] = () => {
