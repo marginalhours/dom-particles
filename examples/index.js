@@ -104,6 +104,7 @@ examples['metroidvania'] = () => {
 
   goButton.addEventListener('click', (e) => {
     t.addParticle({
+      trail: 4,
       position: { x: e.layerX, y: goButton.getBoundingClientRect().y - 60 },
       get contents () { return Math.floor(200 * Math.random()) }, 
       ttl: 800,

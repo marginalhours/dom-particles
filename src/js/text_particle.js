@@ -123,6 +123,14 @@ export default class TextParticle {
     this.position.x += this.velocity.x * f;
     this.position.y += this.velocity.y * f;
     
+    // If trail, propagate styles down trail
+    if (this.trailElements) {
+      for(let i = 1; i < this.trailElements.length; i++){
+        Object.assign(this.trailElements[i].style, this.trailElements[i - 1].style);
+      }
+      Object.assign(this.trailElements[0].style, this.element.style);
+    }
+    
     // Get current props, call user onUpdate(), assign them
     this.nextProps = this.getSnapshot();
     this.onUpdate(this);

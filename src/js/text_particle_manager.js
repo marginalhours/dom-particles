@@ -34,7 +34,16 @@ export default class TextParticleManager {
   
   addParticle (options) {
     if (this.particles.length < this.max) {
-      let p = new TextParticle({...options, element: this.pop()});
+      let trailElements = [];
+      
+      if (options.trail) {
+        for(let i = 0; i < options.trail; i++){
+          trailElements.push(this.pop());  
+        }
+      }
+      
+      let p = new TextParticle({...options, element: this.pop(), trailElements: trailElements });
+      
       this.particles.push(p);
 
       if (!this.raf && this.autostart) {
