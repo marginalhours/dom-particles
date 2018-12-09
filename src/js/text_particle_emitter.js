@@ -1,18 +1,3 @@
-/*
-*  Particle emitter. 
-*  Configuration:
-*    emitEvery: Milliseconds. How often to emit a particle.
-*    position, velocity, acceleration: Vector-like objects. During update, velocity += acceleration, position += velocity.
-*    rotation: Which direction this emitter is facing (IN DEGREES)
-*    maxEmissions: Max number of particles to emit. Once reached, emitter stops.
-*    ttl: Max number of milliseconds to emit particles for.
-*    MAX_EMIT_PER_STEP: Maximum number of particles to emit per timestep. Limitation to stop all particles syncing up on browser tab switch. Not recommended to change.
-*    particleOptions: See particle class. Options used to instantiate particles from this emitter.
-*      If these options are getters, not literal, they will be recalculated per-particle (useful for randomization etc)
-*      The initial position vector of a particle from an emitter is expressed _relative to the emitter_.
-*      The initial velocity vector of a particle from an emitter is expressed _relative to the emitter's angle_.
-*/
-
 import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
 import { propValueToFunction } from './utilities';
 
