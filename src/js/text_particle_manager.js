@@ -91,7 +91,6 @@ export default class TextParticleManager {
   reset () {
     if (this.raf) { cancelAnimationFrame(this.raf) }
     this.particles.map(p => {
-      // p.onDestroy(p);
       p.setContents('');
       p.setStyleText(this.reservoirCSS);
       
@@ -121,6 +120,11 @@ export default class TextParticleManager {
       p.setContents('');
       p.setStyleText(this.reservoirCSS);
 
+      p.trailElements.map(t => {
+        t.style.cssText = this.reservoirCSS;
+        this.push(t);  
+      });
+      
       this.push(p.element);
     });
     

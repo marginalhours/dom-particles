@@ -32,7 +32,9 @@ export default class TextParticle {
 
     // Populate initial text content
     this.setContents(this.contents);
- 
+   
+    this.trailElements.map(t => t.innerHTML = this.contents);
+    
     // Fetch initial style snapshot, call user onCreate(), assign styles
     this.buildProps(this.style);
     this.nextProps = this.getSnapshot();
@@ -124,7 +126,7 @@ export default class TextParticle {
     this.position.y += this.velocity.y * f;
     
     // If trail, propagate styles down trail
-    if (this.trailElements) {
+    if (this.trailElements.length > 0) {
       for(let i = 1; i < this.trailElements.length; i++){
         Object.assign(this.trailElements[i].style, this.trailElements[i - 1].style);
       }
