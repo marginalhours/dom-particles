@@ -34,17 +34,8 @@ export default class TextParticleManager {
   
   addParticle (options) {
     if (this.particles.length < this.max) {
-      let particleElement = this.pop();
       
-      let trailElements = [];
-      
-      if (options.trail) {
-        for(let i = 0; i < options.trail; i++){
-          trailElements.push(this.pop());  
-        }
-      }
-      
-      let p = new TextParticle({...options, element: particleElement, trailElements: trailElements });
+      let p = new TextParticle({...options, element: this.pop()});
       
       this.particles.push(p);
 
@@ -121,11 +112,6 @@ export default class TextParticleManager {
       p.onDestroy(p);
       p.setContents('');
       p.setStyleText(this.reservoirCSS);
-
-      p.trailElements.map(t => {
-        t.style.cssText = this.reservoirCSS;
-        this.push(t);  
-      });
       
       this.push(p.element);
     });
@@ -162,7 +148,7 @@ export default class TextParticleManager {
   create () {
     let element = document.createElement(this.tagName);
     element.style.cssText = this.reservoirCSS;
-    this.foldElement.appendChild(element);    
+    this.foldElement.prepend(element);    
     return element;
   }
   

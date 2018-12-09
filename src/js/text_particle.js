@@ -9,8 +9,6 @@ export const DEFAULT_PARTICLE_OPTIONS = {
   onCreate: () => {},
   onUpdate: () => {},
   onDestroy: () => {},
-  trail: 0,
-  trailGap: 4,
   heading: false,
   grid: false,
 }
@@ -33,8 +31,6 @@ export default class TextParticle {
 
     // Populate initial text content
     this.setContents(this.contents);
-   
-    this.trailElements.map(t => t.innerHTML = this.contents);
     
     // Fetch initial style snapshot, call user onCreate(), assign styles
     this.buildProps(this.style);
@@ -125,16 +121,6 @@ export default class TextParticle {
     this.velocity.y += this.acceleration.y * f;
     this.position.x += this.velocity.x * f;
     this.position.y += this.velocity.y * f;
-    
-    // If trail, propagate styles down trail
-    if (this.trailElements.length > 0) {
-      for(let i = 1; i < this.trailElements.length; i++){
-        Object.assign(this.trailElements[i].style, this.trailElements[i - 1].style);
-      }
-      if (this.frameNumber % this.trailGap === 0){
-        Object.assign(this.trailElements[0].style, this.element.style);
-      }
-    }
     
     // Get current props, call user onUpdate(), assign them
     this.nextProps = this.getSnapshot();

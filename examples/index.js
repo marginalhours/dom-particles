@@ -103,8 +103,7 @@ examples['metroidvania'] = () => {
   `);
 
   goButton.addEventListener('click', (e) => {
-    t.addParticle({
-      trail: 3,
+    let s = t.addParticle({
       position: { x: e.layerX, y: goButton.getBoundingClientRect().y - 60 },
       get contents () { return Math.floor(200 * Math.random()) }, 
       ttl: 800,
@@ -112,6 +111,22 @@ examples['metroidvania'] = () => {
       acceleration: { x: 0, y: -100 },
       style: { 
         scale: [2.5, 1, 1, 1, 1, 1, 1],
+        fontWeight: 'bold',
+        fontSize: '18px',
+        fontFamily: 'monospace',
+        textShadow: '1px 1px 0px #f00',
+        color: '#fff'
+      }
+    });
+    t.addParticle({
+      position: { x: e.layerX, y: goButton.getBoundingClientRect().y - 58 },
+      get contents () { return s.contents }, 
+      ttl: 800,
+      velocity: { x: 0, y: -25 },
+      acceleration: { x: 0, y: -100 },
+      style: { 
+        scale: [2.5, 1, 1, 1, 1, 1, 1],
+        opacity: 0.5,
         fontWeight: 'bold',
         fontSize: '18px',
         fontFamily: 'monospace',
