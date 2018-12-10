@@ -442,17 +442,21 @@ examples['fireworks'] = () => {
           },
           onDestroy: (p) => {
               let k = 100;
-              let x = 24;
+              let x = 12;
               for(var i = 0; i < x; i++){
-                t.addParticle({
-                  ttl: 1200,
-                  position: { x: p.position.x, y: p.position.y },
-                  velocity: { x: k * Math.sin(2 * i * Math.PI / x), y: k * Math.cos(2 * i * Math.PI / x) },
-                  get acceleration () { return { x: 0, y: 150 } },
-                  onCreate: (p) => {
-                    p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-                  },
-                  style: { ...p.style, scale: 0.5, opacity: [1, 0] },
+                t.addEmitter({
+                  emitEvery: 32,
+                  maxEmissions: 4,
+                  particleOptions: {
+                    ttl: 1200,
+                    position: { x: p.position.x, y: p.position.y },
+                    velocity: { x: k * Math.sin(2 * i * Math.PI / x), y: k * Math.cos(2 * i * Math.PI / x) },
+                    get acceleration () { return { x: 0, y: 150 } },
+                    onCreate: (p) => {
+                      p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+                    },
+                    style: { ...p.style, scale: 0.5, opacity: [1, 0] },
+                  }
                 });
               }
           }
