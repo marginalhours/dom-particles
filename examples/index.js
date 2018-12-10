@@ -421,7 +421,7 @@ examples['fireworks'] = () => {
   let f = () => {
     t.addEmitter({
         position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight },
-        emitEvery: 100,
+        emitEvery: 300,
         particleOptions: {
           contents: '', 
           get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
@@ -434,7 +434,7 @@ examples['fireworks'] = () => {
           get acceleration () { return { y: 600 } },
           style: { 
             get backgroundColor () { return ['rgb(255, 0, 0)', 'rgb(255, 255, 255)', 'rgb(0, 0, 255)'][Math.floor(3 * Math.random())] },
-            opacity: [1, 1, 0],
+            opacity: [1, 1, 0.5],
             width: '5px',
             height: '5px',            
             borderRadius: '5px',
@@ -442,11 +442,11 @@ examples['fireworks'] = () => {
           },
           onDestroy: (p) => {
               let k = 100;
-              let x = 12;
+              let x = 10;
               for(var i = 0; i < x; i++){
                 t.addEmitter({
                   emitEvery: 32,
-                  maxEmissions: 4,
+                  maxEmissions: 8,
                   particleOptions: {
                     ttl: 1200,
                     position: { x: p.position.x, y: p.position.y },
