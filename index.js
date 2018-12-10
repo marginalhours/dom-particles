@@ -438,7 +438,6 @@ examples['fireworks'] = () => {
             width: '5px',
             height: '5px',            
             borderRadius: '5px',
-            // boxShadow: '1px 1px #888888'
           },
           onDestroy: (p) => {
               let k = 100;
