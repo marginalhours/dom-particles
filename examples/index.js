@@ -403,12 +403,10 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
           p.state = MOVING;
           if (p.state == false) {
             p.velocity = {x: 0, y: 0}
-            p.ttl = 10000;
+            p.ttl = false;
           } else {
             let h = 300 + 300 * Math.random();
-            h = MOVING ? h : 0;
-            theta += 2 * Math.PI * Math.random();
-            p.velocity = { x: h * Math.cos(p.heading), y: h * Math.sin(theta) }
+            p.velocity = { x: h * Math.cos(p.heading), y: h * Math.sin(p.heading) }
             p.ttl = 800;
           }
         }
@@ -417,7 +415,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
     }
   }); 
   
-  goButton.addEventListener('mousedown', () => { MOVING = true; emitter.emitEvery = 16; });
+  goButton.addEventListener('mousedown', () => { MOVING = true; emitter.emitEvery = 4; });
   goButton.addEventListener('mouseup', () => { MOVING = false; emitter.emitEvery = 400; });
 }
 
