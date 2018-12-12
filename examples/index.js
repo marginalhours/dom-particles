@@ -372,6 +372,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
     position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
     emitEvery: 800,
     particleOptions: {
+      ttl: false,
       style: { 
         color: ['#eef', '#fff'], 
         fontSize: '16px',
@@ -408,7 +409,6 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
             theta += 2 * Math.PI * Math.random();
             p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
             p.ttl = 800;
-            p.velocity = 0;
           }
         }
         // p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }

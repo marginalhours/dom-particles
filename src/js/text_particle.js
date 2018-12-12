@@ -40,7 +40,7 @@ export default class TextParticle {
   }
   
   get alive () {
-    return this.elapsed < this.ttl;
+    return !this.ttl && this.elapsed >= this.ttl;
   }
   
   get lifeFrac () {
@@ -115,7 +115,6 @@ export default class TextParticle {
   update (f) {
     // Housekeeping
     this.elapsed += f * 1000;
-    
     // Standard motion update
     this.velocity.x += this.acceleration.x * f;
     this.velocity.y += this.acceleration.y * f;

@@ -26,7 +26,7 @@ export default class TextParticleEmitter {
     });
     
     this.manager = options.manager;
-    this.totalElapsed = 0;
+    this.elapsed = 0;
     this.elapsed = this.emitEvery;
     this.emitted = 0;
     this.frameNumber = 0;
