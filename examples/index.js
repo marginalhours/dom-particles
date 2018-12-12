@@ -370,37 +370,44 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   let f = () => {
     t.addEmitter({
       position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
-      emitEvery: 500,
+      emitEvery: 4,
       particleOptions: {
         contents: '',
         ttl: false,
         style: { 
-          backgroundColor: ['#eef', '#fff'], 
+          backgroundColor: '#fff', 
           width: '2px',
           height: '2px',
+          transformOrigin: '100% 50%'
         },
         get position () { 
           return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
         },
         onCreate: (p) => {
-          let h = 300 + 300 * Math.random();
+          let h = 600;
           h = MOVING ? h : 0;
           let theta = Math.atan2(p.position.y - mainWindow.clientHeight / 2, p.position.x - mainWindow.clientWidth / 2);
           p.state = MOVING;
           p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-          p.heading = theta;    
+          p.heading = theta;
+          p.fixedProps.scaleX = MOVING ? 25 : 1;
         },
-        onUpdate: (p) => {        
+        onUpdate: (p) => {   
+          let h;
+          if (MOVING) {
+            p.fixedProps.scaleX = lerp(p.fixedProps.scaleX, 25, 0.1);  
+            p.speed = lerp(p.speed, 600, 0.1);
+          } else {
+            p.fixedProps.scaleX = lerp(p.fixedProps.scaleX, 1, 0.1);  
+            p.speed = lerp(p.speed, 0, 0.1);
+          }
           if (p.state != MOVING){
             p.state = MOVING;
             if (p.state == false) {
               p.velocity = {x: 0, y: 0};
-              p.fixedProps.width = '2px';
               p.ttl = false;
             } else {
-              let h = 300 + 300 * Math.random();
-              p.velocity = { x: h * Math.cos(p.heading), y: h * Math.sin(p.heading) }
-              p.fixedProps.width = '12px';
+              
               p.elapsed = 0;
               p.ttl = 800;
             }
@@ -422,7 +429,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   };
   
   goButton.addEventListener('mousedown', () => { MOVING = true; f(); });
-  goButton.addEventListener('mouseup', () => { MOVING = false; f(); });
+  goButton.addEventListener('mouseup', () => { MOVING = false; g(); });
 }
 
 examples['fireworks'] = () => {  
