@@ -384,30 +384,31 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
           return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
         },
         onCreate: (p) => {
-          let h = 600;
-          h = MOVING ? h : 0;
+          p.fixedProps.scaleX = MOVING ? 25 : 1;
+          p.speed = MOVING ? 600 : 0;
           let theta = Math.atan2(p.position.y - mainWindow.clientHeight / 2, p.position.x - mainWindow.clientWidth / 2);
           p.state = MOVING;
-          p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+          p.velocity = { x: p.speed * Math.cos(theta), y: p.speed * Math.sin(theta) }
           p.heading = theta;
-          p.fixedProps.scaleX = MOVING ? 25 : 1;
         },
         onUpdate: (p) => {   
           let h;
           if (MOVING) {
-            p.fixedProps.scaleX = lerp(p.fixedProps.scaleX, 25, 0.1);  
+            p.fixedProps.backgroundColor = '#eef';
+            p.fixedProps.scaleX = lerp(p.fixedProps.scaleX, 50, 0.1);  
             p.speed = lerp(p.speed, 600, 0.1);
           } else {
+            p.fixedProps.backgroundColor = '#fff';
             p.fixedProps.scaleX = lerp(p.fixedProps.scaleX, 1, 0.1);  
             p.speed = lerp(p.speed, 0, 0.1);
           }
+          p.velocity = { x: p.speed * Math.cos(p.heading), y: p.speed * Math.sin(p.heading) }
+          
           if (p.state != MOVING){
             p.state = MOVING;
             if (p.state == false) {
-              p.velocity = {x: 0, y: 0};
               p.ttl = false;
             } else {
-              
               p.elapsed = 0;
               p.ttl = 800;
             }
