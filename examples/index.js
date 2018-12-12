@@ -367,50 +367,62 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   
   let MOVING = false;
 
-  let emitter = t.addEmitter({
-    position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
-    emitEvery: 16,
-    particleOptions: {
-      contents: '',
-      ttl: false,
-      style: { 
-        backgroundColor: ['#eef', '#fff'], 
-        width: '2px',
-        height: '2px',
-      },
-      get position () { 
-        return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
-      },
-      onCreate: (p) => {
-        let h = 300 + 300 * Math.random();
-        h = MOVING ? h : 0;
-        let theta = Math.atan2(p.position.y - mainWindow.clientHeight / 2, p.position.x - mainWindow.clientWidth / 2);
-        p.state = MOVING;
-        p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-        p.heading = theta;        
-      },
-      onUpdate: (p) => {        
-        if (p.state != MOVING){
+  let f = () => {
+    t.addEmitter({
+      position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
+      emitEvery: 500,
+      particleOptions: {
+        contents: '',
+        ttl: false,
+        style: { 
+          backgroundColor: ['#eef', '#fff'], 
+          width: '2px',
+          height: '2px',
+        },
+        get position () { 
+          return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
+        },
+        onCreate: (p) => {
+          let h = 300 + 300 * Math.random();
+          h = MOVING ? h : 0;
+          let theta = Math.atan2(p.position.y - mainWindow.clientHeight / 2, p.position.x - mainWindow.clientWidth / 2);
           p.state = MOVING;
-          if (p.state == false) {
-            p.velocity = {x: 0, y: 0}
-            p.fixedProps.width = '2px';
-            p.ttl = false;
-          } else {
-            let h = 300 + 300 * Math.random();
-            p.velocity = { x: h * Math.cos(p.heading), y: h * Math.sin(p.heading) }
-            p.fixedProps.width = '12px';
-            p.elapsed = 0;
-            p.ttl = 800;
+          p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+          p.heading = theta;    
+        },
+        onUpdate: (p) => {        
+          if (p.state != MOVING){
+            p.state = MOVING;
+            if (p.state == false) {
+              p.velocity = {x: 0, y: 0};
+              p.fixedProps.width = '2px';
+              p.ttl = false;
+            } else {
+              let h = 300 + 300 * Math.random();
+              p.velocity = { x: h * Math.cos(p.heading), y: h * Math.sin(p.heading) }
+              p.fixedProps.width = '12px';
+              p.elapsed = 0;
+              p.ttl = 800;
+            }
           }
+          if (p.position.x < -12 || 
+              p.position.x > mainWindow.clientWidth + 12 || 
+              p.position.y < -12 || 
+              p.position.y > mainWindow.clientHeight + 12){
+            p.ttl = p.elapsed;  
+          }
+          // p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
         }
-        // p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
       }
-    }
-  }); 
+    });
+  }
+    
+  let g = () => {
+    t.emitters = [];  
+  };
   
-  goButton.addEventListener('mousedown', () => { MOVING = true; });
-  goButton.addEventListener('mouseup', () => { MOVING = false; });
+  goButton.addEventListener('mousedown', () => { MOVING = true; f(); });
+  goButton.addEventListener('mouseup', () => { MOVING = false; f(); });
 }
 
 examples['fireworks'] = () => {  
