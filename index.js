@@ -368,6 +368,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   let MOVING = false;
 
   let theta = 0;
+  
   let emitter = t.addEmitter({
     position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
     emitEvery: 800,
@@ -397,7 +398,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
         
       },
-      onUpdate: (p) => {
+      onUpdate: (p) => {        
         if (p.state != MOVING){
           p.state = MOVING;
           if (p.state == false) {
@@ -407,7 +408,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
             let h = 300 + 300 * Math.random();
             h = MOVING ? h : 0;
             theta += 2 * Math.PI * Math.random();
-            p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+            p.velocity = { x: h * Math.cos(p.heading), y: h * Math.sin(theta) }
             p.ttl = 800;
           }
         }
