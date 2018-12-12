@@ -265,7 +265,7 @@ examples['bubbles'] = () => {
                 onCreate: (p) => {
                   p.heading = Math.atan2(p.velocity.y, p.velocity.x);
                 },
-                style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
+                style: { backgroundColor: transparent; opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
               });
             }
         }
