@@ -40,7 +40,7 @@ export default class TextParticle {
   }
   
   get alive () {
-    return !this.ttl && this.elapsed >= this.ttl;
+    return !this.ttl || this.elapsed < this.ttl;
   }
   
   get lifeFrac () {
