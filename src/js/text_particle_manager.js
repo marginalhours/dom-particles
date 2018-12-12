@@ -46,8 +46,9 @@ export default class TextParticleManager {
     }
   }
   
-  addEmitter (options) {
-    let e = this.emitters.push(new TextParticleEmitter({...options, manager: this}));
+  addEmitter (options) {    
+    let e = new TextParticleEmitter({...options, manager: this})
+    this.emitters.push(e);
     if (!this.raf && this.autostart){
       this.start();
     }

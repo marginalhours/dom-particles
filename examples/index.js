@@ -397,12 +397,18 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         
       },
       onUpdate: (p) => {
-        if (this.state != MOVING){
-          if (this.state == false) {
-            this.ttl = 800;
+        if (p.state != MOVING){
+          p.state = MOVING;
+          if (p.state == false) {
+            p.velocity = {x: 0, y: 0}
+            p.ttl = 10000;
           } else {
-            this.ttl = 10000;
-            this.velocity = 0;
+            let h = 300 + 300 * Math.random();
+            h = MOVING ? h : 0;
+            theta += 2 * Math.PI * Math.random();
+            p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+            p.ttl = 800;
+            p.velocity = 0;
           }
         }
         // p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
