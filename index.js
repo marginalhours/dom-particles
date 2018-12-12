@@ -373,12 +373,12 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
     position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
     emitEvery: 800,
     particleOptions: {
+      contents: '',
       ttl: false,
       style: { 
-        color: ['#eef', '#fff'], 
-        fontSize: '16px',
-        scale: [1, 2], 
-        get opacity () { return MOVING ? 1 : [1, 1, 0] }
+        backgroundColor: ['#eef', '#fff'], 
+        width: '2px',
+        height: '2px',
       },
       get position () { 
         if (MOVING) { 
@@ -407,6 +407,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
           } else {
             let h = 300 + 300 * Math.random();
             p.velocity = { x: h * Math.cos(p.heading), y: h * Math.sin(p.heading) }
+            p.elapsed = 0;
             p.ttl = 800;
           }
         }
