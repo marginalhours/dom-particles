@@ -367,11 +367,9 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
   
   let MOVING = false;
 
-  let theta = 0;
-  
   let emitter = t.addEmitter({
     position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
-    emitEvery: 800,
+    emitEvery: 16,
     particleOptions: {
       contents: '',
       ttl: false,
@@ -381,32 +379,27 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         height: '2px',
       },
       get position () { 
-        if (MOVING) { 
-          return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
-        } else {
-          return { x: mainWindow.clientWidth * (Math.random() - 0.5), y: mainWindow.clientHeight * (Math.random() - 0.5) }
-        }
-      },
-      get velocity () {
-        let h = 300 + 300 * Math.random();
-        h = MOVING ? h : 0;
-        theta += 2 * Math.PI * Math.random();
-        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+        return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
       },
       onCreate: (p) => {
-        this.state = MOVING;
-        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-        
+        let h = 300 + 300 * Math.random();
+        h = MOVING ? h : 0;
+        let theta = Math.atan2(p.position.y - mainWindow.clientHeight / 2, p.position.x - mainWindow.clientWidth / 2);
+        p.state = MOVING;
+        p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+        p.heading = theta;        
       },
       onUpdate: (p) => {        
         if (p.state != MOVING){
           p.state = MOVING;
           if (p.state == false) {
             p.velocity = {x: 0, y: 0}
+            p.fixedProps.width = '2px';
             p.ttl = false;
           } else {
             let h = 300 + 300 * Math.random();
             p.velocity = { x: h * Math.cos(p.heading), y: h * Math.sin(p.heading) }
+            p.fixedProps.width = '12px';
             p.elapsed = 0;
             p.ttl = 800;
           }
@@ -416,8 +409,8 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
     }
   }); 
   
-  goButton.addEventListener('mousedown', () => { MOVING = true; emitter.emitEvery = 4; });
-  goButton.addEventListener('mouseup', () => { MOVING = false; emitter.emitEvery = 400; });
+  goButton.addEventListener('mousedown', () => { MOVING = true; });
+  goButton.addEventListener('mouseup', () => { MOVING = false; });
 }
 
 examples['fireworks'] = () => {  
