@@ -394,12 +394,10 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         onUpdate: (p) => {   
           let h;
           if (MOVING) {
-            p.fixedProps.backgroundColor = '#aaf';
-            p.fixedProps.scaleX = lerp(p.fixedProps.scaleX, 50, 0.1);  
+            p.updateStyle({'backgroundColor': '#aaf', scaleX: lerp(p.style.scaleX, 50, 0.1)});
             p.speed = lerp(p.speed, 600, 0.1);
           } else {
-            p.fixedProps.backgroundColor = '#fff';
-            p.fixedProps.scaleX = lerp(p.fixedProps.scaleX, 1, 0.1);  
+            p.updateStyle({'backgroundColor': '#fff', scaleX: lerp(p.style.scaleX, 1, 0.1)});
             p.speed = lerp(p.speed, 0, 0.1);
           }
           p.velocity = { x: p.speed * Math.cos(p.heading), y: p.speed * Math.sin(p.heading) }

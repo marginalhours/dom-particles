@@ -68,8 +68,8 @@ export default class TextParticle {
       }
     });
     
-    this.dynamicProps = dynamicProps;
-    this.fixedProps = fixedProps;
+    this.dynamicProps = {...this.dynamicProps, ...dynamicProps};
+    this.fixedProps = {...this.fixedProps, ...fixedProps};
   }
   
   setContents (text) {
@@ -80,14 +80,14 @@ export default class TextParticle {
       this.element.style.cssText = text;  
   }
   
-  updateStyles (obj) {
+  updateStyle(obj){
     this.style = {...this.style, ...obj};
-    this.buildProps(this.style);
+    console.log(this.style);
+    this.buildProps(obj);
   }
   
   getSnapshot () {
     let lifeFrac = this.lifeFrac;
-    
     let snapshot = Object.keys(this.dynamicProps)
       .reduce((a, b) => {
         let propFn = this.dynamicProps[b];
