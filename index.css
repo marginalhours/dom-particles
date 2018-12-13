@@ -63,7 +63,7 @@ html, body {
   font-size: 24px;
   font-weight: bold;
   user-select: none;
-  z-index: 9999999;
+  z-index: 1;
 }
 
 .main-button:hover {
