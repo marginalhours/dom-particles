@@ -378,7 +378,9 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
           backgroundColor: '#fff', 
           width: '2px',
           height: '2px',
-          transformOrigin: '100% 50%'
+          transformOrigin: '100% 50%',
+          scaleX: 1,
+          zIndex: 0
         },
         get position () { 
           return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }

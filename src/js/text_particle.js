@@ -5,7 +5,7 @@ const zeroVector = { x: 0, y: 0 }
 export const DEFAULT_PARTICLE_OPTIONS = {
   ttl: 1000,
   contents: '.',
-  style: { display: 'inline-block' },
+  style: { display: 'inline-block', zIndex: 1 },
   onCreate: () => {},
   onUpdate: () => {},
   onDestroy: () => {},
@@ -33,7 +33,7 @@ export default class TextParticle {
     this.setContents(this.contents);
     
     // Fetch initial style snapshot, call user onCreate(), assign styles
-    this.buildProps(this.style);
+    this.updateStyle(this.style);
     this.nextProps = this.getSnapshot();
     this.onCreate(this);    
     Object.assign(this.element.style, this.nextProps);
@@ -82,7 +82,6 @@ export default class TextParticle {
   
   updateStyle(obj){
     this.style = {...this.style, ...obj};
-    console.log(this.style);
     this.buildProps(obj);
   }
   
