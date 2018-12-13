@@ -394,7 +394,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         onUpdate: (p) => {   
           let h;
           if (MOVING) {
-            p.fixedProps.backgroundColor = '#eef';
+            p.fixedProps.backgroundColor = '#aaf';
             p.fixedProps.scaleX = lerp(p.fixedProps.scaleX, 50, 0.1);  
             p.speed = lerp(p.speed, 600, 0.1);
           } else {

@@ -80,6 +80,11 @@ export default class TextParticle {
       this.element.style.cssText = text;  
   }
   
+  updateStyles (obj) {
+    this.style = {...this.style, ...obj};
+    this.buildProps(this.style);
+  }
+  
   getSnapshot () {
     let lifeFrac = this.lifeFrac;
     

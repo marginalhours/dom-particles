@@ -49,6 +49,10 @@ velocity += acceleration;
 position += velocity;
 ```
 
+Particle methods:
+
+- updateStyle: replace style keys dynamically
+
 
 Styling Particles
 -----------------
