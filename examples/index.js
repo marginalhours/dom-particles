@@ -564,24 +564,35 @@ examples['worlds'] = () => {
 
   goButton.addEventListener('mousedown', () => {
     t.addParticle({
-      ttl: 800,
-      contents: `<img src='https://www.gstatic.com/webp/gallery3/1.sm.png'>`, //🐝'
+      ttl: 8000,
+      contents: `🌏`,
       style: {
         width: '16px',
         height: '16px',
+        fontSize: '16px',
+        lineHeight: '16px',
+        borderRadius: '8px',
+        color: '#0f0',
+        backgroundColor: '#00f',
         get scale () { return 1; }
       },
-      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get position () { return { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60} },
       get velocity () {
-        let h = 100 + 100 * Math.random();
-        // theta += 0.01 * Math.PI * Math.random();
-        theta = 2 * Math.random() * Math.PI;
+        let h = 10;
+        let theta = 2 * Math.random() * Math.PI;
         return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
       },
-      onCreate: (p) => {
-        p.element.querySelector('img').style.width = '64px';
-        p.element.querySelector('img').style.height = '64px';
-        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + 5 * Math.PI / 6;
+      onCreate (p) {
+        p.idx = 0;
+      },
+      onUpdate (p) {
+        if (p.frameNumber % 15 === 0){
+          p.idx = (p.idx + 1) % 3;
+        }
+        p.setContents(['🌏','🌎', '🌍'][p.idx])
       }
     });
-}
+  })
+};
+
+['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘']
