@@ -556,3 +556,32 @@ examples['bees'] = () => {
     t.emitters = [];
   });  
 }
+
+examples['worlds'] = () => {
+   mainWindow.style.backgroundColor = '#fefeee';
+  
+  setButtonText('Press to world');
+
+  goButton.addEventListener('mousedown', () => {
+    t.addParticle({
+      ttl: 800,
+      contents: `<img src='https://www.gstatic.com/webp/gallery3/1.sm.png'>`, //🐝'
+      style: {
+        width: '16px',
+        height: '16px',
+        get scale () { return 1; }
+      },
+      get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+      get velocity () {
+        let h = 100 + 100 * Math.random();
+        // theta += 0.01 * Math.PI * Math.random();
+        theta = 2 * Math.random() * Math.PI;
+        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+      },
+      onCreate: (p) => {
+        p.element.querySelector('img').style.width = '64px';
+        p.element.querySelector('img').style.height = '64px';
+        p.heading = Math.atan2(p.velocity.y, p.velocity.x) + 5 * Math.PI / 6;
+      }
+    });
+}
