@@ -595,4 +595,42 @@ examples['worlds'] = () => {
   })
 };
 
-['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘']
+examples['moons'] = () => {
+   mainWindow.style.backgroundColor = '#fefeee';
+  
+  setButtonText('Press to world');
+  
+  let moons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘']
+
+  goButton.addEventListener('mousedown', () => {
+    t.addParticle({
+      ttl: 8000,
+      contents: `🌑`,
+      style: {
+        width: '14px',
+        height: '14px',
+        fontSize: '16px',
+        lineHeight: '14px',
+        borderRadius: '12px',
+        color: '#f0c420',
+        backgroundColor: '#000',
+        get scale () { return 1; }
+      },
+      get position () { return { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60} },
+      get velocity () {
+        let h = 10;
+        let theta = 2 * Math.random() * Math.PI;
+        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+      },
+      onCreate (p) {
+        p.idx = 0;
+      },
+      onUpdate (p) {
+        if (p.frameNumber % 15 === 0){
+          p.idx = (p.idx + 1) % moons.length;
+          p.setContents(moons[p.idx])
+        }
+      }
+    });
+  })
+};
