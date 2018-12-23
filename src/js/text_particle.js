@@ -66,7 +66,7 @@ export default class TextParticle {
         // Either a fixed value or a getter, either way, just assign it
         fixedProps[propKey] = propValue; 
       }
-    });s
+    });
     
     this.dynamicProps = {...this.dynamicProps, ...dynamicProps};
     this.fixedProps = {...this.fixedProps, ...fixedProps};

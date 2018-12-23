@@ -446,7 +446,7 @@ examples['fireworks'] = () => {
           get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
           get ttl () { return 1500 + (250 * Math.random()) },
           get velocity () { 
-            let theta = (3/2) * Math.PI + (Math.PI / 6) * (Math.random() - 0.5);
+            let theta = (3/2) * Math.PI + (Math.PI / 8) * (Math.random() - 0.5);
             let k = 800;
             return { x: k * Math.cos(theta),  y: k * Math.sin(theta) } 
           },
