@@ -6,7 +6,7 @@ const HEAT_COLOURS = [
   [61, 12, 8, 1.0], // faint red
   [98, 12, 11, 1.0], // blood red
   [167, 18, 14, 1.0], // dark cherry
-  [220, 25, 21, 1.0], // medium cherry 
+  [220, 25, 21, 1.0], // medium cherry
   [232, 39, 24, 1.0], // cherry
   [255, 54, 28, 1.0], // bright cherry
   [255, 72, 24, 1.0], // salmon
@@ -19,37 +19,37 @@ const HEAT_COLOURS = [
 ].reverse();
 
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
-    
+
 let mainWindow = document.querySelector('.main')
 let code = document.querySelector('.code')
 let goButton = document.querySelector('.main-button');
 
-let t = new letterbomb({ 
+let t = new letterbomb({
   max: 10000,
   container: mainWindow
 });
-  
+
 const setBackgroundColor = (color) => {
-  mainWindow.style.backgroundColor = color;  
+  mainWindow.style.backgroundColor = color;
 }
 
 const setButtonText = (text) => {
-  goButton.innerText = text; 
+  goButton.innerText = text;
 }
 
 const setCode = (text) => {
-  code.innerText = text; 
+  code.innerText = text;
 }
 
 document.querySelector('.examples-select').addEventListener('change', (e) => {
   // clear out current examples
   t.reset();
-  
+
   // replace event handlers
   let newButton = goButton.cloneNode(true);
   goButton.parentNode.replaceChild(newButton, goButton);
   goButton = document.querySelector('.main-button');
-  
+
   // pick example
   examples[e.target.value]();
 });
@@ -59,20 +59,20 @@ const examples = {};
 
 examples['number-goes-up'] = () => {
   setButtonText('Press to go up');
-  
-  setCode(`  
+
+  setCode(`
     t.addParticle({
       position: { x: e.layerX, y: e.layerY },
-      contents: '+1', 
+      contents: '+1',
       velocity: { x: 0, y: -10 },
       acceleration: { x: 0, y: -100 },
     })
   `);
-  
-  goButton.addEventListener('click', (e) => {   
+
+  goButton.addEventListener('click', (e) => {
     t.addParticle({
       position: { x: e.layerX, y: e.layerY },
-      contents: '+1', 
+      contents: '+1',
       velocity: { x: 0, y: -10 },
       acceleration: { x: 0, y: -100 },
     })
@@ -82,16 +82,16 @@ examples['number-goes-up'] = () => {
 examples['metroidvania'] = () => {
   setButtonText('Press to attack');
   setBackgroundColor('#113');
-    
+
   setCode(`
     goButton.addEventListener('click', (e) => {
         t.addParticle({
           position: { x: e.layerX, y: e.layerY },
-          get contents () { return Math.floor(200 * Math.random()) }, 
+          get contents () { return Math.floor(200 * Math.random()) },
           ttl: 500,
           velocity: { x: 0, y: -20 },
           acceleration: { x: 0, y: -100 },
-          style: { 
+          style: {
             scale: [2, 1, 1, 1, 1, 1, 1],
             fontWeight: 'bold',
             fontFamily: 'monospace',
@@ -105,11 +105,11 @@ examples['metroidvania'] = () => {
   goButton.addEventListener('click', (e) => {
     let s = t.addParticle({
       position: { x: e.layerX, y: goButton.getBoundingClientRect().y - 60 },
-      get contents () { return Math.floor(200 * Math.random()) }, 
+      get contents () { return Math.floor(200 * Math.random()) },
       ttl: 800,
       velocity: { x: 0, y: -25 },
       acceleration: { x: 0, y: -100 },
-      style: { 
+      style: {
         scale: [2.5, 1, 1, 1, 1, 1, 1],
         opacity: [1, 1, 0],
         fontWeight: 'bold',
@@ -122,29 +122,29 @@ examples['metroidvania'] = () => {
   });
 }
 
-examples['trails'] = () => {  
+examples['trails'] = () => {
     setButtonText('Hold to trail');
     setBackgroundColor('#fff');
-  
+
     let k = 0;
     let l = -400;
     let m = 200;
     let n = 16;
-  
+
     goButton.addEventListener('mousedown', () => {
       t.addEmitter({
         position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientWidth / 4 },
         emitEvery: 8,
-        onUpdate: (emitter) => {   
+        onUpdate: (emitter) => {
           emitter.position.x = mainWindow.clientWidth / 2 + (m * Math.sin(k++/n));
         },
         particleOptions: {
           ttl: 1000,
-          style: { 
+          style: {
             get backgroundColor () { return  ['#f33', '#fefeee'] },
             width: '12px',
             height: '12px',
-            scale: [2, 0.1], 
+            scale: [2, 0.1],
             zIndex: 100
           },
           contents: '',
@@ -159,37 +159,36 @@ examples['trails'] = () => {
       t.addEmitter({
         position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientWidth / 4 },
         emitEvery: 8,
-        onUpdate: (emitter) => {   
+        onUpdate: (emitter) => {
           emitter.position.x = mainWindow.clientWidth / 2 + (m * Math.sin(Math.PI + k/n));
         },
         particleOptions: {
           ttl: 1000,
-          style: { 
+          style: {
             get backgroundColor () { return  ['#33f', '#eefefe'] },
             width: '12px',
             height: '12px',
-            scale: [2, 0.1], 
+            scale: [2, 0.1],
             zIndex: 50
           },
           contents: '',
           get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
           get velocity () {
-            let h = (500 + (100 * Math.random()));
-            return { y: h }
+            return { y: 500 + (100 * Math.random()) };
           }
         }
       });
     });
-  
+
     goButton.addEventListener('mouseup', () => {
-      t.emitters = [];
+      t.clearEmitters();
     });
 }
 
 examples['flame'] = () => {
   setButtonText('Hold to Burn');
   setBackgroundColor('#000');
-  
+
   setCode(`
     goButton.addEventListener('mousedown', () => {
       t.addEmitter({
@@ -202,14 +201,14 @@ examples['flame'] = () => {
           velocity: { x: 0, y: -66 },
           style: { backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)), width: '8px', height: '8px', scale: [2, 1], borderRadius: '8px' },
         },
-      });  
+      });
     });
 
     goButton.addEventListener('mouseup', () => {
       t.emitters = [];
     });
   `);
-  
+
   goButton.addEventListener('mousedown', () => {
     t.addEmitter({
       position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60 },
@@ -221,29 +220,29 @@ examples['flame'] = () => {
         velocity: { x: 0, y: -66 },
         style: { backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)), width: '8px', height: '8px', scale: [2, 1], borderRadius: '8px' },
       },
-    });  
+    });
   });
-  
+
   goButton.addEventListener('mouseup', () => {
-    t.emitters = [];
+    t.clearEmitters();
   });
 }
 
 examples['bubbles'] = () => {
   setBackgroundColor('#113');
   setButtonText('Hold to Bubble');
-  
+
   setCode(`
     t.addEmitter({
       position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
       emitEvery: 200,
       particleOptions: {
-        contents: '', 
+        contents: '',
         get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
         get ttl () { return 1500 + (250 * Math.random()) },
         get velocity () { return { y: -10 } },
         get acceleration () { return { x: 0, y: -100 } },
-        style: { 
+        style: {
           get scale () { return 0.25 + Math.random() },
           opacity: [0.5, 1, 1, 1, 0.9],
           border: '2px solid rgba(192, 192, 200, 1.0)',
@@ -272,18 +271,18 @@ examples['bubbles'] = () => {
       }
     });
   `);
-  
+
   let f = () => {
     t.addEmitter({
         position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
         emitEvery: 200,
         particleOptions: {
-          contents: '', 
+          contents: '',
           get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
           get ttl () { return 1500 + (250 * Math.random()) },
           get velocity () { return { y: -10 } },
           get acceleration () { return { x: 0, y: -100 } },
-          style: { 
+          style: {
             get scale () { return 0.25 + Math.random() },
             opacity: [0.5, 1, 1, 1, 0.9],
             border: '2px solid rgba(192, 192, 200, 1.0)',
@@ -312,11 +311,11 @@ examples['bubbles'] = () => {
         }
       });
   }
-  
+
   let g = () => {
-    t.emitters = [];  
+    t.clearEmitters();
   }
-  
+
   goButton.addEventListener('mousedown', f);
   goButton.addEventListener('touchstart', f);
   goButton.addEventListener('mouseup', g);
@@ -325,7 +324,7 @@ examples['bubbles'] = () => {
 
 examples['blossom'] = () => {
   mainWindow.style.backgroundColor = '#fefeee';
-  
+
   setButtonText('Hold to Blossom');
 
   goButton.addEventListener('mousedown', () => {
@@ -335,11 +334,11 @@ examples['blossom'] = () => {
       emitEvery: 3,
       particleOptions: {
         ttl: 800,
-        style: { 
-          backgroundColor: ['#f33', '#fefeee'], 
+        style: {
+          backgroundColor: ['#f33', '#fefeee'],
           width: '16px',
           height: '16px',
-          scale: [0, 20], 
+          scale: [0, 20],
         },
         contents: '',
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
@@ -353,18 +352,18 @@ examples['blossom'] = () => {
           p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
         }
       }
-    }); 
+    });
   });
-  
+
   goButton.addEventListener('mouseup', () => {
-    t.emitters = [];
+    t.clearEmitters();
   });
 }
 
 examples['you-know-i-had-to-do-it-to-em'] = () => {
   setBackgroundColor('#01010f');
   setButtonText('Hold to Lightspeed');
-  
+
   let MOVING = false;
 
   let f = () => {
@@ -374,15 +373,15 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
       particleOptions: {
         contents: '',
         ttl: false,
-        style: { 
-          backgroundColor: '#fff', 
+        style: {
+          backgroundColor: '#fff',
           width: '2px',
           height: '2px',
           transformOrigin: '100% 50%',
           scaleX: 1,
           zIndex: 0
         },
-        get position () { 
+        get position () {
           return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
         },
         onCreate: (p) => {
@@ -393,8 +392,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
           p.velocity = { x: p.speed * Math.cos(theta), y: p.speed * Math.sin(theta) }
           p.heading = theta;
         },
-        onUpdate: (p) => {   
-          let h;
+        onUpdate: (p) => {
           if (MOVING) {
             p.updateStyle({'backgroundColor': '#aaf', scaleX: lerp(p.style.scaleX, 50, 0.1)});
             p.speed = lerp(p.speed, 600, 0.1);
@@ -403,7 +401,7 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
             p.speed = lerp(p.speed, 0, 0.1);
           }
           p.velocity = { x: p.speed * Math.cos(p.heading), y: p.speed * Math.sin(p.heading) }
-          
+
           if (p.state != MOVING){
             p.state = MOVING;
             if (p.state == false) {
@@ -413,49 +411,49 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
               p.ttl = 800;
             }
           }
-          if (p.position.x < -12 || 
-              p.position.x > mainWindow.clientWidth + 12 || 
-              p.position.y < -12 || 
+          if (p.position.x < -12 ||
+              p.position.x > mainWindow.clientWidth + 12 ||
+              p.position.y < -12 ||
               p.position.y > mainWindow.clientHeight + 12){
-            p.ttl = p.elapsed;  
+            p.ttl = p.elapsed;
           }
           // p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
         }
       }
     });
   }
-    
+
   let g = () => {
-    t.emitters = [];  
+    t.clearEmitters();
   };
-  
+
   goButton.addEventListener('mousedown', () => { MOVING = true; f(); });
   goButton.addEventListener('mouseup', () => { MOVING = false; g(); });
 }
 
-examples['fireworks'] = () => {  
-  setBackgroundColor('#112');  
+examples['fireworks'] = () => {
+  setBackgroundColor('#112');
   setButtonText('Hold to 4th of July');
-  
+
   let f = () => {
     t.addEmitter({
         position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight },
         emitEvery: 300,
         particleOptions: {
-          contents: '', 
+          contents: '',
           get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
           get ttl () { return 1500 + (250 * Math.random()) },
-          get velocity () { 
+          get velocity () {
             let theta = (3/2) * Math.PI + (Math.PI / 8) * (Math.random() - 0.5);
             let k = 800;
-            return { x: k * Math.cos(theta),  y: k * Math.sin(theta) } 
+            return { x: k * Math.cos(theta),  y: k * Math.sin(theta) }
           },
           get acceleration () { return { y: 600 } },
-          style: { 
+          style: {
             get backgroundColor () { return ['rgb(255, 0, 0)', 'rgb(255, 255, 255)', 'rgb(0, 0, 255)'][Math.floor(3 * Math.random())] },
             opacity: [1, 1, 0.5],
             width: '5px',
-            height: '5px',            
+            height: '5px',
             borderRadius: '5px',
           },
           onDestroy: (p) => {
@@ -481,11 +479,11 @@ examples['fireworks'] = () => {
         }
       });
   }
-  
+
   let g = () => {
-    t.emitters = [];  
+    t.clearEmitters();
   }
-  
+
   goButton.addEventListener('mousedown', f);
   goButton.addEventListener('mouseup', g);
 }
@@ -496,9 +494,9 @@ examples['chess'] = () => {
     emitEvery: 200,
     particleOptions: {
       ttl: 1000,
-      style: { 
-        color: '#000', 
-        fontSize: '32px', 
+      style: {
+        color: '#000',
+        fontSize: '32px',
         width: '32px',
         height: '32px',
         get scale() { return 10 * Math.random() }
@@ -520,7 +518,7 @@ examples['chess'] = () => {
 
 examples['bees'] = () => {
   mainWindow.style.backgroundColor = '#fefeee';
-  
+
   setButtonText('Hold to Swarm');
 
   goButton.addEventListener('mousedown', () => {
@@ -549,17 +547,17 @@ examples['bees'] = () => {
           p.heading = Math.atan2(p.velocity.y, p.velocity.x) + 5 * Math.PI / 6;
         }
       }
-    }); 
+    });
   });
-  
+
   goButton.addEventListener('mouseup', () => {
-    t.emitters = [];
-  });  
+    t.clearEmitters();
+  });
 }
 
 examples['worlds'] = () => {
    mainWindow.style.backgroundColor = '#fefeee';
-  
+
   setButtonText('Press to world');
 
   goButton.addEventListener('mousedown', () => {
@@ -597,9 +595,9 @@ examples['worlds'] = () => {
 
 examples['moons'] = () => {
    mainWindow.style.backgroundColor = '#fefeee';
-  
+
   setButtonText('Press to world');
-  
+
   let moons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘']
 
   goButton.addEventListener('mousedown', () => {
