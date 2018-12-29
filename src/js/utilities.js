@@ -1,3 +1,5 @@
+export const ZERO_VECTOR = { x: 0, y: 0 };
+
 /* Useful regexes */
 const RGB_PATTERN = /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
 const RGBA_PATTERN = /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([01](?:\.\d+)*)\s*\)/;
@@ -9,7 +11,7 @@ const NUMBER_AND_UNIT_PATTERN = /(\d+\.\d+|\d+)([a-z]+)?/;
 export const rgbToNumbers = (string) => {
   try {
     let [_, r, g, b] = RGB_PATTERN.exec(string);
-    return [...[r, g, b].map(v => parseInt(v)), 1.0]; 
+    return [...[r, g, b].map(v => parseInt(v)), 1.0];
   }
   catch (err){
     console.warn(`Invalid RGB value: ${string}`);
@@ -20,7 +22,7 @@ export const rgbToNumbers = (string) => {
 export const rgbaToNumbers = (string) => {
   try {
     let [_, r, g, b, a] = RGBA_PATTERN.exec(string);
-    return [...[r, g, b].map(v => parseInt(v)), parseFloat(a)] 
+    return [...[r, g, b].map(v => parseInt(v)), parseFloat(a)]
   }
   catch (err){
     console.warn(`Invalid RGBA value: ${string}`);
@@ -32,10 +34,10 @@ export const hexToNumbers = (string) => {
   try {
     let [_, r, g, b] = HEX_PATTERN.exec(string);
     return [...[r, g, b].map(x => parseInt(x, 16) * ((x.length === 1) ? 0x11 : 0x1)), 1.0];
-  } 
+  }
   catch (err) {
     console.warn(`Invalid hex value: ${string}`);
-    return false;  
+    return false;
   }
 }
 
@@ -43,7 +45,7 @@ export const valueToNumberAndUnit = (string) => {
   try {
     let [_, num, unit] = NUMBER_AND_UNIT_PATTERN.exec(string);
     return [parseFloat(num), unit || '']
-  } 
+  }
   catch (err) {
     console.warn(`Invalid CSS unit string: ${string}`);
     return false;
@@ -78,7 +80,7 @@ export const easeArray = (array, easeFn, frac) => {
 /* Property calculation function-generation functions */
 
 export const transpose = (array) => {
-  return array[0].map((_, i) => array.map(r => r[i]));  
+  return array[0].map((_, i) => array.map(r => r[i]));
 }
 
 export const propValueToFunction = (propValue) => {
@@ -89,10 +91,10 @@ export const propValueToFunction = (propValue) => {
     let values = k.map(v => v[0]);
     return (frac) => valueToCSSString(easeArray(values, lerp, frac), unit)
   } else {
-    // Colour in [[r, g, b, a],...] format 
+    // Colour in [[r, g, b, a],...] format
     let k_t = transpose(k);
-    return (frac) => colourToCSSString(k_t.map(c => easeArray(c, lerp, frac)))  
-  } 
+    return (frac) => colourToCSSString(k_t.map(c => easeArray(c, lerp, frac)))
+  }
 }
 
 const selectorMap = {
@@ -102,22 +104,22 @@ const selectorMap = {
 
 export const buildOffsets = (text, selector) => {
   if (typeof selector === 'string') { selector = selectorMap[selector] }
-  
+
   if (typeof selector === 'number') {
     return buildChunksOfN(text, selector);
   } else {
-    return buildChunksFromRegex(text, selector);  
+    return buildChunksFromRegex(text, selector);
   }
 }
 
 const buildChunksOfN = (text, n) => {
   let offsets = [];
   let chunks = text.length / n;
-  
+
   for(let i = 0; i < Math.floor(chunks); i++) {
-    offsets.push([i * n, (i + 1) * n]);  
+    offsets.push([i * n, (i + 1) * n]);
   }
-  
+
   if (text.length % n !== 0){
     let last = offsets[offsets.length - 1];
     offsets.push([last[1], last[1] + (text.length % n)]);
@@ -131,24 +133,24 @@ const buildChunksFromRegex = (text, pattern) => {
   let m;
   do {
     m = pattern.exec(text);
-    if (m) {      
+    if (m) {
       let next = m.index;
       // Push in-between match
       if (next > prev) {
-        offsets.push([prev, next]);  
+        offsets.push([prev, next]);
       }
       let end = m.index + m[0].length;
       offsets.push([m.index, end]);
       prev = end;
     }
   } while (m);
-  
+
   // Cleanup remainder
   let final = offsets[offsets.length - 1];
   if (final[1] < text.length) {
-    offsets.push([final[1], text.length]);  
+    offsets.push([final[1], text.length]);
   }
-  
+
   return offsets;
 }
 

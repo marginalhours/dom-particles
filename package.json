@@ -1,7 +1,7 @@
 {
-  "name": "webpack-template",
+  "name": "letter-bomb",
   "version": "0.0.1",
-  "description": "a webpack template for glitch",
+  "description": "Particle effects for the DOM",
   "main": "server.js",
   "scripts": {
     "test": "mocha --require @babel/register --watch",
@@ -33,6 +33,8 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
     "express": "^4.15.3",
+    "jsdom": "13.1.0",
+    "jsdom-global": "3.0.2",
     "mocha": "^5.2.0",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2"
