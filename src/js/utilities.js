@@ -97,63 +97,6 @@ export const propValueToFunction = (propValue) => {
   }
 }
 
-const selectorMap = {
-  'character': 1,
-  'word': /\w+/g
-}
-
-export const buildOffsets = (text, selector) => {
-  if (typeof selector === 'string') { selector = selectorMap[selector] }
-
-  if (typeof selector === 'number') {
-    return buildChunksOfN(text, selector);
-  } else {
-    return buildChunksFromRegex(text, selector);
-  }
-}
-
-const buildChunksOfN = (text, n) => {
-  let offsets = [];
-  let chunks = text.length / n;
-
-  for(let i = 0; i < Math.floor(chunks); i++) {
-    offsets.push([i * n, (i + 1) * n]);
-  }
-
-  if (text.length % n !== 0){
-    let last = offsets[offsets.length - 1];
-    offsets.push([last[1], last[1] + (text.length % n)]);
-  }
-  return offsets;
-}
-
-const buildChunksFromRegex = (text, pattern) => {
-  let offsets = [];
-  let prev = 0;
-  let m;
-  do {
-    m = pattern.exec(text);
-    if (m) {
-      let next = m.index;
-      // Push in-between match
-      if (next > prev) {
-        offsets.push([prev, next]);
-      }
-      let end = m.index + m[0].length;
-      offsets.push([m.index, end]);
-      prev = end;
-    }
-  } while (m);
-
-  // Cleanup remainder
-  let final = offsets[offsets.length - 1];
-  if (final[1] < text.length) {
-    offsets.push([final[1], text.length]);
-  }
-
-  return offsets;
-}
-
 export const positionFromNode = (element, xOffset, yOffset) => {
   let rect = element.getBoundingClientRect();
   return { x: rect.x + xOffset, y: rect.y + yOffset}

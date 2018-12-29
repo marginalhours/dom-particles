@@ -55,28 +55,6 @@ export default class TextParticleManager {
     return e;
   }
 
-  /* Problematic: Needs to duplicate element styles (font size etc) */
-  from (element, pattern, options) {
-    let offsets = buildOffsets(element.innerText, pattern);
-    offsets.reverse().map(o => {
-      // should we just build our own whole element here and replace in the DOM in one go?
-      // saves messing about with offsets...
-      let r = document.createRange();
-      r.setStart(element.childNodes[0], o[0]);
-      r.setEnd(element.childNodes[0], o[1]);
-      let s = document.createElement(this.tagName);
-      r.surroundContents(s);
-      let { x, y, width, height } = s.getBoundingClientRect();
-      Object.assign(s.style, { width, height });
-
-      // let p = new TextParticle({...options, text: r.toString(), element: s, position: { x, y }, style: {...options.style, width, height }});
-      // p.element.parentElement.removeChild(p.element);
-      // this.foldElement.appendChild(p.element);
-      // this._particles.push(p);
-    });
-    this.start();
-  }
-
   start () {
     this.frameStart = performance.now();
     this.raf = requestAnimationFrame((t) => this._update(t));

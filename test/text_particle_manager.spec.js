@@ -45,10 +45,4 @@ describe('TextParticleManager', () => {
     assert.equal(t._emitters.length, 1);
     assert.equal(t._emitters[0], e);
   });
-
-  it('should be able to create particles from a DOM element', () => {
-    // lol
-    assert(false);
-  })
-
 });
