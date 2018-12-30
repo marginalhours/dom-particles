@@ -96,8 +96,3 @@ export const propValueToFunction = (propValue) => {
     return (frac) => colourToCSSString(k_t.map(c => easeArray(c, lerp, frac)))
   }
 }
-
-export const positionFromNode = (element, xOffset, yOffset) => {
-  let rect = element.getBoundingClientRect();
-  return { x: rect.x + xOffset, y: rect.y + yOffset}
-}

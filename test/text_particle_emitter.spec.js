@@ -16,7 +16,7 @@ describe('TextParticleEmitter', () => {
     assert.deepEqual(e.position, ZERO_VECTOR);
     assert.deepEqual(e.velocity, ZERO_VECTOR);
     assert.deepEqual(e.acceleration, ZERO_VECTOR);
-    assert.equal(e.rotation, 0);
+    assert.equal(e.heading, 0);
   });
 
   it('should have its properties overridden by the user on creation', () => {

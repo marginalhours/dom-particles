@@ -1,14 +1,5 @@
-- unit tests for particle / emitter / manager
-- better fromDOMNode functionality (ideally, get it working, like, at all) 
-- finish examples page (maybe make source code editable too?)
+- Move to transform matrix rather than long row of functions (careful of composition)
+- Allow for multiple values in one property? (weird edge case)
+- skew example?
 - some actual, you know, *text* examples (sine wave dickens?)
-- make all examples button-controlled (set text to "press to" / "hold to")
-- possibility of providing x and y coords as part of style
-- inlining of style options along with everything else
-
-- currently out of scope:
-  - full 3d (with z-coord)
-  - probably the timing thing (see above) - the broader point is if there's no time-control etc, then the autostart argument is pretty redundant
-  
-  
-  Particles: .from(selector, splitPattern/) would be a cool way to extend it. Think hard about APIs (there is that codepen one, I guess):
+- possibility of providing x and y coords as part of style (no?) (hmmm)

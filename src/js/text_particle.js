@@ -85,34 +85,36 @@ export default class TextParticle {
   }
 
   getSnapshot () {
-    let lifeFrac = this.lifeFrac;
     let snapshot = Object.keys(this.dynamicProps)
       .reduce((a, b) => ({
         ...a,
-        [b]: this.dynamicProps[b](lifeFrac)
+        [b]: this.dynamicProps[b](this.lifeFrac)
       }), {...this.fixedProps});
 
     return {...snapshot, transform: this.getScaledTransform(snapshot) }
   }
 
   getScaledTransform(snapshot) {
-    let { rotation, scale, scaleX, scaleY } = snapshot;
+    let { rotation, scale, scaleX, scaleY, skew, skewX, skewY } = snapshot;
     rotation = (this.heading && `${this.heading}rad`) || rotation || 0;
     scale = scale || 1.0;
     scaleX = scaleX || scale;
     scaleY = scaleY || scale;
+    skew = skew || 0;
+    skewX = skewX || skew;
+    skewY = skewY || skew;
 
-    return this.getTransform(scaleX, scaleY, rotation);
+    return this.getTransform(scaleX, scaleY, rotation, skewX, skewY);
   }
 
-  getTransform (scaleX, scaleY, rotation) {
-    return `translate3d(${this.position.x}px, ${this.position.y}px, 0px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
+  getTransform (scaleX, scaleY, rotation, skewX, skewY) {
+    return `translate3d(${this.position.x}px, ${this.position.y}px, 0px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY}) skew(${skewX}, ${skewY})`;
   }
 
-  getGridTransform (scaleX, scaleY, rotation) {
+  getGridTransform (scaleX, scaleY, rotation, skewX, skewY) {
     let x = this.position.x - (this.position.x % this.grid);
     let y = this.position.y - (this.position.y % this.grid);
-    return `translate3d(${x}px, ${y}px, 0px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY})`;
+    return `translate3d(${x}px, ${y}px, 0px) rotateZ(${rotation}) scale(${scaleX}, ${scaleY}) skew(${skewX}, ${skewY})`;
   }
 
   update (f) {
@@ -126,7 +128,7 @@ export default class TextParticle {
 
     // Get current props, call user onUpdate(), assign them
     this.nextProps = this.getSnapshot();
-    this.onUpdate(this);
+    this.onUpdate(this, f);
     Object.assign(this.element.style, this.nextProps);
 
     // Next frame

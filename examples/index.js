@@ -20,198 +20,142 @@ const HEAT_COLOURS = [
 
 let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 
-let mainWindow = document.querySelector('.main')
-let code = document.querySelector('.code')
-let goButton = document.querySelector('.main-button');
-
 let t = new letterbomb({
   max: 10000,
-  container: mainWindow
+  container: document.querySelector('body')
 });
 
-const setBackgroundColor = (color) => {
-  mainWindow.style.backgroundColor = color;
+examples = {};
+
+const getTileMidpoint = (tile) => {
+  const t = tile.getBoundingClientRect();
+  return {
+    x: window.scrollX, //+ t.x + (t.width / 2),
+    y: window.scrollY //+ t.y + (t.height / 2)
+  }
 }
 
-const setButtonText = (text) => {
-  goButton.innerText = text;
-}
 
-const setCode = (text) => {
-  code.innerText = text;
-}
+/* Simple */
+const simpleButton = document.querySelector('.simple .example-button');
+const simpleContainer = document.querySelector('.simple');
 
-document.querySelector('.examples-select').addEventListener('change', (e) => {
-  // clear out current examples
-  t.reset();
-
-  // replace event handlers
-  let newButton = goButton.cloneNode(true);
-  goButton.parentNode.replaceChild(newButton, goButton);
-  goButton = document.querySelector('.main-button');
-
-  // pick example
-  examples[e.target.value]();
+simpleButton.addEventListener('click', (e) => {
+  simpleContainer.style.backgroundColor = 'rgba(255, 255, 240, 1.0)';
+  t.addParticle({
+    position: { x: e.clientX, y: e.clientY },
+    contents: '+1',
+    velocity: { x: 0, y: -50 }
+  });
 });
 
 
-const examples = {};
+/* Metroidvania */
+const metroidButton = document.querySelector('.metroidvania .example-button');
 
-examples['number-goes-up'] = () => {
-  setButtonText('Press to go up');
-
-  setCode(`
-    t.addParticle({
-      position: { x: e.layerX, y: e.layerY },
-      contents: '+1',
-      velocity: { x: 0, y: -10 },
-      acceleration: { x: 0, y: -100 },
-    })
-  `);
-
-  goButton.addEventListener('click', (e) => {
-    t.addParticle({
-      position: { x: e.layerX, y: e.layerY },
-      contents: '+1',
-      velocity: { x: 0, y: -10 },
-      acceleration: { x: 0, y: -100 },
-    })
+metroidButton.addEventListener('click', (e) => {
+  t.addParticle({
+    position: { x: e.clientX, y: window.scrollY + metroidButton.getBoundingClientRect().y },
+    get contents () { return Math.floor(200 * Math.random()) },
+    ttl: 800,
+    velocity: { x: 0, y: -25 },
+    acceleration: { x: 0, y: -100 },
+    style: {
+      scale: [2.5, 1, 1, 1, 1, 1, 1],
+      opacity: [1, 1, 0],
+      fontWeight: 'bold',
+      fontSize: '18px',
+      fontFamily: 'monospace',
+      textShadow: '1px 1px 0px #f00',
+      color: '#fff'
+    }
   });
-}
+});
 
-examples['metroidvania'] = () => {
-  setButtonText('Press to attack');
-  setBackgroundColor('#113');
 
-  setCode(`
-    goButton.addEventListener('click', (e) => {
-        t.addParticle({
-          position: { x: e.layerX, y: e.layerY },
-          get contents () { return Math.floor(200 * Math.random()) },
-          ttl: 500,
-          velocity: { x: 0, y: -20 },
-          acceleration: { x: 0, y: -100 },
-          style: {
-            scale: [2, 1, 1, 1, 1, 1, 1],
-            fontWeight: 'bold',
-            fontFamily: 'monospace',
-            textShadow: '1px 1px 0px #f00',
-            color: '#fff'
-          }
-        });
-      });
-  `);
+/* Trails */
+{
+  const trailButton = document.querySelector('.trail .example-button');
 
-  goButton.addEventListener('click', (e) => {
-    let s = t.addParticle({
-      position: { x: e.layerX, y: goButton.getBoundingClientRect().y - 60 },
-      get contents () { return Math.floor(200 * Math.random()) },
-      ttl: 800,
-      velocity: { x: 0, y: -25 },
-      acceleration: { x: 0, y: -100 },
-      style: {
-        scale: [2.5, 1, 1, 1, 1, 1, 1],
-        opacity: [1, 1, 0],
-        fontWeight: 'bold',
-        fontSize: '18px',
-        fontFamily: 'monospace',
-        textShadow: '1px 1px 0px #f00',
-        color: '#fff'
-      }
-    });
-  });
-}
+  const f = (e) => {
+    e.preventDefault();
 
-examples['trails'] = () => {
-    setButtonText('Hold to trail');
-    setBackgroundColor('#fff');
+    const trailContainer = document.querySelector('.trail');
+    const midpoint = getTileMidpoint(trailContainer);
 
     let k = 0;
-    let l = -400;
-    let m = 200;
+    let m = 180;
     let n = 16;
 
-    goButton.addEventListener('mousedown', () => {
-      t.addEmitter({
-        position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientWidth / 4 },
-        emitEvery: 8,
-        onUpdate: (emitter) => {
-          emitter.position.x = mainWindow.clientWidth / 2 + (m * Math.sin(k++/n));
+    t.addEmitter({
+      position: { x: midpoint.x, y: trailContainer.getBoundingClientRect().y },
+      emitEvery: 8,
+      onUpdate: (emitter) => {
+        emitter.position.x = midpoint.x + (m * Math.sin(k++/n));
+      },
+      particleOptions: {
+        ttl: 1000,
+        style: {
+          get backgroundColor () { return  ['#f33', '#fefeee'] },
+          width: '12px',
+          height: '12px',
+          scale: [2, 0.1],
+          zIndex: 100
         },
-        particleOptions: {
-          ttl: 1000,
-          style: {
-            get backgroundColor () { return  ['#f33', '#fefeee'] },
-            width: '12px',
-            height: '12px',
-            scale: [2, 0.1],
-            zIndex: 100
-          },
-          contents: '',
-          get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
-          get velocity () {
-            let h = (500 + (100 * Math.random()));
-            return { y: h }
-          }
+        contents: '',
+        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
+        get velocity () {
+          let h = (500 + (100 * Math.random()));
+          return { y: h }
         }
-      });
-
-      t.addEmitter({
-        position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientWidth / 4 },
-        emitEvery: 8,
-        onUpdate: (emitter) => {
-          emitter.position.x = mainWindow.clientWidth / 2 + (m * Math.sin(Math.PI + k/n));
-        },
-        particleOptions: {
-          ttl: 1000,
-          style: {
-            get backgroundColor () { return  ['#33f', '#eefefe'] },
-            width: '12px',
-            height: '12px',
-            scale: [2, 0.1],
-            zIndex: 50
-          },
-          contents: '',
-          get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-          get velocity () {
-            return { y: 500 + (100 * Math.random()) };
-          }
-        }
-      });
+      }
     });
 
-    goButton.addEventListener('mouseup', () => {
-      t.clearEmitters();
+    t.addEmitter({
+      position: { x: midpoint.x, y: trailContainer.getBoundingClientRect().y },
+      emitEvery: 8,
+      onUpdate: (emitter) => {
+        emitter.position.x = midpoint.x + (m * Math.sin(Math.PI + k/n));
+      },
+      particleOptions: {
+        ttl: 1000,
+        style: {
+          get backgroundColor () { return  ['#33f', '#eefefe'] },
+          width: '12px',
+          height: '12px',
+          scale: [2, 0.1],
+          zIndex: 50
+        },
+        contents: '',
+        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
+        get velocity () {
+          return { y: 500 + (100 * Math.random()) };
+        }
+      }
     });
+  }
+
+  const g = () => {
+    t.clearEmitters();
+  }
+
+  trailButton.addEventListener('mousedown', f);
+  trailButton.addEventListener('touchstart', f);
+  trailButton.addEventListener('mouseup', g);
+  trailButton.addEventListener('touchend', g);
 }
 
-examples['flame'] = () => {
-  setButtonText('Hold to Burn');
-  setBackgroundColor('#000');
+/* Flame */
+{
+  const flameButton = document.querySelector('.flame .example-button');
+  const flameContainer = document.querySelector('.flame');
 
-  setCode(`
-    goButton.addEventListener('mousedown', () => {
-      t.addEmitter({
-        position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60 },
-        emitEvery: 8,
-        particleOptions: {
-          contents: '',
-          ttl: 1500,
-          get position () { return { x: 64 * (Math.random() - 0.5), y: 15 * (Math.random() - 0.5) } },
-          velocity: { x: 0, y: -66 },
-          style: { backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)), width: '8px', height: '8px', scale: [2, 1], borderRadius: '8px' },
-        },
-      });
-    });
-
-    goButton.addEventListener('mouseup', () => {
-      t.emitters = [];
-    });
-  `);
-
-  goButton.addEventListener('mousedown', () => {
+  const f = (e) => {
+    e.preventDefault();
+    const midpoint = getTileMidpoint(flameContainer);
+    flameContainer.style.backgroundColor = '#000';
     t.addEmitter({
-      position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60 },
+      position: { x: midpoint.x, y: window.scrollY + flameButton.getBoundingClientRect().y },
       emitEvery: 8,
       particleOptions: {
         contents: '',
@@ -221,24 +165,39 @@ examples['flame'] = () => {
         style: { backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)), width: '8px', height: '8px', scale: [2, 1], borderRadius: '8px' },
       },
     });
-  });
+  }
 
-  goButton.addEventListener('mouseup', () => {
+  const g = (e) => {
+    e.preventDefault();
     t.clearEmitters();
-  });
+    flameContainer.style.backgroundColor = '#fff';
+  }
+
+  flameButton.addEventListener('mousedown', f);
+  flameButton.addEventListener('touchstart', f);
+  flameButton.addEventListener('mouseup', g);
+  flameButton.addEventListener('touchend', g);
 }
 
-examples['bubbles'] = () => {
-  setBackgroundColor('#113');
-  setButtonText('Hold to Bubble');
 
-  setCode(`
-    t.addEmitter({
-      position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
+/* Bubbles */
+const bubbleButton = document.querySelector('.bubble .example-button');
+const bubbleContainer = document.querySelector('.bubble');
+
+
+const f = (e) => {
+  e.preventDefault();
+
+  bubbleContainer.style.backgroundColor = '#113';
+
+  const midpoint = getTileMidpoint(bubbleContainer);
+
+  t.addEmitter({
+      position: { x: midpoint.x, y: window.scrollY + bubbleButton.getBoundingClientRect().y },
       emitEvery: 200,
       particleOptions: {
         contents: '',
-        get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
+        get position () { return { x: 80 * (Math.random() - 0.5) } },
         get ttl () { return 1500 + (250 * Math.random()) },
         get velocity () { return { y: -10 } },
         get acceleration () { return { x: 0, y: -100 } },
@@ -264,63 +223,23 @@ examples['bubbles'] = () => {
                 onCreate: (p) => {
                   p.heading = Math.atan2(p.velocity.y, p.velocity.x);
                 },
-                style: { backgroundColor: transparent; opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
+                style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
               });
             }
         }
       }
     });
-  `);
-
-  let f = () => {
-    t.addEmitter({
-        position: { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60  },
-        emitEvery: 200,
-        particleOptions: {
-          contents: '',
-          get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
-          get ttl () { return 1500 + (250 * Math.random()) },
-          get velocity () { return { y: -10 } },
-          get acceleration () { return { x: 0, y: -100 } },
-          style: {
-            get scale () { return 0.25 + Math.random() },
-            opacity: [0.5, 1, 1, 1, 0.9],
-            border: '2px solid rgba(192, 192, 200, 1.0)',
-            width: '32px',
-            height: '32px',
-            borderRadius: '16px'
-          },
-          onDestroy: (p) => {
-              let k = 32;
-              let x = 6;
-              let m = Math.random() * Math.PI / x;
-              for(var i = 0; i < x; i++){
-                /* radial fragments */
-                let s = t.addParticle({
-                  ttl: 600,
-                  position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
-                  velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
-                  contents: '-',
-                  onCreate: (p) => {
-                    p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-                  },
-                  style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
-                });
-              }
-          }
-        }
-      });
-  }
-
-  let g = () => {
-    t.clearEmitters();
-  }
-
-  goButton.addEventListener('mousedown', f);
-  goButton.addEventListener('touchstart', f);
-  goButton.addEventListener('mouseup', g);
-  goButton.addEventListener('touchend', g);
 }
+
+const g = () => {
+  t.clearEmitters();
+  bubbleContainer.style.backgroundColor = '#fff';
+}
+
+bubbleButton.addEventListener('mousedown', f);
+bubbleButton.addEventListener('touchstart', f);
+bubbleButton.addEventListener('mouseup', g);
+bubbleButton.addEventListener('touchend', g);
 
 examples['blossom'] = () => {
   mainWindow.style.backgroundColor = '#fefeee';
@@ -332,6 +251,9 @@ examples['blossom'] = () => {
     t.addEmitter({
       position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
       emitEvery: 3,
+      onUpdate: (e, t) => {
+        e.heading += 0.1;
+      },
       particleOptions: {
         ttl: 800,
         style: {
@@ -343,14 +265,14 @@ examples['blossom'] = () => {
         contents: '',
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
         get velocity () {
-          let h = 800 + 100 * Math.random();
-          // theta += 0.01 * Math.PI * Math.random();
-          theta = 2 * Math.random() * Math.PI;
-          return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+          return { x: 800 + 100 * Math.random() }
         },
         onCreate: (p) => {
           p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-        }
+        },
+        onUpdate: (p) => {
+          p.heading += 0.1;
+        },
       }
     });
   });
@@ -360,15 +282,20 @@ examples['blossom'] = () => {
   });
 }
 
-examples['you-know-i-had-to-do-it-to-em'] = () => {
-  setBackgroundColor('#01010f');
-  setButtonText('Hold to Lightspeed');
+/* Lightspeed */
+{
+  const lightspeedButton = document.querySelector('.lightspeed .example-button');
+  const lightspeedContainer = document.querySelector('.lightspeed');
+  lightspeedButton.style.zIndex = 1000;
 
-  let MOVING = false;
+  let MOVING;
 
   let f = () => {
+    const midpoint = getTileMidpoint(lightspeedContainer);
+    lightspeedContainer.style.backgroundColor = '#01010f';
+
     t.addEmitter({
-      position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
+      position: { ...midpoint },
       emitEvery: 4,
       particleOptions: {
         contents: '',
@@ -379,15 +306,15 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
           height: '2px',
           transformOrigin: '100% 50%',
           scaleX: 1,
-          zIndex: 0
+          zIndex: 1
         },
         get position () {
           return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
         },
         onCreate: (p) => {
           p.fixedProps.scaleX = MOVING ? 25 : 1;
-          p.speed = MOVING ? 600 : 0;
-          let theta = Math.atan2(p.position.y - mainWindow.clientHeight / 2, p.position.x - mainWindow.clientWidth / 2);
+          p.speed = MOVING ? 300 : 0;
+          let theta = Math.atan2(p.position.y - midpoint.y, p.position.x - midpoint.x);
           p.state = MOVING;
           p.velocity = { x: p.speed * Math.cos(theta), y: p.speed * Math.sin(theta) }
           p.heading = theta;
@@ -395,13 +322,12 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
         onUpdate: (p) => {
           if (MOVING) {
             p.updateStyle({'backgroundColor': '#aaf', scaleX: lerp(p.style.scaleX, 50, 0.1)});
-            p.speed = lerp(p.speed, 600, 0.1);
+            p.speed = lerp(p.speed, 300, 0.1);
           } else {
             p.updateStyle({'backgroundColor': '#fff', scaleX: lerp(p.style.scaleX, 1, 0.1)});
             p.speed = lerp(p.speed, 0, 0.1);
           }
           p.velocity = { x: p.speed * Math.cos(p.heading), y: p.speed * Math.sin(p.heading) }
-
           if (p.state != MOVING){
             p.state = MOVING;
             if (p.state == false) {
@@ -411,41 +337,66 @@ examples['you-know-i-had-to-do-it-to-em'] = () => {
               p.ttl = 800;
             }
           }
-          if (p.position.x < -12 ||
-              p.position.x > mainWindow.clientWidth + 12 ||
-              p.position.y < -12 ||
-              p.position.y > mainWindow.clientHeight + 12){
-            p.ttl = p.elapsed;
+
+          let rect = lightspeedContainer.getBoundingClientRect();
+
+          if (p.position.x < rect.x ||
+              p.position.x > rect.x + rect.width ||
+              p.position.y < rect.y ||
+              p.position.y > rect.y + rect.height){
+                p.ttl = p.elapsed;
           }
-          // p.acceleration = { x: -1.1 * p.velocity.x, y: -1.1 * p.velocity.y }
         }
       }
     });
   }
 
-  let g = () => {
+  const g = () => {
     t.clearEmitters();
   };
 
-  goButton.addEventListener('mousedown', () => { MOVING = true; f(); });
-  goButton.addEventListener('mouseup', () => { MOVING = false; g(); });
+  lightspeedButton.addEventListener('mousedown', () => {
+    lightspeedContainer.style.backgroundColor = '#010120';
+    MOVING = true;
+    f();
+  });
+  lightspeedButton.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    lightspeedContainer.style.backgroundColor = '#010120';
+    MOVING = true;
+    f();
+  });
+  lightspeedButton.addEventListener('mouseup', () => {
+    lightspeedContainer.style.backgroundColor = '#01010f';
+    MOVING = false;
+    g();
+  });
+  lightspeedButton.addEventListener('touchend', () => {
+    lightspeedContainer.style.backgroundColor = '#01010f';
+    MOVING = false;
+    g();
+  });
 }
 
-examples['fireworks'] = () => {
-  setBackgroundColor('#112');
-  setButtonText('Hold to 4th of July');
+/* Fireworks */
+{
+  const fireworkButton = document.querySelector('.fireworks .example-button');
+  const fireworkContainer = document.querySelector('.fireworks');
 
-  let f = () => {
+  const f = () => {
+    fireworkContainer.style.backgroundColor = '#112';
+    const midpoint = getTileMidpoint(fireworkContainer);
+
     t.addEmitter({
-        position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight },
-        emitEvery: 300,
+        position: { x: midpoint.x, y: fireworkContainer.getBoundingClientRect().y + fireworkContainer.getBoundingClientRect().height },
+        emitEvery: 400,
         particleOptions: {
           contents: '',
-          get position () { return { x: 0.167 * mainWindow.clientWidth * (Math.random() - 0.5) } },
-          get ttl () { return 1500 + (250 * Math.random()) },
+          get position () { return { x: 0.167 * 320 * (Math.random() - 0.5) } },
+          get ttl () { return 800 + (250 * Math.random()) },
           get velocity () {
             let theta = (3/2) * Math.PI + (Math.PI / 8) * (Math.random() - 0.5);
-            let k = 800;
+            let k = 600;
             return { x: k * Math.cos(theta),  y: k * Math.sin(theta) }
           },
           get acceleration () { return { y: 600 } },
@@ -464,7 +415,7 @@ examples['fireworks'] = () => {
                   emitEvery: 32,
                   maxEmissions: 8,
                   particleOptions: {
-                    ttl: 1200,
+                    ttl: 600,
                     position: { x: p.position.x, y: p.position.y },
                     velocity: { x: k * Math.sin(2 * i * Math.PI / x), y: k * Math.cos(2 * i * Math.PI / x) },
                     get acceleration () { return { x: 0, y: 150 } },
@@ -480,12 +431,57 @@ examples['fireworks'] = () => {
       });
   }
 
+  let g = () => { t.clearEmitters(); }
+
+  fireworkButton.addEventListener('mousedown', f);
+  fireworkButton.addEventListener('mouseup', g);
+}
+
+
+/* Snowflakes */
+{
+  const snowflakeButton = document.querySelector('.snowflakes .example-button');
+  const snowflakeContainer = document.querySelector('.snowflakes');
+
+  let f = (e) => {
+    e.preventDefault();
+
+    snowflakeContainer.style.backgroundColor = '#213';
+    const midpoint = getTileMidpoint(snowflakeContainer);
+
+    t.addEmitter({
+      position: { x: midpoint.x, y: snowflakeContainer.getBoundingClientRect().y },
+      emitEvery: 100,
+      particleOptions: {
+        contents: '❄',
+        style: {
+          color: '#fff',
+          get scale () { return 0.5 + 2 * Math.random() },
+          get opacity () {
+            let k = 0.5 + (0.5 * Math.random());
+            return [k, k, 0]
+          }
+        },
+        get position() { return { x: 320 * (Math.random() - 0.5)}},
+        get velocity () { return { x: 60 * (Math.random() - 0.5), y: 15 + 10 * Math.random() } },
+        ttl: 12000,
+        onUpdate: (p) => {
+          if (Math.random() > 0.99) {
+            p.velocity.x = -p.velocity.x;
+          }
+        }
+      }
+    });
+  }
+
   let g = () => {
     t.clearEmitters();
   }
 
-  goButton.addEventListener('mousedown', f);
-  goButton.addEventListener('mouseup', g);
+  snowflakeButton.addEventListener('mousedown', f);
+  snowflakeButton.addEventListener('touchstart', f);
+  snowflakeButton.addEventListener('mouseup', g);
+  snowflakeButton.addEventListener('touchend', g);
 }
 
 examples['chess'] = () => {
@@ -528,7 +524,7 @@ examples['bees'] = () => {
       emitEvery: 3,
       particleOptions: {
         ttl: 800,
-        contents: `<img src='https://www.gstatic.com/webp/gallery3/1.sm.png'>`, //🐝'
+        contents: '🐝',
         style: {
           width: '16px',
           height: '16px',
@@ -537,13 +533,10 @@ examples['bees'] = () => {
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
         get velocity () {
           let h = 100 + 100 * Math.random();
-          // theta += 0.01 * Math.PI * Math.random();
           theta = 2 * Math.random() * Math.PI;
           return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
         },
         onCreate: (p) => {
-          p.element.querySelector('img').style.width = '64px';
-          p.element.querySelector('img').style.height = '64px';
           p.heading = Math.atan2(p.velocity.y, p.velocity.x) + 5 * Math.PI / 6;
         }
       }
@@ -564,16 +557,7 @@ examples['worlds'] = () => {
     t.addParticle({
       ttl: 8000,
       contents: `🌏`,
-      style: {
-        width: '16px',
-        height: '16px',
-        fontSize: '16px',
-        lineHeight: '16px',
-        borderRadius: '8px',
-        color: '#0f0',
-        backgroundColor: '#00f',
-        get scale () { return 1; }
-      },
+      style: { fontSize: '48px' },
       get position () { return { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60} },
       get velocity () {
         let h = 10;
@@ -598,22 +582,13 @@ examples['moons'] = () => {
 
   setButtonText('Press to world');
 
-  let moons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘']
+  let moons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'].reverse()
 
   goButton.addEventListener('mousedown', () => {
     t.addParticle({
       ttl: 8000,
       contents: `🌑`,
-      style: {
-        width: '14px',
-        height: '14px',
-        fontSize: '16px',
-        lineHeight: '14px',
-        borderRadius: '12px',
-        color: '#f0c420',
-        backgroundColor: '#000',
-        get scale () { return 1; }
-      },
+      style: { fontSize: '48px' },
       get position () { return { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60} },
       get velocity () {
         let h = 10;

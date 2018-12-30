@@ -1,12 +1,11 @@
 import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
 import { ZERO_VECTOR } from './utilities';
 
-
 const DEFAULT_EMITTER_OPTIONS = {
   maxEmissions: false,
   ttl: false,
   emitEvery: 500,
-  rotation: 0,
+  heading: 0,
   particleOptions: { ...DEFAULT_PARTICLE_OPTIONS },
   onCreate: () => {},
   onUpdate: () => {},
@@ -69,11 +68,10 @@ export default class TextParticleEmitter {
         let v = { ...ZERO_VECTOR, ...this.particleOptions.velocity };
         let v_angle = Math.atan2(v.y, v.x);
         let v_magna = Math.sqrt((v.x * v.x) + (v.y * v.y));
-        let t_angle = (this.rotation / 180) * Math.PI;
 
         let vv = {
-          x: v_magna * Math.cos(v_angle + t_angle),
-          y: v_magna * Math.sin(v_angle + t_angle)
+          x: v_magna * Math.cos(v_angle + this.heading),
+          y: v_magna * Math.sin(v_angle + this.heading)
         }
 
         this.manager.addParticle({ ...this.particleOptions, position: pp, velocity: vv });
@@ -85,6 +83,6 @@ export default class TextParticleEmitter {
     }
 
     // user-provided update
-    this.onUpdate(this);
+    this.onUpdate(this, f);
   }
 }
