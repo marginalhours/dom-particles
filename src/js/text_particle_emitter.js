@@ -1,5 +1,4 @@
 import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
-import { ZERO_VECTOR } from './utilities';
 
 const DEFAULT_EMITTER_OPTIONS = {
   maxEmissions: false,
@@ -20,9 +19,9 @@ export default class TextParticleEmitter {
     Object.assign(this, {
       ...DEFAULT_EMITTER_OPTIONS,
       ...options,
-      position: { ...ZERO_VECTOR, ...options.position },
-      velocity: { ...ZERO_VECTOR, ...options.velocity },
-      acceleration: { ...ZERO_VECTOR, ...options.acceleration },
+      position: { ...{ x: 0, y: 0 }, ...options.position },
+      velocity: { ...{ x: 0, y: 0 }, ...options.velocity },
+      acceleration: { ...{ x: 0, y: 0 }, ...options.acceleration },
     });
 
     this.manager = options.manager;
@@ -62,10 +61,10 @@ export default class TextParticleEmitter {
       this.elapsed = 0;
 
       for(let i = 0; i < toEmit; i++){
-        let p = { ...ZERO_VECTOR, ...this.particleOptions.position };
+        let p = { ...{ x: 0, y: 0 }, ...this.particleOptions.position };
         let pp = { x: this.position.x + p.x, y: this.position.y + p.y }
 
-        let v = { ...ZERO_VECTOR, ...this.particleOptions.velocity };
+        let v = { ...{ x: 0, y: 0 }, ...this.particleOptions.velocity };
         let v_angle = Math.atan2(v.y, v.x);
         let v_magna = Math.sqrt((v.x * v.x) + (v.y * v.y));
 

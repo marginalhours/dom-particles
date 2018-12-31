@@ -1,4 +1,4 @@
-import { propValueToFunction, ZERO_VECTOR } from './utilities';
+import { propValueToFunction } from './utilities';
 
 export const DEFAULT_PARTICLE_OPTIONS = {
   ttl: 1000,
@@ -16,9 +16,9 @@ export default class TextParticle {
     Object.assign(this, {
       ...DEFAULT_PARTICLE_OPTIONS,
       ...options,
-      velocity: { ...ZERO_VECTOR, ...options.velocity },
-      position: { ...ZERO_VECTOR, ...options.position },
-      acceleration: { ...ZERO_VECTOR, ...options.acceleration },
+      velocity: { ...{ x: 0, y: 0 }, ...options.velocity },
+      position: { ...{ x: 0, y: 0 }, ...options.position },
+      acceleration: { ...{ x: 0, y: 0 }, ...options.acceleration },
       style: { ...DEFAULT_PARTICLE_OPTIONS.style, ...options.style }
     });
 

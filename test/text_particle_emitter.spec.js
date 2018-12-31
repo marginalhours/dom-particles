@@ -2,7 +2,6 @@ const assert = require('assert');
 const TextParticleManager = require('../src/js/text_particle_manager').default;
 const TextParticleEmitter = require('../src/js/text_particle_emitter').default;
 const { DEFAULT_PARTICLE_OPTIONS } = require('../src/js/text_particle');
-const { ZERO_VECTOR } = require('../src/js/utilities');
 
 describe('TextParticleEmitter', () => {
 
@@ -13,9 +12,9 @@ describe('TextParticleEmitter', () => {
     assert.equal(e.ttl, false);
     assert.equal(e.emitEvery, 500);
     assert.deepEqual(e.particleOptions, DEFAULT_PARTICLE_OPTIONS);
-    assert.deepEqual(e.position, ZERO_VECTOR);
-    assert.deepEqual(e.velocity, ZERO_VECTOR);
-    assert.deepEqual(e.acceleration, ZERO_VECTOR);
+    assert.deepEqual(e.position, { x: 0, y: 0 });
+    assert.deepEqual(e.velocity, { x: 0, y: 0 });
+    assert.deepEqual(e.acceleration, { x: 0, y: 0 });
     assert.equal(e.heading, 0);
   });
 

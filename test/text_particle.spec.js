@@ -1,6 +1,5 @@
 const assert = require('assert');
 const TextParticle = require('../src/js/text_particle').default;
-const { ZERO_VECTOR } = require('../src/js/utilities');
 
 describe('TextParticle', () => {
   it('should have default options on creation', () => {
@@ -8,9 +7,9 @@ describe('TextParticle', () => {
       element: document.createElement('span')
     });
 
-    assert.deepEqual(p.position, ZERO_VECTOR);
-    assert.deepEqual(p.acceleration, ZERO_VECTOR);
-    assert.deepEqual(p.velocity, ZERO_VECTOR);
+    assert.deepEqual(p.position, { x: 0, y: 0 });
+    assert.deepEqual(p.acceleration, { x: 0, y: 0 });
+    assert.deepEqual(p.velocity, { x: 0, y: 0 });
     assert.equal(p.ttl, 1000);
     assert.equal(p.frameNumber, 0);
   });

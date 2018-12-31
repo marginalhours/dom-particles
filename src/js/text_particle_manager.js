@@ -1,8 +1,6 @@
 import TextParticle from './text_particle';
 import TextParticleEmitter from './text_particle_emitter';
 
-import { buildOffsets } from './utilities';
-
 const DEFAULT_TPM_OPTIONS = {
   max: 100,
   preallocate: 10,

@@ -2,18 +2,26 @@ html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   font-family: sans-serif;
   background-color: #113;
 }
 
-.body-wrapper {
+body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  box-sizing: border-box;
   padding: 20px;
+}
+
+.body-wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   grid-auto-rows: min-content;
   grid-gap: 20px;
-  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  margin-bottom: 100px;
 }
 
 .example {
