@@ -12,21 +12,20 @@ const getTileMidpoint = (tile) => {
   const t = tile.getBoundingClientRect();
   return {
     x: window.scrollX + t.x + (t.width / 2),
-    y: window.scrollY + t.y + (t.height / 2)
+    y: document.body.scrollTop + t.y + (t.height / 2)
   }
 }
 
 /* Simple */
 {
   const simpleButton = document.querySelector('.simple .example-button');
-  const simpleContainer = document.querySelector('.simple');
 
   const f = (e) => {
-    simpleContainer.style.backgroundColor = 'rgba(255, 255, 240, 1.0)';
     t.addParticle({
-      position: { x: window.scrollX + e.clientX, y: window.scrollY + e.clientY },
+      position: { x: e.clientX, y: document.body.scrollTop + simpleButton.getBoundingClientRect().y },
       contents: '+1',
-      velocity: { x: 0, y: -50 }
+      velocity: { x: 0, y: -40 },
+      style: { color: '#fff', fontSize: '24px' }
     });
   }
 
@@ -40,8 +39,8 @@ const getTileMidpoint = (tile) => {
 
   const f = (e) => {
     t.addParticle({
-      position: { x: e.clientX, y: window.scrollY + metroidButton.getBoundingClientRect().y },
-      get contents () { return Math.floor(200 * Math.random()) },
+      position: { x: e.clientX, y: document.body.scrollTop + metroidButton.getBoundingClientRect().y },
+      get contents () { return Math.floor(200 * Math.random()); },
       ttl: 800,
       velocity: { x: 0, y: -25 },
       acceleration: { x: 0, y: -100 },
@@ -58,7 +57,7 @@ const getTileMidpoint = (tile) => {
   }
 
   metroidButton.addEventListener('click', (e) => { e.preventDefault(); f(e); });
-  metroidButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(t.touches[0]) });
+  metroidButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(t.changedTouches[0]) });
 }
 
 /* Trails */
@@ -71,17 +70,17 @@ const getTileMidpoint = (tile) => {
     const midpoint = getTileMidpoint(trailContainer);
 
     let k = 0;
-    let m = 180;
-    let n = 16;
+    let m = 140;
+    let n = 12;
 
     t.addEmitter({
       position: { x: midpoint.x, y: midpoint.y - 120 },
-      emitEvery: 8,
+      emitEvery: 16,
       onUpdate: (emitter) => {
         emitter.position.x = midpoint.x + (m * Math.sin(k++/n));
       },
       particleOptions: {
-        ttl: 1000,
+        ttl: 600,
         style: {
           get backgroundColor () { return  ['#f33', '#fefeee'] },
           width: '12px',
@@ -100,12 +99,12 @@ const getTileMidpoint = (tile) => {
 
     t.addEmitter({
       position: { x: midpoint.x, y: midpoint.y - 120 },
-      emitEvery: 8,
+      emitEvery: 16,
       onUpdate: (emitter) => {
         emitter.position.x = midpoint.x + (m * Math.sin(Math.PI + k/n));
       },
       particleOptions: {
-        ttl: 1000,
+        ttl: 600,
         style: {
           get backgroundColor () { return  ['#33f', '#eefefe'] },
           width: '12px',
@@ -251,7 +250,6 @@ const getTileMidpoint = (tile) => {
   const blossomContainer = document.querySelector('.blossom');
 
   const f = () => {
-    blossomContainer.style.backgroundColor = '#fefeee';
     const midpoint = getTileMidpoint(blossomContainer);
 
     t.addEmitter({
@@ -350,8 +348,8 @@ const getTileMidpoint = (tile) => {
 
           if (p.position.x < rect.x ||
               p.position.x > rect.x + rect.width ||
-              p.position.y < window.scrollY + rect.y ||
-              p.position.y > window.scrollY + rect.y + rect.height){
+              p.position.y < document.body.scrollTop + rect.y ||
+              p.position.y > document.body.scrollTop + rect.y + rect.height){
                 p.ttl = p.elapsed;
           }
         }
@@ -440,7 +438,7 @@ const getTileMidpoint = (tile) => {
       });
   }
 
-  let g = () => { t.clearEmitters(); }
+  let g = () => { t.clearEmitters(); fireworkContainer.style.backgroundColor = 'rgba(0, 0, 0, 0)';}
 
   fireworkButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
   fireworkButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
@@ -455,8 +453,6 @@ const getTileMidpoint = (tile) => {
   const snowflakeContainer = document.querySelector('.snowflakes');
 
   let f = () => {
-
-    snowflakeContainer.style.backgroundColor = '#213';
     const midpoint = getTileMidpoint(snowflakeContainer);
 
     t.addEmitter({
