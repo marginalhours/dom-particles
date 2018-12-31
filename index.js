@@ -1,27 +1,8 @@
 const { colourToCSSString, positionFromNode, lerp } = letterbomb.utilities;
 
-const HEAT_COLOURS = [
-  [0, 0, 0, 1.0], // out
-  [31, 0, 0, 1.0], // even fainter
-  [61, 12, 8, 1.0], // faint red
-  [98, 12, 11, 1.0], // blood red
-  [167, 18, 14, 1.0], // dark cherry
-  [220, 25, 21, 1.0], // medium cherry
-  [232, 39, 24, 1.0], // cherry
-  [255, 54, 28, 1.0], // bright cherry
-  [255, 72, 24, 1.0], // salmon
-  [255, 105, 16, 1.0], // dark orange
-  [255, 166, 36, 1.0], // orange
-  [255, 246, 79, 1.0], // lemon
-  [255, 253, 148, 1.0], // light yellow
-  [254, 254, 200, 1.0], // white
-  [254, 254, 254, 1.0], // white
-].reverse();
-
-let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
-
 let t = new letterbomb({
   max: 10000,
+  preallocate: 100,
   container: document.querySelector('body')
 });
 
@@ -29,49 +10,51 @@ examples = {};
 
 const getTileMidpoint = (tile) => {
   const t = tile.getBoundingClientRect();
+  console.log(window.scrollY);
   return {
-    x: window.scrollX, //+ t.x + (t.width / 2),
-    y: window.scrollY //+ t.y + (t.height / 2)
+    x: window.scrollX + t.x + (t.width / 2),
+    y: window.scrollY + t.y + (t.height / 2)
   }
 }
 
-
 /* Simple */
-const simpleButton = document.querySelector('.simple .example-button');
-const simpleContainer = document.querySelector('.simple');
+{
+  const simpleButton = document.querySelector('.simple .example-button');
+  const simpleContainer = document.querySelector('.simple');
 
-simpleButton.addEventListener('click', (e) => {
-  simpleContainer.style.backgroundColor = 'rgba(255, 255, 240, 1.0)';
-  t.addParticle({
-    position: { x: e.clientX, y: e.clientY },
-    contents: '+1',
-    velocity: { x: 0, y: -50 }
+  simpleButton.addEventListener('click', (e) => {
+    simpleContainer.style.backgroundColor = 'rgba(255, 255, 240, 1.0)';
+    t.addParticle({
+      position: { x: e.clientX, y: e.clientY },
+      contents: '+1',
+      velocity: { x: 0, y: -50 }
+    });
   });
-});
-
+}
 
 /* Metroidvania */
-const metroidButton = document.querySelector('.metroidvania .example-button');
+{
+  const metroidButton = document.querySelector('.metroidvania .example-button');
 
-metroidButton.addEventListener('click', (e) => {
-  t.addParticle({
-    position: { x: e.clientX, y: window.scrollY + metroidButton.getBoundingClientRect().y },
-    get contents () { return Math.floor(200 * Math.random()) },
-    ttl: 800,
-    velocity: { x: 0, y: -25 },
-    acceleration: { x: 0, y: -100 },
-    style: {
-      scale: [2.5, 1, 1, 1, 1, 1, 1],
-      opacity: [1, 1, 0],
-      fontWeight: 'bold',
-      fontSize: '18px',
-      fontFamily: 'monospace',
-      textShadow: '1px 1px 0px #f00',
-      color: '#fff'
-    }
+  metroidButton.addEventListener('click', (e) => {
+    t.addParticle({
+      position: { x: e.clientX, y: window.scrollY + metroidButton.getBoundingClientRect().y },
+      get contents () { return Math.floor(200 * Math.random()) },
+      ttl: 800,
+      velocity: { x: 0, y: -25 },
+      acceleration: { x: 0, y: -100 },
+      style: {
+        scale: [2.5, 1, 1, 1, 1, 1, 1],
+        opacity: [1, 1, 0],
+        fontWeight: 'bold',
+        fontSize: '18px',
+        fontFamily: 'monospace',
+        textShadow: '1px 1px 0px #f00',
+        color: '#fff'
+      }
+    });
   });
-});
-
+}
 
 /* Trails */
 {
@@ -88,7 +71,7 @@ metroidButton.addEventListener('click', (e) => {
     let n = 16;
 
     t.addEmitter({
-      position: { x: midpoint.x, y: trailContainer.getBoundingClientRect().y },
+      position: { x: midpoint.x, y: midpoint.y - 120 },
       emitEvery: 8,
       onUpdate: (emitter) => {
         emitter.position.x = midpoint.x + (m * Math.sin(k++/n));
@@ -112,7 +95,7 @@ metroidButton.addEventListener('click', (e) => {
     });
 
     t.addEmitter({
-      position: { x: midpoint.x, y: trailContainer.getBoundingClientRect().y },
+      position: { x: midpoint.x, y: midpoint.y - 120 },
       emitEvery: 8,
       onUpdate: (emitter) => {
         emitter.position.x = midpoint.x + (m * Math.sin(Math.PI + k/n));
@@ -150,12 +133,30 @@ metroidButton.addEventListener('click', (e) => {
   const flameButton = document.querySelector('.flame .example-button');
   const flameContainer = document.querySelector('.flame');
 
+  const HEAT_COLOURS = [
+    [0, 0, 0, 1.0], // out
+    [31, 0, 0, 1.0], // even fainter
+    [61, 12, 8, 1.0], // faint red
+    [98, 12, 11, 1.0], // blood red
+    [167, 18, 14, 1.0], // dark cherry
+    [220, 25, 21, 1.0], // medium cherry
+    [232, 39, 24, 1.0], // cherry
+    [255, 54, 28, 1.0], // bright cherry
+    [255, 72, 24, 1.0], // salmon
+    [255, 105, 16, 1.0], // dark orange
+    [255, 166, 36, 1.0], // orange
+    [255, 246, 79, 1.0], // lemon
+    [255, 253, 148, 1.0], // light yellow
+    [254, 254, 200, 1.0], // white
+    [254, 254, 254, 1.0], // white
+  ].reverse();
+
   const f = (e) => {
     e.preventDefault();
     const midpoint = getTileMidpoint(flameContainer);
     flameContainer.style.backgroundColor = '#000';
     t.addEmitter({
-      position: { x: midpoint.x, y: window.scrollY + flameButton.getBoundingClientRect().y },
+      position: { x: midpoint.x, y: midpoint.y - 40 },
       emitEvery: 8,
       particleOptions: {
         contents: '',
@@ -170,7 +171,7 @@ metroidButton.addEventListener('click', (e) => {
   const g = (e) => {
     e.preventDefault();
     t.clearEmitters();
-    flameContainer.style.backgroundColor = '#fff';
+    flameContainer.style.backgroundColor = 'rgba(0, 0, 0, 0)';
   }
 
   flameButton.addEventListener('mousedown', f);
@@ -181,105 +182,110 @@ metroidButton.addEventListener('click', (e) => {
 
 
 /* Bubbles */
-const bubbleButton = document.querySelector('.bubble .example-button');
-const bubbleContainer = document.querySelector('.bubble');
+{
+  const bubbleButton = document.querySelector('.bubble .example-button');
+  const bubbleContainer = document.querySelector('.bubble');
 
+  const f = (e) => {
+    e.preventDefault();
 
-const f = (e) => {
-  e.preventDefault();
+    bubbleContainer.style.backgroundColor = '#113';
 
-  bubbleContainer.style.backgroundColor = '#113';
-
-  const midpoint = getTileMidpoint(bubbleContainer);
-
-  t.addEmitter({
-      position: { x: midpoint.x, y: window.scrollY + bubbleButton.getBoundingClientRect().y },
-      emitEvery: 200,
-      particleOptions: {
-        contents: '',
-        get position () { return { x: 80 * (Math.random() - 0.5) } },
-        get ttl () { return 1500 + (250 * Math.random()) },
-        get velocity () { return { y: -10 } },
-        get acceleration () { return { x: 0, y: -100 } },
-        style: {
-          get scale () { return 0.25 + Math.random() },
-          opacity: [0.5, 1, 1, 1, 0.9],
-          border: '2px solid rgba(192, 192, 200, 1.0)',
-          width: '32px',
-          height: '32px',
-          borderRadius: '16px'
-        },
-        onDestroy: (p) => {
-            let k = 32;
-            let x = 6;
-            let m = Math.random() * Math.PI / x;
-            for(var i = 0; i < x; i++){
-              /* radial fragments */
-              let s = t.addParticle({
-                ttl: 600,
-                position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
-                velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
-                contents: '-',
-                onCreate: (p) => {
-                  p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-                },
-                style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
-              });
-            }
-        }
-      }
-    });
-}
-
-const g = () => {
-  t.clearEmitters();
-  bubbleContainer.style.backgroundColor = '#fff';
-}
-
-bubbleButton.addEventListener('mousedown', f);
-bubbleButton.addEventListener('touchstart', f);
-bubbleButton.addEventListener('mouseup', g);
-bubbleButton.addEventListener('touchend', g);
-
-examples['blossom'] = () => {
-  mainWindow.style.backgroundColor = '#fefeee';
-
-  setButtonText('Hold to Blossom');
-
-  goButton.addEventListener('mousedown', () => {
-    let theta = 0;
+    const midpoint = getTileMidpoint(bubbleContainer);
     t.addEmitter({
-      position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
+        position: { x: midpoint.x, y: midpoint.y - 40 },
+        emitEvery: 200,
+        particleOptions: {
+          contents: '',
+          get position () { return { x: 80 * (Math.random() - 0.5) } },
+          get ttl () { return 1500 + (250 * Math.random()) },
+          get velocity () { return { y: -10 } },
+          get acceleration () { return { x: 0, y: -100 } },
+          style: {
+            get scale () { return 0.25 + Math.random() },
+            opacity: [0.5, 1, 1, 1, 0.9],
+            border: '2px solid rgba(192, 192, 200, 1.0)',
+            width: '32px',
+            height: '32px',
+            borderRadius: '16px'
+          },
+          onDestroy: (p) => {
+              let k = 32;
+              let x = 6;
+              let m = Math.random() * Math.PI / x;
+              for(var i = 0; i < x; i++){
+                /* radial fragments */
+                t.addParticle({
+                  ttl: 600,
+                  position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
+                  velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
+                  contents: '-',
+                  onCreate: (p) => {
+                    p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+                  },
+                  style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
+                });
+              }
+          }
+        }
+      });
+  }
+
+  const g = () => {
+    t.clearEmitters();
+  }
+
+  bubbleButton.addEventListener('mousedown', f);
+  bubbleButton.addEventListener('touchstart', f);
+  bubbleButton.addEventListener('mouseup', g);
+  bubbleButton.addEventListener('touchend', g);
+
+}
+
+/* Blossom */
+{
+  const blossomButton = document.querySelector('.blossom .example-button');
+  const blossomContainer = document.querySelector('.blossom');
+
+  const f = () => {
+    blossomContainer.style.backgroundColor = '#fefeee';
+    const midpoint = getTileMidpoint(blossomContainer);
+
+    t.addEmitter({
+      position: { x: midpoint.x, y: midpoint.y },
       emitEvery: 3,
-      onUpdate: (e, t) => {
-        e.heading += 0.1;
-      },
       particleOptions: {
-        ttl: 800,
+        ttl: 300,
         style: {
           backgroundColor: ['#f33', '#fefeee'],
           width: '16px',
           height: '16px',
-          scale: [0, 20],
+          scale: [0, 10],
         },
         contents: '',
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
         get velocity () {
-          return { x: 800 + 100 * Math.random() }
+          const theta = 2 * Math.PI * Math.random();
+          const r = 800 + 100 * Math.random();
+          return { x: r * Math.cos(theta), y: r * Math.sin(theta) }
         },
         onCreate: (p) => {
+          console.log(p.position);
           p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-        },
-        onUpdate: (p) => {
-          p.heading += 0.1;
         },
       }
     });
-  });
+  }
 
-  goButton.addEventListener('mouseup', () => {
+  const g = () => {
     t.clearEmitters();
-  });
+  }
+
+  blossomButton.addEventListener('mousedown', f);
+  blossomButton.addEventListener('touchstart', f);
+  blossomButton.addEventListener('mouseup', g);
+  blossomButton.addEventListener('touchend', g);
+
 }
 
 /* Lightspeed */
@@ -295,7 +301,7 @@ examples['blossom'] = () => {
     lightspeedContainer.style.backgroundColor = '#01010f';
 
     t.addEmitter({
-      position: { ...midpoint },
+      position: { x: midpoint.x, y: midpoint.y },
       emitEvery: 4,
       particleOptions: {
         contents: '',
@@ -342,8 +348,8 @@ examples['blossom'] = () => {
 
           if (p.position.x < rect.x ||
               p.position.x > rect.x + rect.width ||
-              p.position.y < rect.y ||
-              p.position.y > rect.y + rect.height){
+              p.position.y < window.scrollY + rect.y ||
+              p.position.y > window.scrollY + rect.y + rect.height){
                 p.ttl = p.elapsed;
           }
         }
@@ -388,7 +394,7 @@ examples['blossom'] = () => {
     const midpoint = getTileMidpoint(fireworkContainer);
 
     t.addEmitter({
-        position: { x: midpoint.x, y: fireworkContainer.getBoundingClientRect().y + fireworkContainer.getBoundingClientRect().height },
+        position: { x: midpoint.x, y: midpoint.y + fireworkContainer.getBoundingClientRect().height / 2 },
         emitEvery: 400,
         particleOptions: {
           contents: '',
@@ -450,7 +456,7 @@ examples['blossom'] = () => {
     const midpoint = getTileMidpoint(snowflakeContainer);
 
     t.addEmitter({
-      position: { x: midpoint.x, y: snowflakeContainer.getBoundingClientRect().y },
+      position: { x: midpoint.x, y: midpoint.y - 160 },
       emitEvery: 100,
       particleOptions: {
         contents: '❄',
