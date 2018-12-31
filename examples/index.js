@@ -22,21 +22,27 @@ const getTileMidpoint = (tile) => {
   const simpleButton = document.querySelector('.simple .example-button');
   const simpleContainer = document.querySelector('.simple');
 
-  simpleButton.addEventListener('click', (e) => {
+  const f = (e) => {
+    e.preventDefault();
+
     simpleContainer.style.backgroundColor = 'rgba(255, 255, 240, 1.0)';
     t.addParticle({
       position: { x: e.clientX, y: e.clientY },
       contents: '+1',
       velocity: { x: 0, y: -50 }
     });
-  });
+  }
+
+  simpleButton.addEventListener('click', f);
+  simpleButton.addEventListener('touchstart', f);
 }
 
 /* Metroidvania */
 {
   const metroidButton = document.querySelector('.metroidvania .example-button');
 
-  metroidButton.addEventListener('click', (e) => {
+  const f = (e) => {
+    e.preventDefault();
     t.addParticle({
       position: { x: e.clientX, y: window.scrollY + metroidButton.getBoundingClientRect().y },
       get contents () { return Math.floor(200 * Math.random()) },
@@ -53,7 +59,10 @@ const getTileMidpoint = (tile) => {
         color: '#fff'
       }
     });
-  });
+  }
+
+  simpleButton.addEventListener('click', f);
+  simpleButton.addEventListener('touchstart', f);
 }
 
 /* Trails */
