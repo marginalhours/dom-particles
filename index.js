@@ -10,7 +10,6 @@ examples = {};
 
 const getTileMidpoint = (tile) => {
   const t = tile.getBoundingClientRect();
-  console.log(window.scrollY);
   return {
     x: window.scrollX + t.x + (t.width / 2),
     y: window.scrollY + t.y + (t.height / 2)
@@ -23,18 +22,16 @@ const getTileMidpoint = (tile) => {
   const simpleContainer = document.querySelector('.simple');
 
   const f = (e) => {
-    e.preventDefault();
-
     simpleContainer.style.backgroundColor = 'rgba(255, 255, 240, 1.0)';
     t.addParticle({
-      position: { x: e.clientX, y: e.clientY },
+      position: { x: window.scrollX + e.clientX, y: window.scrollY + e.clientY },
       contents: '+1',
       velocity: { x: 0, y: -50 }
     });
   }
 
-  simpleButton.addEventListener('click', f);
-  simpleButton.addEventListener('touchstart', f);
+  simpleButton.addEventListener('click', (e) => { e.preventDefault(); f(e); });
+  simpleButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(t.touches[0]); });
 }
 
 /* Metroidvania */
@@ -42,7 +39,6 @@ const getTileMidpoint = (tile) => {
   const metroidButton = document.querySelector('.metroidvania .example-button');
 
   const f = (e) => {
-    e.preventDefault();
     t.addParticle({
       position: { x: e.clientX, y: window.scrollY + metroidButton.getBoundingClientRect().y },
       get contents () { return Math.floor(200 * Math.random()) },
@@ -61,16 +57,15 @@ const getTileMidpoint = (tile) => {
     });
   }
 
-  simpleButton.addEventListener('click', f);
-  simpleButton.addEventListener('touchstart', f);
+  metroidButton.addEventListener('click', (e) => { e.preventDefault(); f(e); });
+  metroidButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(t.touches[0]) });
 }
 
 /* Trails */
 {
   const trailButton = document.querySelector('.trail .example-button');
 
-  const f = (e) => {
-    e.preventDefault();
+  const f = () => {
 
     const trailContainer = document.querySelector('.trail');
     const midpoint = getTileMidpoint(trailContainer);
@@ -131,8 +126,8 @@ const getTileMidpoint = (tile) => {
     t.clearEmitters();
   }
 
-  trailButton.addEventListener('mousedown', f);
-  trailButton.addEventListener('touchstart', f);
+  trailButton.addEventListener('mousedown', (e) => { e.preventDefault(); f(); });
+  trailButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(); });
   trailButton.addEventListener('mouseup', g);
   trailButton.addEventListener('touchend', g);
 }
@@ -160,8 +155,8 @@ const getTileMidpoint = (tile) => {
     [254, 254, 254, 1.0], // white
   ].reverse();
 
-  const f = (e) => {
-    e.preventDefault();
+  const f = () => {
+
     const midpoint = getTileMidpoint(flameContainer);
     flameContainer.style.backgroundColor = '#000';
     t.addEmitter({
@@ -183,8 +178,8 @@ const getTileMidpoint = (tile) => {
     flameContainer.style.backgroundColor = 'rgba(0, 0, 0, 0)';
   }
 
-  flameButton.addEventListener('mousedown', f);
-  flameButton.addEventListener('touchstart', f);
+  flameButton.addEventListener('mousedown', (e) => { e.preventDefault(); f(); });
+  flameButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(); });
   flameButton.addEventListener('mouseup', g);
   flameButton.addEventListener('touchend', g);
 }
@@ -195,8 +190,7 @@ const getTileMidpoint = (tile) => {
   const bubbleButton = document.querySelector('.bubble .example-button');
   const bubbleContainer = document.querySelector('.bubble');
 
-  const f = (e) => {
-    e.preventDefault();
+  const f = () => {
 
     bubbleContainer.style.backgroundColor = '#113';
 
@@ -244,8 +238,8 @@ const getTileMidpoint = (tile) => {
     t.clearEmitters();
   }
 
-  bubbleButton.addEventListener('mousedown', f);
-  bubbleButton.addEventListener('touchstart', f);
+  bubbleButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
+  bubbleButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
   bubbleButton.addEventListener('mouseup', g);
   bubbleButton.addEventListener('touchend', g);
 
@@ -279,7 +273,6 @@ const getTileMidpoint = (tile) => {
           return { x: r * Math.cos(theta), y: r * Math.sin(theta) }
         },
         onCreate: (p) => {
-          console.log(p.position);
           p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
         },
       }
@@ -290,8 +283,8 @@ const getTileMidpoint = (tile) => {
     t.clearEmitters();
   }
 
-  blossomButton.addEventListener('mousedown', f);
-  blossomButton.addEventListener('touchstart', f);
+  blossomButton.addEventListener('mousedown', (e) => { e.preventDefault(); f(); });
+  blossomButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
   blossomButton.addEventListener('mouseup', g);
   blossomButton.addEventListener('touchend', g);
 
@@ -370,15 +363,16 @@ const getTileMidpoint = (tile) => {
     t.clearEmitters();
   };
 
-  lightspeedButton.addEventListener('mousedown', () => {
+  lightspeedButton.addEventListener('mousedown', (e) => {
     lightspeedContainer.style.backgroundColor = '#010120';
     MOVING = true;
+    e.preventDefault();
     f();
   });
-  lightspeedButton.addEventListener('touchstart', (e) => {
-    e.preventDefault();
+  lightspeedButton.addEventListener('touchstart', (t) => {
     lightspeedContainer.style.backgroundColor = '#010120';
     MOVING = true;
+    t.preventDefault();
     f();
   });
   lightspeedButton.addEventListener('mouseup', () => {
@@ -448,8 +442,10 @@ const getTileMidpoint = (tile) => {
 
   let g = () => { t.clearEmitters(); }
 
-  fireworkButton.addEventListener('mousedown', f);
+  fireworkButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
+  fireworkButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
   fireworkButton.addEventListener('mouseup', g);
+  fireworkButton.addEventListener('touchend', g);
 }
 
 
@@ -458,8 +454,7 @@ const getTileMidpoint = (tile) => {
   const snowflakeButton = document.querySelector('.snowflakes .example-button');
   const snowflakeContainer = document.querySelector('.snowflakes');
 
-  let f = (e) => {
-    e.preventDefault();
+  let f = () => {
 
     snowflakeContainer.style.backgroundColor = '#213';
     const midpoint = getTileMidpoint(snowflakeContainer);
@@ -493,8 +488,8 @@ const getTileMidpoint = (tile) => {
     t.clearEmitters();
   }
 
-  snowflakeButton.addEventListener('mousedown', f);
-  snowflakeButton.addEventListener('touchstart', f);
+  snowflakeButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
+  snowflakeButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
   snowflakeButton.addEventListener('mouseup', g);
   snowflakeButton.addEventListener('touchend', g);
 }
