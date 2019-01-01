@@ -8,7 +8,7 @@
     "start": "./start.sh",
     "serve": "node server.js",
     "dev": "webpack --progress --colors --watch --mode=development",
-    "build": "WEBPACK_ENV=build webpack --mode=production"
+    "build": "WEBPACK_ENV=build mode=production webpack --mode=production"
   },
   "babel": {
     "presets": [

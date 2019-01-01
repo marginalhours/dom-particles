@@ -1,7 +1,7 @@
 const path = require('path'),
       webpack = require('webpack');
 
-const libraryName = 'dom-text-particles';
+const libraryName = 'domTextParticles';
 const mode = process.env.mode;
 
 let outputFile = `${libraryName}.js`;
