@@ -1,10 +1,10 @@
-# Library Name
+# Dom-Text-Particles
 
-Particle-style animation for the DOM. [Demo Page](http://)
+Particle-style animation for the DOM. [Demo Page](http://misterkeefe.github.io/dom-text-particles)
 
 ## Installation
 
-`npm install --save <library_name>`
+<!-- `npm install --save dom-text-particles`
 
 then in your code:
 
@@ -16,13 +16,16 @@ t = new LibraryName();
 
 or just as a script tag via [unpkg](https://unpkg.com/#/):
 
-`<script type='text/javascript' src='//unpkg'>`
+`<script type='text/javascript' src='//unpkg'>` -->
 
 
 ## Quickstart example
 
-Include the above `<script>` tag in the `<head>` of your page, then somewhere in the
-body include the following script:
+Include this `<script>` tag in the `<head>` of your page:
+
+
+
+Then somewhere in the body include the following script:
 
 ```
 <script type='text/javascript'>

@@ -1,16 +1,16 @@
 const path = require('path'),
       webpack = require('webpack');
 
-const libraryName = 'letterbomb';
+const libraryName = 'dom-text-particles';
 const mode = process.env.mode;
 
 let outputFile = `${libraryName}.js`;
 
 if (mode === 'production') {
-  outputFile = `${libraryName}.min.js`;  
+  outputFile = `${libraryName}.min.js`;
 }
 
-module.exports = {  
+module.exports = {
   entry: {
     index: './src/js/index.js'
   },

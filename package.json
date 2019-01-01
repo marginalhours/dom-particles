@@ -1,8 +1,8 @@
 {
-  "name": "letter-bomb",
+  "name": "dom-text-particles",
   "version": "0.0.1",
   "description": "Particle effects for DOM elements",
-  "browser": "lib/letterbomb.min.js",
+  "browser": "lib/dom-text-particles.js",
   "scripts": {
     "test": "mocha --require @babel/register --watch",
     "start": "./start.sh",
@@ -19,7 +19,7 @@
     "node": "8.1.x"
   },
   "repository": {
-    "url": "https://github.com/MisterKeefe/#readme"
+    "url": "https://github.com/MisterKeefe/dom-text-particles#readme"
   },
   "license": "MIT",
   "keywords": [
