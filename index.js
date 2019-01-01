@@ -1,6 +1,6 @@
-const { colourToCSSString, positionFromNode, lerp } = letterbomb.utilities;
+const { colourToCSSString, positionFromNode, lerp } = domTextParticles.utilities;
 
-let t = new letterbomb({
+let t = new domTextParticles({
   max: 10000,
   preallocate: 100,
   container: document.querySelector('body')
