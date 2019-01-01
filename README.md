@@ -1,31 +1,42 @@
 # Library Name
 
-Particle-style animation for the DOM. [Demo Page]()
+Particle-style animation for the DOM. [Demo Page](http://)
 
 ## Installation
 
 `npm install --save <library_name>`
 
-or
+then in your code:
+
+```
+import LibraryName from 'LibraryName'
+
+t = new LibraryName();
+```
+
+or just as a script tag via [unpkg](https://unpkg.com/#/):
 
 `<script type='text/javascript' src='//unpkg'>`
 
 
 ## Quickstart example
 
-`git clone` this repository and have a look at the examples folder
+Include the above `<script>` tag in the `<head>` of your page, then somewhere in the
+body include the following script:
 
 ```
-let t = new LibraryName();
-let c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
+<script type='text/javascript'>
+  const t = new LibraryName();
+  const c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 
-t.addEmitter({
-  position: { x: c.x, y: c.y },
-  particleOptions: {
-    velocity: { y: -50 },
-    contents: 'Hello world'
-  }
-})
+  t.addEmitter({
+    position: { x: c.x, y: c.y },
+    particleOptions: {
+      velocity: { y: -50 },
+      contents: 'Hello world'
+    }
+  })
+</script>
 ```
 
 
@@ -51,7 +62,7 @@ lifespan, the Manager will unregister itself and stop updating until the next `a
 ### Methods
 - `.add(options)` - Create a particle from the provided `options` object (see below for particle options)
 - `.addEmitter(options)` - Create a particle emitter from the provided `options` object (see below for emitter options)
-- `.start()` - If `autostart: false` was passed to this instance, call this function manually to begin animation of a particle.
+- `.start()` - If `autostart: false` was passed to this instance, call this function manually to begin animation.
 - `.reset()` - Removes all particles and emitters.
 - `.clearEmitters()` - Removes all emitters. Existing particles will remain until the end of their lifespan.
 
@@ -70,20 +81,22 @@ position += velocity;
 
 There are also three update hooks which can be provided in the particle options: `onCreate`, `onUpdate`, and `onDestroy`. All of these are called with the particle object as the first argument. For `onUpdate`, the second argument is the elapsed time (in fractions of a second, so `1.0` is one second) since the last `onUpdate` call.
 
+Velocity and acceleration are specified in units of pixels per second. For example, a particle with a `ttl` of `1000` milliseconds and a velocity of `{ x: 10 }` will travel ten pixels to the right during its lifespan.
+
 
 ### Options
 
 | Name      | Default                   | Remarks                             |
 | ----      | -------                   | ----------------------------------- |
 | `contents`  | `'.'`                     | innerHTML of the particle element |
-| `ttl`       | `1000`                    |  Set to an integer to destroy this emitter after that many milliseconds have elapsed. |
+| `ttl`       | `1000`                    |  Set to an integer to destroy this particle after that many milliseconds have elapsed. |
 | `onCreate`  | N/A                       | Callback function on particle creation - called with the particle object as its first argument |
 | `onUpdate`  | N/A                       | Callback function on particle update - called with the particle object as its first argument, and elapsed time since last `onUpdate` call as the second argument |
 | `onDestroy` | N/A                       | Callback function on particle destruction - called with the particle object as its first argument |
-| `style` | `{ display: 'inline-block' }` | object of styles to be applied to the particle. Style values can be arrays, for animation purposes - see section **Styling Particles** below.
+| `style` | `{}` | object of styles to be applied to the particle. Style values can be arrays, for animation purposes - see section **Styling Particles** below.
 | `heading` | `false` | Set to a number in range `0`...`2 * Math.PI` to manually control the particle heading in an `onUpdate` handler, otherwise animate using the `rotation` style.
 | `grid` | `false` | Set to a number to snap the particle's position to a grid of that size
-| `position` | `{x : 0, y: 0}` | Particle position. If particle is created by an emitter, this is taken to be relative to the emitter's position; if not, it's taken to be relative to the anchor element of the parent `manager` object. For convenience, components which are zero need not be specified: `{x: 1}` and `{y: 1}` are both valid vectors. |
+| `position` | `{x : 0, y: 0}` | Particle position. If particle is created by an emitter, this is taken to be relative to the emitter's position; if not, it's taken to be relative to the container element of the parent `manager` object. For convenience, components which are zero need not be specified: `{x: 1}` and `{y: 1}` are both valid vectors. |
 | `velocity` | `{x : 0, y: 0}` | Particle velocity |
 | `acceleration` | `{x : 0, y: 0}` | Particle acceleration |
 
@@ -92,7 +105,6 @@ There are also three update hooks which can be provided in the particle options:
 - `setText(text)`: Sets the `innerText` of the particle element to `text`
 - `setContents(html)`: Sets the `innerHTML` of the particle element to `html`
 - `updateStyle(styleObject)`: Update particle element styles
-
 
 ### Styling particles
 
@@ -111,10 +123,10 @@ for the purpose of the particle's actual style at a particular moment in time. I
 
 The array of values can be any length. Most simple CSS properties (colours; unit + value eg `1px`, `2em` etc) are supported. Compound properties have to be manipulated component-by-component.
 
-There are also some transform properties which are included as separate arguments for ease-of-use. These are as follows:
+There are also some CSS transform properties which are included as separate arguments for ease-of-use. These are as follows:
 
 - `scale` (or just `scaleX` or `scaleY`) - scale the element
-- `rotation` - rotate the element
+- `rotation` - rotate the element, but takes lower precedence than the `heading` property.
 - `skew` (or just `skewX` or `skewY`) - skew the element
 
 ## Emitters
@@ -128,6 +140,7 @@ Emitters are created (and returned) by the `addEmitter` function on a `Manager` 
 | ----      | -------                   | ----------------------------------- |
 | `maxEmissions` | `false`              | Maximum particles to emit. Set to a integer to destroy this emitter after that many have been created. |
 | `ttl`       | `false`                 | Set to an integer to destroy this emitter after that many milliseconds have elapsed. |
+| `emitEvery` | `500`                   | Number of milliseconds between particle emissions
 | `onCreate`  | N/A                     | Callback function on emitter creation - called with the particle object as its first argument |
 | `onUpdate`  | N/A                     | Callback function on emitter update - called with the emitter object as its first argument, and elapsed time since last `onUpdate` call as the second argument |
 | `onDestroy` | N/A                     | Callback function on emitter destruction - called with the emitter object as its first argument |

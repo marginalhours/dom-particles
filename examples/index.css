@@ -19,9 +19,12 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   grid-auto-rows: min-content;
   grid-gap: 20px;
-  overflow-x: hidden;
-  overflow-y: scroll;
   margin-bottom: 100px;
+}
+
+h1 {
+  color: #fff;
+  text-align: center;
 }
 
 .example {
@@ -61,11 +64,42 @@ body {
   background-color: #888;
 }
 
-.code {
-  overflow-y: scroll;
-  font-size: 11px;
-  white-space: pre-wrap;
-  padding: 0px 20px;
+.health-outer {
+  height: 32px;
+  width: 280px;
+  border-radius: 32px;
+  border: 8px solid #252037;
+  overflow: hidden;
+  background-color: #3A2B40;
+  position: relative;
+}
+
+.health-shadow {
+  height: 32px;
+  width: 100%;
+  border-radius: 20px;
+  background-color: #842337;
+  padding-top: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: width 500ms ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.health-inner {
+  height: 32px;
+  width: 100%;
+  border-radius: 20px;
+  background-color: #AC3030;
+  padding-top: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: width 500ms ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 @media only screen and (max-width: 500px) {

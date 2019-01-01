@@ -1,5 +1,3 @@
-- Move to transform matrix rather than long row of functions (careful of composition)
 - Allow for multiple values in one property? (weird edge case)
-- skew example?
 - some actual, you know, *text* examples (sine wave dickens?)
 - possibility of providing x and y coords as part of style (no?) (hmmm)

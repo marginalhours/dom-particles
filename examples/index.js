@@ -11,7 +11,7 @@ examples = {};
 const getTileMidpoint = (tile) => {
   const t = tile.getBoundingClientRect();
   return {
-    x: window.scrollX + t.x + (t.width / 2),
+    x: document.body.scrollLeft + t.x + (t.width / 2),
     y: document.body.scrollTop + t.y + (t.height / 2)
   }
 }
@@ -37,10 +37,20 @@ const getTileMidpoint = (tile) => {
 {
   const metroidButton = document.querySelector('.metroidvania .example-button');
 
+  const healthOuter = document.querySelector('.metroidvania .health-outer');
+  const healthInner = document.querySelector('.metroidvania .health-inner');
+  const healthShadow = document.querySelector('.metroidvania .health-shadow');
+
+  let healthAmount = 1000;
+
   const f = (e) => {
+    const rect = healthInner.getBoundingClientRect();
+    const xpos = document.body.scrollLeft + rect.x + rect.width;
+    const ypos = document.body.scrollTop + rect.y;
+
     t.addParticle({
-      position: { x: e.clientX, y: document.body.scrollTop + metroidButton.getBoundingClientRect().y },
-      get contents () { return Math.floor(200 * Math.random()); },
+      position: { x: xpos, y: ypos },
+      get contents () { return 100 + Math.floor(100 * Math.random()); },
       ttl: 800,
       velocity: { x: 0, y: -25 },
       acceleration: { x: 0, y: -100 },
@@ -50,8 +60,16 @@ const getTileMidpoint = (tile) => {
         fontWeight: 'bold',
         fontSize: '18px',
         fontFamily: 'monospace',
-        textShadow: '1px 1px 0px #f00',
+        textShadow: '1px 1px 0px #842337',
         color: '#fff'
+      },
+      onCreate: (p) => {
+        healthAmount -= p.contents;
+        if (healthAmount < 0) { healthAmount = 1000; }
+        healthInner.style.width = `${100 * healthAmount / 1000}%`;
+        setTimeout(() => {
+          healthShadow.style.width = `${100 * healthAmount / 1000}%`;
+        }, 500);
       }
     });
   }
@@ -452,7 +470,7 @@ const getTileMidpoint = (tile) => {
   const snowflakeButton = document.querySelector('.snowflakes .example-button');
   const snowflakeContainer = document.querySelector('.snowflakes');
 
-  let f = () => {
+  const f = () => {
     const midpoint = getTileMidpoint(snowflakeContainer);
 
     t.addEmitter({
@@ -480,7 +498,7 @@ const getTileMidpoint = (tile) => {
     });
   }
 
-  let g = () => {
+  const g = () => {
     t.clearEmitters();
   }
 
@@ -518,18 +536,19 @@ examples['chess'] = () => {
   });
 }
 
-examples['bees'] = () => {
-  mainWindow.style.backgroundColor = '#fefeee';
+/* Bees */
+{
+  const beeButton = document.querySelector('.bees .example-button');
+  const beeContainer = document.querySelector('.bees');
 
-  setButtonText('Hold to Swarm');
+  const f = () => {
+    const midpoint = getTileMidpoint(beeContainer);
 
-  goButton.addEventListener('mousedown', () => {
-    let theta = 0;
     t.addEmitter({
-      position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
-      emitEvery: 3,
+      position: { x: midpoint.x, y: midpoint.y },
+      emitEvery: 32,
       particleOptions: {
-        ttl: 800,
+        ttl: 1600,
         contents: '🐝',
         style: {
           width: '16px',
@@ -538,33 +557,48 @@ examples['bees'] = () => {
         },
         get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
         get velocity () {
-          let h = 100 + 100 * Math.random();
-          theta = 2 * Math.random() * Math.PI;
+          const h = 50 + 50 * Math.random();
+          const theta = 2 * Math.random() * Math.PI;
           return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
         },
         onCreate: (p) => {
-          p.heading = Math.atan2(p.velocity.y, p.velocity.x) + 5 * Math.PI / 6;
+          p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+        },
+        onUpdate: (p) => {
+          if (Math.random() > 0.9) {
+            const h = 50 + 50 * Math.random();
+            const theta = 2 * Math.random() * Math.PI;
+            p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+            p.heading = Math.atan2(p.velocity.y, p.velocity.x);
+          }
         }
       }
     });
-  });
+  }
 
-  goButton.addEventListener('mouseup', () => {
+  const g = () => {
     t.clearEmitters();
-  });
+  }
+
+  beeButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
+  beeButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
+  beeButton.addEventListener('mouseup', g);
+  beeButton.addEventListener('touchend', g);
 }
 
-examples['worlds'] = () => {
-   mainWindow.style.backgroundColor = '#fefeee';
+/* Worlds */
+{
+  const worldButton = document.querySelector('.world .example-button');
+  const worldContainer = document.querySelector('.world');
 
-  setButtonText('Press to world');
+  const f = () => {
+    const midpoint = getTileMidpoint(worldContainer);
 
-  goButton.addEventListener('mousedown', () => {
     t.addParticle({
       ttl: 8000,
       contents: `🌏`,
       style: { fontSize: '48px' },
-      get position () { return { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60} },
+      get position () { return { x: midpoint.x, y: midpoint.y } },
       get velocity () {
         let h = 10;
         let theta = 2 * Math.random() * Math.PI;
@@ -580,22 +614,27 @@ examples['worlds'] = () => {
         p.setContents(['🌏','🌎', '🌍'][p.idx])
       }
     });
-  })
-};
+  };
 
-examples['moons'] = () => {
-   mainWindow.style.backgroundColor = '#fefeee';
+  worldButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
+  worldButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
+}
 
-  setButtonText('Press to world');
+/* Moons */
+{
+  const moonButton = document.querySelector('.moon .example-button');
+  const moonContainer = document.querySelector('.moon');
 
-  let moons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'].reverse()
+  const f = () => {
+    const midpoint = getTileMidpoint(moonContainer);
 
-  goButton.addEventListener('mousedown', () => {
+    const moons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'].reverse()
+
     t.addParticle({
       ttl: 8000,
       contents: `🌑`,
       style: { fontSize: '48px' },
-      get position () { return { x: mainWindow.clientWidth / 2, y: goButton.getBoundingClientRect().y - 60} },
+      get position () { return { x: midpoint.x, y: midpoint.y } },
       get velocity () {
         let h = 10;
         let theta = 2 * Math.random() * Math.PI;
@@ -611,5 +650,8 @@ examples['moons'] = () => {
         }
       }
     });
-  })
-};
+  }
+
+  moonButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
+  moonButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
+}
