@@ -1,12 +1,14 @@
-# Dom-Text-Particles
+# dom-particles
 
-Particle-style animation for the DOM. [Demo Page](http://misterkeefe.github.io/dom-text-particles)
+A small JS library to provide particle-style effects within the DOM, without leveraging `<canvas>` or other techniques. 
+
+[Demo Page](http://misterkeefe.github.io/dom-particles)
 
 ## Quickstart
 
 Include this `<script>` tag in the `<head>` of your page:
 
-Then somewhere in the body include the following script:
+Then somewhere in the `<body>` include the following script:
 
 ```
 <script type='text/javascript'>
@@ -23,8 +25,7 @@ Then somewhere in the body include the following script:
 </script>
 ```
 
-
-## Installation via NPM
+## Alternative installation via NPM
 
 `npm install --save dom-particles`
 
@@ -57,13 +58,15 @@ npm run test
 
 ```
 
-## Manager object
+# API Reference
 
-The Manager object is the chief way of creating particles and emitters.
+## DomParticles object 
 
-By default, a Manager only uses the `requestAnimationFrame` API to update itself
+The DomParticles object is the chief way of creating particles and emitters.
+
+By default, a DomParticles only uses the `requestAnimationFrame` API to update itself
 while a particle or emitter is extant. After the last particle or emitter reaches the end of its
-lifespan, the Manager will unregister itself and stop updating until the next `add` or `addEmitter` call.
+lifespan, the DomParticles will unregister itself and stop updating until the next `add` or `addEmitter` call.
 
 
 ### Options
@@ -74,7 +77,7 @@ lifespan, the Manager will unregister itself and stop updating until the next `a
 | `preallocate` | `10`                  | How many particle elements to create by default and add to the DOM. More will be created on-demand, up to the `max` amount.
 | `tagName` | `span`                    | Tag to use for particle elements
 | `container` | document `body` tag     | Parent container for all particles. Will have `position:relative` applied to the styles.
-| `autostart` | `true`                  | If `false`, particles will not be animated until `.start()` is called on the manager instance
+| `autostart` | `true`                  | If `false`, particles will not be animated until `.start()` is called on the parent `DomParticles` instance
 
 ### Methods
 - `.add(options)` - Create a particle from the provided `options` object (see below for particle options)
@@ -86,7 +89,7 @@ lifespan, the Manager will unregister itself and stop updating until the next `a
 
 ## Particles
 
-Particles are created (and returned) by the `add` function on a `Manager` object.
+Particles are created (and returned) by the `add` function on a `DomParticles` object.
 By default they have a finite lifespan, after which they disappear from the DOM.
 
 At each frame, the following default update is applied to a particle:
@@ -113,7 +116,7 @@ Velocity and acceleration are specified in units of pixels per second. For examp
 | `style` | `{}` | object of styles to be applied to the particle. Style values can be arrays, for animation purposes - see section **Styling Particles** below.
 | `heading` | `false` | Set to a number in range `0`...`2 * Math.PI` to manually control the particle heading in an `onUpdate` handler, otherwise animate using the `rotation` style.
 | `grid` | `false` | Set to a number to snap the particle's position to a grid of that size
-| `position` | `{x : 0, y: 0}` | Particle position. If particle is created by an emitter, this is taken to be relative to the emitter's position; if not, it's taken to be relative to the container element of the parent `manager` object. For convenience, components which are zero need not be specified: `{x: 1}` and `{y: 1}` are both valid vectors. |
+| `position` | `{x : 0, y: 0}` | Particle position. If particle is created by an emitter, this is taken to be relative to the emitter's position; if not, it's taken to be relative to the container element of the parent `DomParticles` object. For convenience, components which are zero need not be specified: `{x: 1}` and `{y: 1}` are both valid vectors. |
 | `velocity` | `{x : 0, y: 0}` | Particle velocity |
 | `acceleration` | `{x : 0, y: 0}` | Particle acceleration |
 
@@ -148,7 +151,7 @@ There are also some CSS transform properties which are included as separate argu
 
 ## Emitters
 
-Emitters are created (and returned) by the `addEmitter` function on a `Manager` object. They provide a convenient way to create multiple particles with similar properties.
+Emitters are created (and returned) by the `addEmitter` function on a `DomParticles` object. They provide a convenient way to create multiple particles with similar properties.
 
 
 ### Options
