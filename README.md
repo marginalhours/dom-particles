@@ -8,6 +8,8 @@ A small JS library to provide particle-style effects within the DOM, without lev
 
 Include this `<script>` tag in the `<head>` of your page:
 
+`<script type="text/javascript" src='https://unpkg.com/dom-particles'></script>`
+
 Then somewhere in the `<body>` include the following script:
 
 ```
