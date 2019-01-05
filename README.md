@@ -2,25 +2,9 @@
 
 Particle-style animation for the DOM. [Demo Page](http://misterkeefe.github.io/dom-text-particles)
 
-## Installation
-
-<!-- `npm install --save dom-text-particles`
-
-then in your code:
-
-```
-import DomParticles from 'dom-text-particles'
-```
-
-or just as a script tag via [unpkg](https://unpkg.com/#/):
-
-`<script type='text/javascript' src='//unpkg'>` -->
-
-
-## Quickstart example
+## Quickstart
 
 Include this `<script>` tag in the `<head>` of your page:
-
 
 Then somewhere in the body include the following script:
 
@@ -39,6 +23,39 @@ Then somewhere in the body include the following script:
 </script>
 ```
 
+
+## Installation via NPM
+
+`npm install --save dom-particles`
+
+then in your code:
+
+```
+import DomParticles from 'dom-particles'
+
+const d = new DomParticles();
+...
+
+```
+
+## Development
+
+`git clone` this repository, then:
+
+```
+cd dom-particles
+npm i
+
+# Uses parcel to start a hot-reloading playground on port 1234
+npm run dev 
+
+# Builds dom-particles.js to lib/
+npm run build
+
+# Runs unit tests with Mocha
+npm run test
+
+```
 
 ## Manager object
 

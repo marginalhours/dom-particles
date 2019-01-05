@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "description": "Particle effects for and with DOM elements",
   "browser": "lib/dom-particles.js",
+  "main": "lib/dom-particles.js",
   "scripts": {
     "dev": "parcel devPlayground.html --global DomParticles",
-    "build": "parcel build src/index.js --out-file DomParticles.js --out-dir lib --global DomParticles",
+    "build": "parcel build src/index.js --out-file dom-particles.js --out-dir lib --global DomParticles",
     "test": "mocha --require @babel/register --watch"
   },
   "babel": {
