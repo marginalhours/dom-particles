@@ -409,7 +409,7 @@ const getTileMidpoint = (tile) => {
   const fireworkContainer = document.querySelector('.fireworks');
 
   const f = () => {
-    fireworkContainer.style.backgroundColor = '#112';
+    fireworkContainer.style.backgroundColor = '#070710';
     const midpoint = getTileMidpoint(fireworkContainer);
 
     t.addEmitter({
