@@ -31,7 +31,7 @@ h1 {
   display: grid;
   justify-items: center;
   align-items: center;
-  border: 1px solid #eee;
+  border: 3px solid #353653;
   height: 320px;
   position: relative;
   transition: background-color 800ms ease-in-out;
@@ -45,7 +45,6 @@ h1 {
   background-color: transparent;
   outline: none;
   border: 3px solid #c5c8d4;
-  border-radius: 5px;
   cursor: pointer;
   display: block;
   color: #fff;
