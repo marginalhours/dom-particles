@@ -1,3 +1,0 @@
-- Allow for multiple values in one property? (weird edge case)
-- some actual, you know, *text* examples (sine wave dickens?)
-- possibility of providing x and y coords as part of style (no?) (hmmm)

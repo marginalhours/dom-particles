@@ -42,9 +42,9 @@ h1 {
   width: 180px;
   max-width: 320px;
   height: 64px;
-  background-color: #aaa;
+  background-color: transparent;
   outline: none;
-  border: none;
+  border: 3px solid #c5c8d4;
   border-radius: 5px;
   cursor: pointer;
   display: block;
@@ -57,11 +57,13 @@ h1 {
 }
 
 .example-button:hover {
-  background-color: #bbb;
+  background-color: white;
+  border-color: white;
+  color: black;
 }
 
 .example-button:active {
-  background-color: #888;
+  transform: translateY(1px);
 }
 
 .health-outer {

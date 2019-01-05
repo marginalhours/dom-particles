@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DomParticles Dev Playground</title>
+    <script type='text/javascript' src='src/index.js'></script>
+
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        body div {
+            height: 100%;
+        }
+
+        .particle-code {
+            background-color: #191a1d;
+            color: #fff;
+            font-family: monospace;
+            padding: 20px;
+            white-space: pre-wrap;
+        }
+
+        .particle-result {
+            display: grid;
+            justify-items: center;
+            align-items: center;
+            background-color: #32333B;
+        }
+
+        .particle-button {
+            width: 180px;
+            max-width: 320px;
+            height: 64px;
+            background-color: transparent;
+            border: 3px solid #c5c8d4;
+            outline: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            user-select: none;
+            outline: none;
+        }
+
+        .particle-button:hover {
+            background-color: white;
+            border-color: white;
+            color: black;
+        }
+
+        .particle-button:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+    <script type='text/javascript'>
+        const t = new DomParticles();   
+    </script>
+    <div class='particle-code' contenteditable spellcheck=false>
+particleButton.addEventListener('click', (e) => {
+    t.addParticle({
+        position: { 
+            x: e.clientX, 
+            y: particleButton.getBoundingClientRect().y },
+        contents: '+1',
+        velocity: { x: 0, y: -40 },
+        style: { fontSize: '24px', fontFamily: 'monospace' }
+        });
+});
+    </div>
+    <div class='particle-result'>
+        <button class='particle-button'>Go</button>
+    </div> 
+    <script type='text/javascript'>
+        const particleCode = document.querySelector('.particle-code');
+        let particleButton = document.querySelector('.particle-button');
+
+        particleCode.addEventListener('input', () => {
+            t.reset();
+            const newButton = particleButton.cloneNode(true);
+            
+            particleButton.parentElement.appendChild(newButton);
+            particleButton.parentElement.removeChild(particleButton);
+            
+            particleButton = newButton;
+
+            eval(particleCode.innerText);
+        });
+
+        eval(particleCode.innerText);
+    </script>
+</body>
+</html>

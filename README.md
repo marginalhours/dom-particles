@@ -9,9 +9,7 @@ Particle-style animation for the DOM. [Demo Page](http://misterkeefe.github.io/d
 then in your code:
 
 ```
-import LibraryName from 'LibraryName'
-
-t = new LibraryName();
+import DomParticles from 'dom-text-particles'
 ```
 
 or just as a script tag via [unpkg](https://unpkg.com/#/):
@@ -24,12 +22,11 @@ or just as a script tag via [unpkg](https://unpkg.com/#/):
 Include this `<script>` tag in the `<head>` of your page:
 
 
-
 Then somewhere in the body include the following script:
 
 ```
 <script type='text/javascript'>
-  const t = new LibraryName();
+  const t = new DomParticles();
   const c = { x: document.body.clientWidth / 2 , y: document.body.clientHeight / 2 };
 
   t.addEmitter({
@@ -38,7 +35,7 @@ Then somewhere in the body include the following script:
       velocity: { y: -50 },
       contents: 'Hello world'
     }
-  })
+  });
 </script>
 ```
 
