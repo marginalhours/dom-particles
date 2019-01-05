@@ -1,8 +1,8 @@
 {
-  "name": "dom-text-particles",
+  "name": "dom-particles",
   "version": "0.0.1",
-  "description": "Particle effects for DOM elements",
-  "browser": "lib/dom-text-particles.js",
+  "description": "Particle effects for and with DOM elements",
+  "browser": "lib/dom-particles.js",
   "scripts": {
     "dev": "parcel devPlayground.html --global DomParticles",
     "build": "parcel build src/index.js --out-file DomParticles.js --out-dir lib --global DomParticles",
