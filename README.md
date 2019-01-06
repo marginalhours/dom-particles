@@ -82,7 +82,7 @@ lifespan, the DomParticles will unregister itself and stop updating until the ne
 | `autostart` | `true`                  | If `false`, particles will not be animated until `.start()` is called on the parent `DomParticles` instance
 
 ### Methods
-- `.add(options)` - Create a particle from the provided `options` object (see below for particle options)
+- `.addParticle(options)` - Create a particle from the provided `options` object (see below for particle options)
 - `.addEmitter(options)` - Create a particle emitter from the provided `options` object (see below for emitter options)
 - `.start()` - If `autostart: false` was passed to this instance, call this function manually to begin animation.
 - `.reset()` - Removes all particles and emitters.
