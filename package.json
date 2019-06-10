@@ -31,7 +31,7 @@
     "jsdom": "13.1.0",
     "jsdom-global": "3.0.2",
     "mocha": "^5.2.0",
-    "parcel": "^1.11.0"
+    "parcel": "^1.12.3"
   },
   "browserslist": "> 0.25%, not dead"
 }
