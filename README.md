@@ -1,6 +1,6 @@
 # dom-particles
 
-[![CircleCI](https://circleci.com/gh/MisterKeefe/dom-particles.svg?style=svg)](https://circleci.com/gh/MisterKeefe/dom-particles)
+[![CircleCI](https://circleci.com/gh/MisterKeefe/dom-particles.svg?style=shield)](https://circleci.com/gh/MisterKeefe/dom-particles)
 
 A small JS library to provide particle-style effects within the DOM, without leveraging `<canvas>` or other techniques.
 
