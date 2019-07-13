@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "parcel devPlayground.html --global DomParticles",
     "build": "parcel build src/index.js --out-file dom-particles.js --out-dir lib --global DomParticles",
-    "test": "mocha --require @babel/register --watch"
+    "test": "mocha --require @babel/register"
   },
   "babel": {
     "presets": [
