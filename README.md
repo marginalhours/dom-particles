@@ -1,6 +1,8 @@
 # dom-particles
 
-A small JS library to provide particle-style effects within the DOM, without leveraging `<canvas>` or other techniques. 
+[![CircleCI](https://circleci.com/gh/MisterKeefe/dom-particles.svg?style=svg)](https://circleci.com/gh/MisterKeefe/dom-particles)
+
+A small JS library to provide particle-style effects within the DOM, without leveraging `<canvas>` or other techniques.
 
 [Demo Page](http://misterkeefe.github.io/dom-particles)
 
@@ -50,7 +52,7 @@ cd dom-particles
 npm i
 
 # Uses parcel to start a hot-reloading playground on port 1234
-npm run dev 
+npm run dev
 
 # Builds dom-particles.js to lib/
 npm run build
@@ -62,7 +64,7 @@ npm run test
 
 # API Reference
 
-## DomParticles object 
+## DomParticles object
 
 The DomParticles object is the chief way of creating particles and emitters.
 
