@@ -1,5 +1,5 @@
-const assert = require('assert');
-const TextParticle = require('../src/js/text_particle').default;
+import assert from 'assert';
+import TextParticle from '../src/text_particle';
 
 describe('TextParticle', () => {
   it('should have default options on creation', () => {

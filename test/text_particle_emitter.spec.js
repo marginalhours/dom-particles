@@ -1,7 +1,7 @@
-const assert = require('assert');
-const TextParticleManager = require('../src/js/text_particle_manager').default;
-const TextParticleEmitter = require('../src/js/text_particle_emitter').default;
-const { DEFAULT_PARTICLE_OPTIONS } = require('../src/js/text_particle');
+import assert from 'assert';
+import TextParticleManager from '../src/text_particle_manager';
+import TextParticleEmitter from '../src/text_particle_emitter';
+import { DEFAULT_PARTICLE_OPTIONS } from '../src/text_particle';
 
 describe('TextParticleEmitter', () => {
 
@@ -72,7 +72,7 @@ describe('TextParticleEmitter', () => {
     const e = new TextParticleEmitter({
       manager: t,
       particleOptions: {
-        get contents () { return "abc"[k++] }
+        get contents () { return 'abc'[k++] }
       }
     });
 

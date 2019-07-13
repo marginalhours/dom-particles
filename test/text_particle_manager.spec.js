@@ -1,5 +1,5 @@
-const assert = require('assert');
-const TextParticleManager = require('../src/js/text_particle_manager').default;
+import assert from 'assert';
+import TextParticleManager from '../src/text_particle_manager';
 
 describe('TextParticleManager', () => {
   it('should have default options on creation', () => {

@@ -1,5 +1,5 @@
-const assert = require('assert');
-const utilities = require('../src/js/utilities');
+import assert from 'assert';
+import * as utilities from '../src/utilities';
 
 describe('utilities', () => {
   describe('#rgbToNumbers()', () => {
