@@ -27,12 +27,12 @@
     "glitch"
   ],
   "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/register": "^7.4.4",
+    "@babel/core": "^7.8.4",
+    "@babel/register": "^7.8.3",
     "jsdom": "13.1.0",
     "jsdom-global": "3.0.2",
     "mocha": "^5.2.0",
-    "parcel": "^1.12.3"
+    "parcel": "^1.12.4"
   },
   "browserslist": "> 0.25%, not dead"
 }

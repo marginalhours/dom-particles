@@ -149,7 +149,7 @@ The array of values can be any length. Most simple CSS properties (colours; unit
 
 There are also some CSS transform properties which are included as separate arguments for ease-of-use. These are as follows:
 
-- `scale` (or just `scaleX` or `scaleY`) - scale the element
+- `scale` (or just `scaleX` or `scaleY`) - scale the element. This is the *transform* version of scale, not the general CSS property.
 - `rotation` - rotate the element, but takes lower precedence than the `heading` property.
 - `skew` (or just `skewX` or `skewY`) - skew the element
 

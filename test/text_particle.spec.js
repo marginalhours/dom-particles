@@ -62,17 +62,17 @@ describe('TextParticle', () => {
     it('should convert arrays into dynamic properties', () => {
       const p = new TextParticle({
         element: document.createElement('span'),
-        style: { 'scale': [0, 1] }
+        style: { 'rotation': [0, 1] }
       });
 
-      assert.equal(typeof p.dynamicProps.scale, 'function');
-      assert.equal(p.nextProps.scale, 0);
+      assert.equal(typeof p.dynamicProps.rotation, 'function');
+      assert.equal(p.nextProps.rotation, 0);
 
       p.update(0.5);
-      assert.equal(p.nextProps.scale, 0.5);
+      assert.equal(p.nextProps.rotation, 0.5);
 
       p.update(0.5);
-      assert.equal(p.nextProps.scale, 1.0);
+      assert.equal(p.nextProps.rotation, 1.0);
     });
 
     it('should kill the particle after its ttl has elapsed', () => {
