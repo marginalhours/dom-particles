@@ -1,6 +1,6 @@
 {
   "name": "dom-particles",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Particle effects for and with DOM elements",
   "browser": "lib/dom-particles.js",
   "scripts": {
