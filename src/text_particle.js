@@ -136,6 +136,7 @@ export default class TextParticle {
     // Get current props, call user onUpdate(), assign them
     this.nextProps = this.getSnapshot();
     this.onUpdate(this, f);
+    delete this.nextProps.scale;
     Object.assign(this.element.style, this.nextProps);
 
     // Next frame
