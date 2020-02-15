@@ -524,23 +524,27 @@ const getTileMidpoint = tile => {
 
   lightspeedButton.addEventListener("mousedown", event => {
     lightspeedContainer.style.backgroundColor = "#010120";
+    lightspeedButton.classList.add("active-lightspeed");
     MOVING = true;
     event.preventDefault();
     showLightspeed();
   });
   lightspeedButton.addEventListener("touchstart", touchEvent => {
     lightspeedContainer.style.backgroundColor = "#010120";
+    lightspeedButton.classList.add("active-lightspeed");
     MOVING = true;
     touchEvent.preventDefault();
     showLightspeed();
   });
   lightspeedButton.addEventListener("mouseup", () => {
     lightspeedContainer.style.backgroundColor = "#01010f";
+    lightspeedButton.classList.remove("active-lightspeed");
     MOVING = false;
     stopLightspeed();
   });
   lightspeedButton.addEventListener("touchend", () => {
     lightspeedContainer.style.backgroundColor = "#01010f";
+    lightspeedButton.classList.remove("active-lightspeed");
     MOVING = false;
     stopLightspeed();
   });
