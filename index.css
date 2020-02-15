@@ -70,6 +70,12 @@ h1 a {
   transform: translateY(1px);
 }
 
+.active-lightspeed {
+  background-color: white;
+  border-color: white;
+  color: black;
+}
+
 .health-outer {
   height: 32px;
   width: 280px;
