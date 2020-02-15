@@ -1,158 +1,201 @@
 const { colourToCSSString, positionFromNode, lerp } = DomParticles.utilities;
 
-let t = new DomParticles({
+const manager = new DomParticles({
   max: 10000,
   preallocate: 100,
-  container: document.querySelector('body')
+  container: document.querySelector("body")
 });
 
 examples = {};
 
-const getTileMidpoint = (tile) => {
-  const t = tile.getBoundingClientRect();
+const getTileMidpoint = tile => {
+  const tileBounds = tile.getBoundingClientRect();
   return {
-    x: document.body.scrollLeft + t.x + (t.width / 2),
-    y: document.body.scrollTop + t.y + (t.height / 2)
-  }
-}
+    x: document.body.scrollLeft + tileBounds.x + tileBounds.width / 2,
+    y: document.body.scrollTop + tileBounds.y + tileBounds.height / 2
+  };
+};
 
 /* Simple */
 {
-  const simpleButton = document.querySelector('.simple .example-button');
+  const simpleButton = document.querySelector(".simple .example-button");
 
-  const f = (e) => {
-    t.addParticle({
-      position: { x: e.clientX, y: document.body.scrollTop + simpleButton.getBoundingClientRect().y },
-      contents: '+1',
+  const showParticle = event => {
+    manager.addParticle({
+      position: {
+        x: event.clientX,
+        y: document.body.scrollTop + simpleButton.getBoundingClientRect().y
+      },
+      contents: "+1",
       velocity: { x: 0, y: -40 },
-      style: { color: '#fff', fontSize: '24px' }
+      style: { color: "#fff", fontSize: "24px" }
     });
-  }
+  };
 
-  simpleButton.addEventListener('click', (e) => { e.preventDefault(); f(e); });
-  simpleButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(t.touches[0]); });
+  simpleButton.addEventListener("click", event => {
+    event.preventDefault();
+    showParticle(event);
+  });
+
+  simpleButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    showParticle(touchEvent.touches[0]);
+  });
 }
 
 /* Metroidvania */
 {
-  const metroidButton = document.querySelector('.metroidvania .example-button');
+  const metroidButton = document.querySelector(".metroidvania .example-button");
 
-  const healthOuter = document.querySelector('.metroidvania .health-outer');
-  const healthInner = document.querySelector('.metroidvania .health-inner');
-  const healthShadow = document.querySelector('.metroidvania .health-shadow');
+  const healthInner = document.querySelector(".metroidvania .health-inner");
+  const healthShadow = document.querySelector(".metroidvania .health-shadow");
 
   let healthAmount = 1000;
 
-  const f = (e) => {
+  const showParticle = () => {
     const rect = healthInner.getBoundingClientRect();
     const xpos = document.body.scrollLeft + rect.x + rect.width;
     const ypos = document.body.scrollTop + rect.y;
 
-    t.addParticle({
+    manager.addParticle({
       position: { x: xpos, y: ypos },
-      get contents () { return 100 + Math.floor(100 * Math.random()); },
+      get contents() {
+        return 100 + Math.floor(100 * Math.random());
+      },
       ttl: 800,
       velocity: { x: 0, y: -25 },
       acceleration: { x: 0, y: -100 },
       style: {
         scale: [2.5, 1, 1, 1, 1, 1, 1],
         opacity: [1, 1, 0],
-        fontWeight: 'bold',
-        fontSize: '18px',
-        fontFamily: 'monospace',
-        textShadow: '1px 1px 0px #842337',
-        color: '#fff'
+        fontWeight: "bold",
+        fontSize: "18px",
+        fontFamily: "monospace",
+        textShadow: "1px 1px 0px #842337",
+        color: "#fff"
       },
-      onCreate: (p) => {
-        healthAmount -= p.contents;
-        if (healthAmount < 0) { healthAmount = 1000; }
-        healthInner.style.width = `${100 * healthAmount / 1000}%`;
+      onCreate(particle) {
+        healthAmount -= particle.contents;
+        if (healthAmount < 0) {
+          healthAmount = 1000;
+        }
+        healthInner.style.width = `${(100 * healthAmount) / 1000}%`;
         setTimeout(() => {
-          healthShadow.style.width = `${100 * healthAmount / 1000}%`;
+          healthShadow.style.width = `${(100 * healthAmount) / 1000}%`;
         }, 500);
       }
     });
-  }
+  };
 
-  metroidButton.addEventListener('click', (e) => { e.preventDefault(); f(e); });
-  metroidButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(t.changedTouches[0]) });
+  metroidButton.addEventListener("click", event => {
+    event.preventDefault();
+    showParticle();
+  });
+
+  metroidButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    showParticle();
+  });
 }
 
 /* Trails */
 {
-  const trailButton = document.querySelector('.trail .example-button');
+  const trailButton = document.querySelector(".trail .example-button");
 
-  const f = () => {
-
-    const trailContainer = document.querySelector('.trail');
+  const showEmitters = () => {
+    const trailContainer = document.querySelector(".trail");
     const midpoint = getTileMidpoint(trailContainer);
 
-    let k = 0;
-    let m = 140;
-    let n = 12;
+    const magnitude = 140;
+    const cycleLength = 12;
 
-    t.addEmitter({
+    manager.addEmitter({
       position: { x: midpoint.x, y: midpoint.y - 120 },
       emitEvery: 16,
-      onUpdate: (emitter) => {
-        emitter.position.x = midpoint.x + (m * Math.sin(k++/n));
+      onUpdate(emitter) {
+        emitter.position.x =
+          midpoint.x + magnitude * Math.sin(emitter.frameNumber / cycleLength);
       },
       particleOptions: {
         ttl: 600,
         style: {
-          get backgroundColor () { return  ['#f33', '#fefeee'] },
-          width: '12px',
-          height: '12px',
+          get backgroundColor() {
+            return ["#f33", "#fefeee"];
+          },
+          width: "12px",
+          height: "12px",
           scale: [2, 0.1],
           zIndex: 100
         },
-        contents: '',
-        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5), z: -100 } },
-        get velocity () {
-          let h = (500 + (100 * Math.random()));
-          return { y: h }
+        contents: "",
+        get position() {
+          return {
+            x: 20 * (Math.random() - 0.5),
+            y: 20 * (Math.random() - 0.5),
+            z: -100
+          };
+        },
+        get velocity() {
+          return { y: 500 + 100 * Math.random() };
         }
       }
     });
 
-    t.addEmitter({
+    manager.addEmitter({
       position: { x: midpoint.x, y: midpoint.y - 120 },
       emitEvery: 16,
-      onUpdate: (emitter) => {
-        emitter.position.x = midpoint.x + (m * Math.sin(Math.PI + k/n));
+      onUpdate(emitter) {
+        emitter.position.x =
+          midpoint.x +
+          magnitude * Math.sin(Math.PI + emitter.frameNumber / cycleLength);
       },
       particleOptions: {
         ttl: 600,
         style: {
-          get backgroundColor () { return  ['#33f', '#eefefe'] },
-          width: '12px',
-          height: '12px',
+          get backgroundColor() {
+            return ["#33f", "#eefefe"];
+          },
+          width: "12px",
+          height: "12px",
           scale: [2, 0.1],
           zIndex: 50
         },
-        contents: '',
-        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-        get velocity () {
-          return { y: 500 + (100 * Math.random()) };
+        contents: "",
+        get position() {
+          return {
+            x: 20 * (Math.random() - 0.5),
+            y: 20 * (Math.random() - 0.5)
+          };
+        },
+        get velocity() {
+          return { y: 500 + 100 * Math.random() };
         }
       }
     });
-  }
+  };
 
-  const g = () => {
-    t.clearEmitters();
-  }
+  const hideEmitters = () => {
+    manager.clearEmitters();
+  };
 
-  trailButton.addEventListener('mousedown', (e) => { e.preventDefault(); f(); });
-  trailButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(); });
-  trailButton.addEventListener('mouseup', g);
-  trailButton.addEventListener('touchend', g);
+  trailButton.addEventListener("mousedown", event => {
+    event.preventDefault();
+    showEmitters();
+  });
+
+  trailButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    showEmitters();
+  });
+
+  trailButton.addEventListener("mouseup", hideEmitters);
+  trailButton.addEventListener("touchend", hideEmitters);
 }
 
 /* Flame */
 {
-  const flameButton = document.querySelector('.flame .example-button');
-  const flameContainer = document.querySelector('.flame');
+  const flameButton = document.querySelector(".flame .example-button");
+  const flameContainer = document.querySelector(".flame");
 
   const HEAT_COLOURS = [
     [0, 0, 0, 1.0], // out
@@ -169,489 +212,701 @@ const getTileMidpoint = (tile) => {
     [255, 246, 79, 1.0], // lemon
     [255, 253, 148, 1.0], // light yellow
     [254, 254, 200, 1.0], // white
-    [254, 254, 254, 1.0], // white
+    [254, 254, 254, 1.0] // white
   ].reverse();
 
-  const f = () => {
-
+  const showFlame = () => {
     const midpoint = getTileMidpoint(flameContainer);
-    flameContainer.style.backgroundColor = '#000';
-    t.addEmitter({
+    flameContainer.style.backgroundColor = "#000";
+
+    manager.addEmitter({
       position: { x: midpoint.x, y: midpoint.y - 40 },
       emitEvery: 8,
       particleOptions: {
-        contents: '',
+        contents: "",
         ttl: 1500,
-        get position () { return { x: 64 * (Math.random() - 0.5), y: 15 * (Math.random() - 0.5) } },
+        get position() {
+          return {
+            x: 64 * (Math.random() - 0.5),
+            y: 15 * (Math.random() - 0.5)
+          };
+        },
         velocity: { x: 0, y: -66 },
-        style: { backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)), width: '8px', height: '8px', scale: [2, 1], borderRadius: '8px' },
-      },
+        style: {
+          backgroundColor: HEAT_COLOURS.map(c => colourToCSSString(c)),
+          width: "8px",
+          height: "8px",
+          scale: [2, 1],
+          borderRadius: "8px"
+        }
+      }
     });
-  }
+  };
 
-  const g = (e) => {
-    e.preventDefault();
-    t.clearEmitters();
-    flameContainer.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-  }
+  const stopFlame = event => {
+    event.preventDefault();
+    manager.clearEmitters();
+    flameContainer.style.backgroundColor = "rgba(0, 0, 0, 0)";
+  };
 
-  flameButton.addEventListener('mousedown', (e) => { e.preventDefault(); f(); });
-  flameButton.addEventListener('touchstart', (t) => { t.preventDefault(); f(); });
-  flameButton.addEventListener('mouseup', g);
-  flameButton.addEventListener('touchend', g);
+  flameButton.addEventListener("mousedown", event => {
+    event.preventDefault();
+    showFlame();
+  });
+
+  flameButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    showFlame();
+  });
+
+  flameButton.addEventListener("mouseup", stopFlame);
+  flameButton.addEventListener("touchend", stopFlame);
 }
-
 
 /* Bubbles */
 {
-  const bubbleButton = document.querySelector('.bubble .example-button');
-  const bubbleContainer = document.querySelector('.bubble');
+  const bubbleButton = document.querySelector(".bubble .example-button");
+  const bubbleContainer = document.querySelector(".bubble");
+  const midpoint = getTileMidpoint(bubbleContainer);
 
-  const f = () => {
+  const showBubbles = () => {
+    bubbleContainer.style.backgroundColor = "#113";
 
-    bubbleContainer.style.backgroundColor = '#113';
-
-    const midpoint = getTileMidpoint(bubbleContainer);
-    t.addEmitter({
-        position: { x: midpoint.x, y: midpoint.y - 40 },
-        emitEvery: 200,
-        particleOptions: {
-          contents: '',
-          get position () { return { x: 80 * (Math.random() - 0.5) } },
-          get ttl () { return 1500 + (250 * Math.random()) },
-          get velocity () { return { y: -10 } },
-          get acceleration () { return { x: 0, y: -100 } },
-          style: {
-            get scale () { return 0.25 + Math.random() },
-            opacity: [0.5, 1, 1, 1, 0.9],
-            border: '2px solid rgba(192, 192, 200, 1.0)',
-            width: '32px',
-            height: '32px',
-            borderRadius: '16px'
+    manager.addEmitter({
+      position: { x: midpoint.x, y: midpoint.y - 40 },
+      emitEvery: 200,
+      particleOptions: {
+        contents: "",
+        get position() {
+          return { x: 80 * (Math.random() - 0.5) };
+        },
+        get ttl() {
+          return 1500 + 250 * Math.random();
+        },
+        get velocity() {
+          return { y: -10 };
+        },
+        get acceleration() {
+          return { x: 0, y: -100 };
+        },
+        style: {
+          get scale() {
+            return 0.25 + Math.random();
           },
-          onDestroy: (p) => {
-              let k = 32;
-              let x = 6;
-              let m = Math.random() * Math.PI / x;
-              for(var i = 0; i < x; i++){
-                /* radial fragments */
-                t.addParticle({
-                  ttl: 600,
-                  position: { x: p.position.x + (16 * p.style.scale), y: p.position.y + (16 * p.style.scale) },
-                  velocity: { x: k * Math.sin(2 * i * Math.PI / x + m), y: k * Math.cos(2 * i * Math.PI / x + m) },
-                  contents: '-',
-                  onCreate: (p) => {
-                    p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-                  },
-                  style: { opacity: [0.7, 0], color: 'rgba(192, 192, 200, 1.0)', scale: p.style.scale, fontSize: '32px' },
-                });
+          opacity: [0.5, 1, 1, 1, 0.9],
+          border: "2px solid rgba(192, 192, 200, 1.0)",
+          width: "32px",
+          height: "32px",
+          borderRadius: "16px"
+        },
+        onDestroy(particle) {
+          const rawSpeed = 32;
+          const numberOfFragments = 6;
+          const angularOffset = (Math.random() * Math.PI) / numberOfFragments;
+
+          for (let i = 0; i < numberOfFragments; i++) {
+            /* radial fragments */
+            manager.addParticle({
+              ttl: 600,
+              position: {
+                x: particle.position.x + 16 * particle.style.scale,
+                y: particle.position.y + 16 * particle.style.scale
+              },
+              velocity: {
+                x:
+                  rawSpeed *
+                  Math.sin(
+                    (2 * i * Math.PI) / numberOfFragments + angularOffset
+                  ),
+                y:
+                  rawSpeed *
+                  Math.cos(
+                    (2 * i * Math.PI) / numberOfFragments + angularOffset
+                  )
+              },
+              contents: "-",
+              onCreate(subParticle) {
+                subParticle.heading = Math.atan2(
+                  subParticle.velocity.y,
+                  subParticle.velocity.x
+                );
+              },
+              style: {
+                opacity: [0.7, 0],
+                color: "rgba(192, 192, 200, 1.0)",
+                scale: particle.style.scale,
+                fontSize: "32px"
               }
+            });
           }
         }
-      });
-  }
+      }
+    });
+  };
 
-  const g = () => {
-    t.clearEmitters();
-  }
+  const stopBubbles = () => {
+    manager.clearEmitters();
+  };
 
-  bubbleButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
-  bubbleButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
-  bubbleButton.addEventListener('mouseup', g);
-  bubbleButton.addEventListener('touchend', g);
+  bubbleButton.addEventListener("mousedown", event => {
+    event.preventDefault();
+    showBubbles();
+  });
 
+  bubbleButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    showBubbles();
+  });
+
+  bubbleButton.addEventListener("mouseup", stopBubbles);
+  bubbleButton.addEventListener("touchend", stopBubbles);
 }
 
 /* Blossom */
 {
-  const blossomButton = document.querySelector('.blossom .example-button');
-  const blossomContainer = document.querySelector('.blossom');
+  const blossomButton = document.querySelector(".blossom .example-button");
+  const blossomContainer = document.querySelector(".blossom");
 
-  const f = () => {
+  const showBlossom = () => {
     const midpoint = getTileMidpoint(blossomContainer);
 
-    t.addEmitter({
+    manager.addEmitter({
       position: { x: midpoint.x, y: midpoint.y },
       emitEvery: 3,
       particleOptions: {
         ttl: 300,
         style: {
-          backgroundColor: ['#f33', '#fefeee'],
-          width: '16px',
-          height: '16px',
-          scale: [0, 10],
+          backgroundColor: ["#f33", "#fefeee"],
+          width: "16px",
+          height: "16px",
+          scale: [0, 10]
         },
-        contents: '',
-        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-        get velocity () {
+        contents: "",
+        get position() {
+          return {
+            x: 20 * (Math.random() - 0.5),
+            y: 20 * (Math.random() - 0.5)
+          };
+        },
+        get velocity() {
           const theta = 2 * Math.PI * Math.random();
-          const r = 800 + 100 * Math.random();
-          return { x: r * Math.cos(theta), y: r * Math.sin(theta) }
+          const magnitude = 800 + 100 * Math.random();
+          return {
+            x: magnitude * Math.cos(theta),
+            y: magnitude * Math.sin(theta)
+          };
         },
-        onCreate: (p) => {
-          p.heading = Math.atan2(p.velocity.y, p.velocity.x) + Math.PI / 2;
-        },
+        onCreate(particle) {
+          particle.heading =
+            Math.atan2(particle.velocity.y, particle.velocity.x) + Math.PI / 2;
+        }
       }
     });
-  }
+  };
 
-  const g = () => {
-    t.clearEmitters();
-  }
+  const stopBlossom = () => {
+    manager.clearEmitters();
+  };
 
-  blossomButton.addEventListener('mousedown', (e) => { e.preventDefault(); f(); });
-  blossomButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
-  blossomButton.addEventListener('mouseup', g);
-  blossomButton.addEventListener('touchend', g);
+  blossomButton.addEventListener("mousedown", event => {
+    event.preventDefault();
+    showBlossom();
+  });
+  blossomButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    showBlossom();
+  });
 
+  blossomButton.addEventListener("mouseup", stopBlossom);
+  blossomButton.addEventListener("touchend", stopBlossom);
 }
 
 /* Lightspeed */
 {
-  const lightspeedButton = document.querySelector('.lightspeed .example-button');
-  const lightspeedContainer = document.querySelector('.lightspeed');
+  const lightspeedButton = document.querySelector(
+    ".lightspeed .example-button"
+  );
+  const lightspeedContainer = document.querySelector(".lightspeed");
   lightspeedButton.style.zIndex = 1000;
 
-  let MOVING;
+  let MOVING = false;
 
-  let f = () => {
+  const showLightspeed = () => {
     const midpoint = getTileMidpoint(lightspeedContainer);
-    lightspeedContainer.style.backgroundColor = '#01010f';
+    lightspeedContainer.style.backgroundColor = "#01010f";
 
-    t.addEmitter({
+    manager.addEmitter({
       position: { x: midpoint.x, y: midpoint.y },
       emitEvery: 4,
       particleOptions: {
-        contents: '',
+        contents: "",
         ttl: false,
         style: {
-          backgroundColor: '#fff',
-          width: '2px',
-          height: '2px',
-          transformOrigin: '100% 50%',
+          backgroundColor: "#fff",
+          width: "2px",
+          height: "2px",
+          transformOrigin: "100% 50%",
           scaleX: 1,
           zIndex: 1
         },
-        get position () {
-          return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) }
+        get position() {
+          return {
+            x: 20 * (Math.random() - 0.5),
+            y: 20 * (Math.random() - 0.5)
+          };
         },
-        onCreate: (p) => {
-          p.fixedProps.scaleX = MOVING ? 25 : 1;
-          p.speed = MOVING ? 300 : 0;
-          let theta = Math.atan2(p.position.y - midpoint.y, p.position.x - midpoint.x);
-          p.state = MOVING;
-          p.velocity = { x: p.speed * Math.cos(theta), y: p.speed * Math.sin(theta) }
-          p.heading = theta;
+        onCreate(particle) {
+          particle.fixedProps.scaleX = MOVING ? 25 : 1;
+          particle.speed = MOVING ? 300 : 0;
+          const theta = Math.atan2(
+            particle.position.y - midpoint.y,
+            particle.position.x - midpoint.x
+          );
+          particle.state = MOVING;
+          particle.velocity = {
+            x: particle.speed * Math.cos(theta),
+            y: particle.speed * Math.sin(theta)
+          };
+          particle.heading = theta;
         },
-        onUpdate: (p) => {
+        onUpdate(particle) {
           if (MOVING) {
-            p.updateStyle({'backgroundColor': '#aaf', scaleX: lerp(p.style.scaleX, 50, 0.1)});
-            p.speed = lerp(p.speed, 300, 0.1);
+            particle.updateStyle({
+              backgroundColor: "#aaf",
+              scaleX: lerp(particle.style.scaleX, 50, 0.1)
+            });
+            particle.speed = lerp(particle.speed, 300, 0.1);
           } else {
-            p.updateStyle({'backgroundColor': '#fff', scaleX: lerp(p.style.scaleX, 1, 0.1)});
-            p.speed = lerp(p.speed, 0, 0.1);
+            particle.updateStyle({
+              backgroundColor: "#fff",
+              scaleX: lerp(particle.style.scaleX, 1, 0.1)
+            });
+            particle.speed = lerp(particle.speed, 0, 0.1);
           }
-          p.velocity = { x: p.speed * Math.cos(p.heading), y: p.speed * Math.sin(p.heading) }
-          if (p.state != MOVING){
-            p.state = MOVING;
-            if (p.state == false) {
-              p.ttl = false;
+          particle.velocity = {
+            x: particle.speed * Math.cos(particle.heading),
+            y: particle.speed * Math.sin(particle.heading)
+          };
+          if (particle.state != MOVING) {
+            particle.state = MOVING;
+            if (particle.state == false) {
+              particle.ttl = false;
             } else {
-              p.elapsed = 0;
-              p.ttl = 800;
+              particle.elapsed = 0;
+              particle.ttl = 800;
             }
           }
 
-          let rect = lightspeedContainer.getBoundingClientRect();
+          const rect = lightspeedContainer.getBoundingClientRect();
 
-          if (p.position.x < rect.x ||
-              p.position.x > rect.x + rect.width ||
-              p.position.y < document.body.scrollTop + rect.y ||
-              p.position.y > document.body.scrollTop + rect.y + rect.height){
-                p.ttl = p.elapsed;
+          if (
+            particle.position.x < rect.x ||
+            particle.position.x > rect.x + rect.width ||
+            particle.position.y < document.body.scrollTop + rect.y ||
+            particle.position.y > document.body.scrollTop + rect.y + rect.height
+          ) {
+            particle.ttl = particle.elapsed;
           }
         }
       }
     });
-  }
-
-  const g = () => {
-    t.clearEmitters();
   };
 
-  lightspeedButton.addEventListener('mousedown', (e) => {
-    lightspeedContainer.style.backgroundColor = '#010120';
+  const stopLightspeed = () => {
+    manager.clearEmitters();
+  };
+
+  lightspeedButton.addEventListener("mousedown", event => {
+    lightspeedContainer.style.backgroundColor = "#010120";
     MOVING = true;
-    e.preventDefault();
-    f();
+    event.preventDefault();
+    showLightspeed();
   });
-  lightspeedButton.addEventListener('touchstart', (t) => {
-    lightspeedContainer.style.backgroundColor = '#010120';
+  lightspeedButton.addEventListener("touchstart", touchEvent => {
+    lightspeedContainer.style.backgroundColor = "#010120";
     MOVING = true;
-    t.preventDefault();
-    f();
+    touchEvent.preventDefault();
+    showLightspeed();
   });
-  lightspeedButton.addEventListener('mouseup', () => {
-    lightspeedContainer.style.backgroundColor = '#01010f';
+  lightspeedButton.addEventListener("mouseup", () => {
+    lightspeedContainer.style.backgroundColor = "#01010f";
     MOVING = false;
-    g();
+    stopLightspeed();
   });
-  lightspeedButton.addEventListener('touchend', () => {
-    lightspeedContainer.style.backgroundColor = '#01010f';
+  lightspeedButton.addEventListener("touchend", () => {
+    lightspeedContainer.style.backgroundColor = "#01010f";
     MOVING = false;
-    g();
+    stopLightspeed();
   });
 }
 
 /* Fireworks */
 {
-  const fireworkButton = document.querySelector('.fireworks .example-button');
-  const fireworkContainer = document.querySelector('.fireworks');
+  const fireworkButton = document.querySelector(".fireworks .example-button");
+  const fireworkContainer = document.querySelector(".fireworks");
 
-  const f = () => {
-    fireworkContainer.style.backgroundColor = '#070710';
+  const startFireworks = () => {
+    fireworkContainer.style.backgroundColor = "#070710";
     const midpoint = getTileMidpoint(fireworkContainer);
 
-    t.addEmitter({
-        position: { x: midpoint.x, y: midpoint.y + fireworkContainer.getBoundingClientRect().height / 2 },
-        emitEvery: 400,
-        particleOptions: {
-          contents: '',
-          get position () { return { x: 0.167 * 320 * (Math.random() - 0.5) } },
-          get ttl () { return 800 + (250 * Math.random()) },
-          get velocity () {
-            let theta = (3/2) * Math.PI + (Math.PI / 8) * (Math.random() - 0.5);
-            let k = 600;
-            return { x: k * Math.cos(theta),  y: k * Math.sin(theta) }
+    manager.addEmitter({
+      position: {
+        x: midpoint.x,
+        y: midpoint.y + fireworkContainer.getBoundingClientRect().height / 2
+      },
+      emitEvery: 400,
+      particleOptions: {
+        contents: "",
+        get position() {
+          return { x: 0.167 * 320 * (Math.random() - 0.5) };
+        },
+        get ttl() {
+          return 800 + 250 * Math.random();
+        },
+        get velocity() {
+          const theta =
+            (3 / 2) * Math.PI + (Math.PI / 8) * (Math.random() - 0.5);
+          const magnitude = 600;
+          return {
+            x: magnitude * Math.cos(theta),
+            y: magnitude * Math.sin(theta)
+          };
+        },
+        get acceleration() {
+          return { y: 600 };
+        },
+        style: {
+          get backgroundColor() {
+            return ["rgb(255, 0, 0)", "rgb(255, 255, 255)", "rgb(0, 0, 255)"][
+              Math.floor(3 * Math.random())
+            ];
           },
-          get acceleration () { return { y: 600 } },
-          style: {
-            get backgroundColor () { return ['rgb(255, 0, 0)', 'rgb(255, 255, 255)', 'rgb(0, 0, 255)'][Math.floor(3 * Math.random())] },
-            opacity: [1, 1, 0.5],
-            width: '5px',
-            height: '5px',
-            borderRadius: '5px',
-          },
-          onDestroy: (p) => {
-              let k = 100;
-              let x = 10;
-              for(var i = 0; i < x; i++){
-                t.addEmitter({
-                  emitEvery: 32,
-                  maxEmissions: 8,
-                  particleOptions: {
-                    ttl: 600,
-                    position: { x: p.position.x, y: p.position.y },
-                    velocity: { x: k * Math.sin(2 * i * Math.PI / x), y: k * Math.cos(2 * i * Math.PI / x) },
-                    get acceleration () { return { x: 0, y: 150 } },
-                    onCreate: (p) => {
-                      p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-                    },
-                    style: { ...p.style, scale: 0.5, opacity: [1, 0] },
-                  }
-                });
+          opacity: [1, 1, 0.5],
+          width: "5px",
+          height: "5px",
+          borderRadius: "5px"
+        },
+        onDestroy(particle) {
+          const magnitude = 100;
+          const childCount = 10;
+          for (let i = 0; i < childCount; i++) {
+            manager.addEmitter({
+              emitEvery: 32,
+              maxEmissions: 8,
+              particleOptions: {
+                ttl: 600,
+                position: { x: particle.position.x, y: particle.position.y },
+                velocity: {
+                  x: magnitude * Math.sin((2 * i * Math.PI) / childCount),
+                  y: magnitude * Math.cos((2 * i * Math.PI) / childCount)
+                },
+                get acceleration() {
+                  return { x: 0, y: 150 };
+                },
+                onCreate(particle) {
+                  particle.heading = Math.atan2(
+                    particle.velocity.y,
+                    particle.velocity.x
+                  );
+                },
+                style: { ...particle.style, scale: 0.5, opacity: [1, 0] }
               }
+            });
           }
         }
-      });
-  }
-
-  let g = () => { t.clearEmitters(); fireworkContainer.style.backgroundColor = 'rgba(0, 0, 0, 0)';}
-
-  fireworkButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
-  fireworkButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
-  fireworkButton.addEventListener('mouseup', g);
-  fireworkButton.addEventListener('touchend', g);
-}
-
-
-/* Snowflakes */
-{
-  const snowflakeButton = document.querySelector('.snowflakes .example-button');
-  const snowflakeContainer = document.querySelector('.snowflakes');
-
-  const f = () => {
-    const midpoint = getTileMidpoint(snowflakeContainer);
-
-    t.addEmitter({
-      position: { x: midpoint.x, y: midpoint.y - 160 },
-      emitEvery: 100,
-      particleOptions: {
-        contents: '❄',
-        style: {
-          color: '#fff',
-          get scale () { return 0.5 + 2 * Math.random() },
-          get opacity () {
-            let k = 0.5 + (0.5 * Math.random());
-            return [k, k, 0]
-          }
-        },
-        get position() { return { x: 320 * (Math.random() - 0.5)}},
-        get velocity () { return { x: 60 * (Math.random() - 0.5), y: 15 + 10 * Math.random() } },
-        ttl: 12000,
-        onUpdate: (p) => {
-          if (Math.random() > 0.99) {
-            p.velocity.x = -p.velocity.x;
-          }
-        }
-      }
-    });
-  }
-
-  const g = () => {
-    t.clearEmitters();
-  }
-
-  snowflakeButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
-  snowflakeButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
-  snowflakeButton.addEventListener('mouseup', g);
-  snowflakeButton.addEventListener('touchend', g);
-}
-
-examples['chess'] = () => {
-  t.addEmitter({
-     position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
-    emitEvery: 200,
-    particleOptions: {
-      ttl: 1000,
-      style: {
-        color: '#000',
-        fontSize: '32px',
-        width: '32px',
-        height: '32px',
-        get scale() { return 10 * Math.random() }
-      },
-      get contents () { return ['⏣', '♔','♕','♖','♗','♘','♙','♚','♛','♜','♝','♞','♟'][Math.floor(12 * Math.random())] } ,
-      get position () { return { x: 128 * (Math.random() - 0.5) } },
-      get velocity () {
-        let theta = 2 * Math.PI * Math.random();
-        let h = 100 + 10 * Math.random();
-        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-      },
-
-      onUpdate: (p) => {
-        p.heading += 0.01;
-      }
-    }
-  });
-}
-
-/* Bees */
-{
-  const beeButton = document.querySelector('.bees .example-button');
-  const beeContainer = document.querySelector('.bees');
-
-  const f = () => {
-    const midpoint = getTileMidpoint(beeContainer);
-
-    t.addEmitter({
-      position: { x: midpoint.x, y: midpoint.y },
-      emitEvery: 32,
-      particleOptions: {
-        ttl: 1600,
-        contents: '🐝',
-        style: {
-          width: '16px',
-          height: '16px',
-          get scale () { return 1; }
-        },
-        get position () { return { x: 20 * (Math.random() - 0.5), y: 20 * (Math.random() - 0.5) } },
-        get velocity () {
-          const h = 50 + 50 * Math.random();
-          const theta = 2 * Math.random() * Math.PI;
-          return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-        },
-        onCreate: (p) => {
-          p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-        },
-        onUpdate: (p) => {
-          if (Math.random() > 0.9) {
-            const h = 50 + 50 * Math.random();
-            const theta = 2 * Math.random() * Math.PI;
-            p.velocity = { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-            p.heading = Math.atan2(p.velocity.y, p.velocity.x);
-          }
-        }
-      }
-    });
-  }
-
-  const g = () => {
-    t.clearEmitters();
-  }
-
-  beeButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
-  beeButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
-  beeButton.addEventListener('mouseup', g);
-  beeButton.addEventListener('touchend', g);
-}
-
-/* Worlds */
-{
-  const worldButton = document.querySelector('.world .example-button');
-  const worldContainer = document.querySelector('.world');
-
-  const f = () => {
-    const midpoint = getTileMidpoint(worldContainer);
-
-    t.addParticle({
-      ttl: 8000,
-      contents: `🌏`,
-      style: { fontSize: '48px' },
-      get position () { return { x: midpoint.x, y: midpoint.y } },
-      get velocity () {
-        let h = 10;
-        let theta = 2 * Math.random() * Math.PI;
-        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
-      },
-      onCreate (p) {
-        p.idx = 0;
-      },
-      onUpdate (p) {
-        if (p.frameNumber % 15 === 0){
-          p.idx = (p.idx + 1) % 3;
-        }
-        p.setContents(['🌏','🌎', '🌍'][p.idx])
       }
     });
   };
 
-  worldButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
-  worldButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
+  const stopFireworks = () => {
+    manager.clearEmitters();
+    fireworkContainer.style.backgroundColor = "rgba(0, 0, 0, 0)";
+  };
+
+  fireworkButton.addEventListener("mousedown", event => {
+    event.preventDefault();
+    startFireworks();
+  });
+  fireworkButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    startFireworks();
+  });
+  fireworkButton.addEventListener("mouseup", stopFireworks);
+  fireworkButton.addEventListener("touchend", stopFireworks);
+}
+
+/* Snowflakes */
+{
+  const snowflakeButton = document.querySelector(".snowflakes .example-button");
+  const snowflakeContainer = document.querySelector(".snowflakes");
+
+  const showSnowflakes = () => {
+    const midpoint = getTileMidpoint(snowflakeContainer);
+
+    manager.addEmitter({
+      position: { x: midpoint.x, y: midpoint.y - 160 },
+      emitEvery: 100,
+      particleOptions: {
+        contents: "❄",
+        style: {
+          color: "#fff",
+          get scale() {
+            return 0.5 + 2 * Math.random();
+          },
+          get opacity() {
+            const startOpacity = 0.5 + 0.5 * Math.random();
+            return [startOpacity, startOpacity, 0];
+          }
+        },
+        get position() {
+          return { x: 320 * (Math.random() - 0.5) };
+        },
+        get velocity() {
+          return { x: 60 * (Math.random() - 0.5), y: 15 + 10 * Math.random() };
+        },
+        ttl: 12000,
+        onUpdate(particle) {
+          if (Math.random() > 0.99) {
+            particle.velocity.x = -particle.velocity.x;
+          }
+        }
+      }
+    });
+  };
+
+  const stopSnowflakes = () => {
+    manager.clearEmitters();
+  };
+
+  snowflakeButton.addEventListener("mousedown", event => {
+    event.preventDefault();
+    showSnowflakes();
+  });
+  snowflakeButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    showSnowflakes();
+  });
+  snowflakeButton.addEventListener("mouseup", stopSnowflakes);
+  snowflakeButton.addEventListener("touchend", stopSnowflakes);
+}
+
+examples.chess = () => {
+  manager.addEmitter({
+    position: { x: mainWindow.clientWidth / 2, y: mainWindow.clientHeight / 2 },
+    emitEvery: 200,
+    particleOptions: {
+      ttl: 1000,
+      style: {
+        color: "#000",
+        fontSize: "32px",
+        width: "32px",
+        height: "32px",
+        get scale() {
+          return 10 * Math.random();
+        }
+      },
+      get contents() {
+        return [
+          "⏣",
+          "♔",
+          "♕",
+          "♖",
+          "♗",
+          "♘",
+          "♙",
+          "♚",
+          "♛",
+          "♜",
+          "♝",
+          "♞",
+          "♟"
+        ][Math.floor(12 * Math.random())];
+      },
+      get position() {
+        return { x: 128 * (Math.random() - 0.5) };
+      },
+      get velocity() {
+        const theta = 2 * Math.PI * Math.random();
+        const magnitude = 100 + 10 * Math.random();
+        return {
+          x: magnitude * Math.cos(theta),
+          y: magnitude * Math.sin(theta)
+        };
+      },
+
+      onUpdate(particle) {
+        particle.heading += 0.01;
+      }
+    }
+  });
+};
+
+/* Bees */
+{
+  const beeButton = document.querySelector(".bees .example-button");
+  const beeContainer = document.querySelector(".bees");
+
+  const startBees = () => {
+    const midpoint = getTileMidpoint(beeContainer);
+
+    manager.addEmitter({
+      position: { x: midpoint.x, y: midpoint.y },
+      emitEvery: 32,
+      particleOptions: {
+        ttl: 1600,
+        contents: "🐝",
+        style: {
+          width: "16px",
+          height: "16px",
+          get scale() {
+            return 1;
+          }
+        },
+        get position() {
+          return {
+            x: 20 * (Math.random() - 0.5),
+            y: 20 * (Math.random() - 0.5)
+          };
+        },
+        get velocity() {
+          const theta = 2 * Math.random() * Math.PI;
+          const magnitude = 50 + 50 * Math.random();
+          return {
+            x: magnitude * Math.cos(theta),
+            y: magnitude * Math.sin(theta)
+          };
+        },
+        onCreate(particle) {
+          particle.heading = Math.atan2(
+            particle.velocity.y,
+            particle.velocity.x
+          );
+        },
+        onUpdate(particle) {
+          if (Math.random() > 0.9) {
+            const theta = 2 * Math.random() * Math.PI;
+            const magnitude = 50 + 50 * Math.random();
+
+            particle.velocity = {
+              x: magnitude * Math.cos(theta),
+              y: magnitude * Math.sin(theta)
+            };
+            particle.heading = Math.atan2(
+              particle.velocity.y,
+              particle.velocity.x
+            );
+          }
+        }
+      }
+    });
+  };
+
+  const stopBees = () => {
+    manager.clearEmitters();
+  };
+
+  beeButton.addEventListener("mousedown", event => {
+    event.preventDefault();
+    startBees();
+  });
+
+  beeButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    startBees();
+  });
+
+  beeButton.addEventListener("mouseup", stopBees);
+  beeButton.addEventListener("touchend", stopBees);
+}
+
+/* Worlds */
+{
+  const worldButton = document.querySelector(".world .example-button");
+  const worldContainer = document.querySelector(".world");
+
+  const showWorld = () => {
+    const midpoint = getTileMidpoint(worldContainer);
+
+    manager.addParticle({
+      ttl: 8000,
+      contents: "🌏",
+      style: { fontSize: "48px" },
+      get position() {
+        return { x: midpoint.x, y: midpoint.y };
+      },
+      get velocity() {
+        const magnitude = 10;
+        const theta = 2 * Math.random() * Math.PI;
+        return {
+          x: magnitude * Math.cos(theta),
+          y: magnitude * Math.sin(theta)
+        };
+      },
+      onCreate(particle) {
+        particle.idx = 0;
+      },
+      onUpdate(particle) {
+        if (particle.frameNumber % 15 === 0) {
+          particle.idx = (particle.idx + 1) % 3;
+        }
+        particle.setContents(["🌏", "🌎", "🌍"][particle.idx]);
+      }
+    });
+  };
+
+  worldButton.addEventListener("mousedown", event => {
+    event.preventDefault();
+    showWorld();
+  });
+  worldButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    showWorld();
+  });
 }
 
 /* Moons */
 {
-  const moonButton = document.querySelector('.moon .example-button');
-  const moonContainer = document.querySelector('.moon');
+  const moonButton = document.querySelector(".moon .example-button");
+  const moonContainer = document.querySelector(".moon");
 
-  const f = () => {
+  const showMoon = () => {
     const midpoint = getTileMidpoint(moonContainer);
 
-    const moons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'].reverse()
+    const moons = ["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"].reverse();
 
-    t.addParticle({
+    manager.addParticle({
       ttl: 8000,
-      contents: `🌑`,
-      style: { fontSize: '48px' },
-      get position () { return { x: midpoint.x, y: midpoint.y } },
-      get velocity () {
-        let h = 10;
-        let theta = 2 * Math.random() * Math.PI;
-        return { x: h * Math.cos(theta), y: h * Math.sin(theta) }
+      contents: "🌑",
+      style: { fontSize: "48px" },
+      get position() {
+        return { x: midpoint.x, y: midpoint.y };
       },
-      onCreate (p) {
-        p.idx = 0;
+      get velocity() {
+        const magnitude = 10;
+        const theta = 2 * Math.random() * Math.PI;
+        return {
+          x: magnitude * Math.cos(theta),
+          y: magnitude * Math.sin(theta)
+        };
       },
-      onUpdate (p) {
-        if (p.frameNumber % 15 === 0){
-          p.idx = (p.idx + 1) % moons.length;
-          p.setContents(moons[p.idx])
+      onCreate(particle) {
+        particle.idx = 0;
+      },
+      onUpdate(particle) {
+        if (particle.frameNumber % 15 === 0) {
+          particle.idx = (particle.idx + 1) % moons.length;
+          particle.setContents(moons[particle.idx]);
         }
       }
     });
-  }
+  };
 
-  moonButton.addEventListener('mousedown', (e) => { e.preventDefault(); f() });
-  moonButton.addEventListener('touchstart', (t) => { t.preventDefault(); f() });
+  moonButton.addEventListener("mousedown", event => {
+    event.preventDefault();
+    showMoon();
+  });
+  moonButton.addEventListener("touchstart", touchEvent => {
+    touchEvent.preventDefault();
+    showMoon();
+  });
 }
