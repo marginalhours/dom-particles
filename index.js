@@ -8,11 +8,17 @@ const manager = new DomParticles({
 
 examples = {};
 
+const getScrollTop = () =>
+  document.body.scrollTop || document.documentElement.scrollTop;
+const getScrollLeft = () =>
+  document.body.scrollLeft || document.documentElement.scrollLeft;
+
 const getTileMidpoint = tile => {
   const tileBounds = tile.getBoundingClientRect();
+
   return {
-    x: document.body.scrollLeft + tileBounds.x + tileBounds.width / 2,
-    y: document.body.scrollTop + tileBounds.y + tileBounds.height / 2
+    x: getScrollLeft() + tileBounds.x + tileBounds.width / 2,
+    y: getScrollTop() + tileBounds.y + tileBounds.height / 2
   };
 };
 
@@ -24,7 +30,7 @@ const getTileMidpoint = tile => {
     manager.addParticle({
       position: {
         x: event.clientX,
-        y: document.body.scrollTop + simpleButton.getBoundingClientRect().y
+        y: getScrollTop() + simpleButton.getBoundingClientRect().y - 16
       },
       contents: "+1",
       velocity: { x: 0, y: -40 },
@@ -54,8 +60,8 @@ const getTileMidpoint = tile => {
 
   const showParticle = () => {
     const rect = healthInner.getBoundingClientRect();
-    const xpos = document.body.scrollLeft + rect.x + rect.width;
-    const ypos = document.body.scrollTop + rect.y;
+    const xpos = getScrollLeft() + rect.x + rect.width;
+    const ypos = getScrollTop() + rect.y;
 
     manager.addParticle({
       position: { x: xpos, y: ypos },
@@ -429,7 +435,7 @@ const getTileMidpoint = tile => {
   const lightspeedContainer = document.querySelector(".lightspeed");
   lightspeedButton.style.zIndex = 1000;
 
-  let MOVING = false;
+  let MOVING;
 
   const showLightspeed = () => {
     const midpoint = getTileMidpoint(lightspeedContainer);
@@ -502,8 +508,8 @@ const getTileMidpoint = tile => {
           if (
             particle.position.x < rect.x ||
             particle.position.x > rect.x + rect.width ||
-            particle.position.y < document.body.scrollTop + rect.y ||
-            particle.position.y > document.body.scrollTop + rect.y + rect.height
+            particle.position.y < getScrollTop() + rect.y ||
+            particle.position.y > getScrollTop() + rect.y + rect.height
           ) {
             particle.ttl = particle.elapsed;
           }
