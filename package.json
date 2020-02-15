@@ -29,10 +29,16 @@
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/register": "^7.8.3",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
     "jsdom": "13.1.0",
     "jsdom-global": "3.0.2",
     "mocha": "^5.2.0",
-    "parcel": "^1.12.4"
+    "parcel": "^1.12.4",
+    "prettier": "1.19.1"
   },
-  "browserslist": "> 0.25%, not dead"
+  "browserslist": "> 0.25%, not dead",
+  "dependencies": {}
 }

@@ -1,4 +1,4 @@
-import { DEFAULT_PARTICLE_OPTIONS } from './text_particle';
+import { DEFAULT_PARTICLE_OPTIONS } from "./text_particle";
 
 const DEFAULT_EMITTER_OPTIONS = {
   maxEmissions: false,
@@ -9,11 +9,11 @@ const DEFAULT_EMITTER_OPTIONS = {
   onCreate: () => {},
   onUpdate: () => {},
   onDestroy: () => {},
-  MAX_EMIT_PER_STEP: 16, /* Prevent thundering herds on tab switch */
-}
+  MAX_EMIT_PER_STEP: 16 /* Prevent thundering herds on tab switch */
+};
 
 export default class TextParticleEmitter {
-  constructor (options) {
+  constructor(options) {
     options = options || {};
 
     Object.assign(this, {
@@ -21,7 +21,7 @@ export default class TextParticleEmitter {
       ...options,
       position: { ...{ x: 0, y: 0 }, ...options.position },
       velocity: { ...{ x: 0, y: 0 }, ...options.velocity },
-      acceleration: { ...{ x: 0, y: 0 }, ...options.acceleration },
+      acceleration: { ...{ x: 0, y: 0 }, ...options.acceleration }
     });
 
     this.manager = options.manager;
@@ -32,7 +32,7 @@ export default class TextParticleEmitter {
     this.onCreate(this);
   }
 
-  get alive () {
+  get alive() {
     if (this.maxEmissions && this.emitted >= this.maxEmissions) {
       return false;
     }
@@ -42,7 +42,7 @@ export default class TextParticleEmitter {
     return true;
   }
 
-  update (f) {
+  update(f) {
     // position update
     this.velocity.x += this.acceleration.x * f;
     this.velocity.y += this.acceleration.y * f;
@@ -57,28 +57,34 @@ export default class TextParticleEmitter {
       let toEmit = Math.floor(this.elapsed / this.emitEvery);
       toEmit = Math.min(toEmit, this.MAX_EMIT_PER_STEP);
 
-      if (this.maxEmissions) { toEmit = Math.min(this.maxEmissions - this.emitted, toEmit); }
+      if (this.maxEmissions) {
+        toEmit = Math.min(this.maxEmissions - this.emitted, toEmit);
+      }
       this.elapsed = 0;
 
-      for(let i = 0; i < toEmit; i++){
+      for (let i = 0; i < toEmit; i++) {
         let p = { ...{ x: 0, y: 0 }, ...this.particleOptions.position };
-        let pp = { x: this.position.x + p.x, y: this.position.y + p.y }
+        let pp = { x: this.position.x + p.x, y: this.position.y + p.y };
 
         let v = { ...{ x: 0, y: 0 }, ...this.particleOptions.velocity };
         let v_angle = Math.atan2(v.y, v.x);
-        let v_magna = Math.sqrt((v.x * v.x) + (v.y * v.y));
+        let v_magna = Math.sqrt(v.x * v.x + v.y * v.y);
 
         let vv = {
           x: v_magna * Math.cos(v_angle + this.heading),
           y: v_magna * Math.sin(v_angle + this.heading)
-        }
+        };
 
-        this.manager.addParticle({ ...this.particleOptions, position: pp, velocity: vv });
+        this.manager.addParticle({
+          ...this.particleOptions,
+          position: pp,
+          velocity: vv
+        });
         // emit particle
-        this.emitted ++;
+        this.emitted += 1;
       }
 
-      this.frameNumber ++;
+      this.frameNumber += 1;
     }
 
     // user-provided update

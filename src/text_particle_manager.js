@@ -1,28 +1,28 @@
-import TextParticle from './text_particle';
-import TextParticleEmitter from './text_particle_emitter';
+import TextParticle from "./text_particle";
+import TextParticleEmitter from "./text_particle_emitter";
 
 const DEFAULT_TPM_OPTIONS = {
   max: 100,
   preallocate: 10,
-  tagName: 'span',
-  autostart: true,
+  tagName: "span",
+  autostart: true
 };
 
 export default class TextParticleManager {
-  constructor (options) {
+  constructor(options) {
     Object.assign(this, { ...DEFAULT_TPM_OPTIONS, ...options });
 
-    this.container = this.container || document.querySelector('body');
-    this.container.style.position = 'relative';
+    this.container = this.container || document.querySelector("body");
+    this.container.style.position = "relative";
 
     this._pool = [];
     this._particles = [];
     this._emitters = [];
 
-    this.foldElement = document.createElement('div');
-    this.foldElement.className = 'text-particle-manager-reservoir';
+    this.foldElement = document.createElement("div");
+    this.foldElement.className = "text-particle-manager-reservoir";
     this.foldElement.style.cssText = `position: absolute; width: 0; height: 0; top: 0; left: 0`;
-    this.reservoirCSS = `position: absolute; display: none; pointer-events: none; white-space: pre-wrap; transform: translate3d(0px, 0px, 0px); box-sizing: border-box;`
+    this.reservoirCSS = `position: absolute; display: none; pointer-events: none; white-space: pre-wrap; transform: translate3d(0px, 0px, 0px); box-sizing: border-box;`;
 
     this._allocate(this.preallocate);
     this.container.appendChild(this.foldElement);
@@ -30,10 +30,9 @@ export default class TextParticleManager {
     this.frameStart = null;
   }
 
-  addParticle (options) {
+  addParticle(options) {
     if (this._particles.length < this.max) {
-
-      let p = new TextParticle({...options, element: this._pop()});
+      let p = new TextParticle({ ...options, element: this._pop() });
 
       this._particles.push(p);
 
@@ -44,24 +43,26 @@ export default class TextParticleManager {
     }
   }
 
-  addEmitter (options) {
-    let e = new TextParticleEmitter({...options, manager: this})
+  addEmitter(options) {
+    let e = new TextParticleEmitter({ ...options, manager: this });
     this._emitters.push(e);
-    if (!this.raf && this.autostart){
+    if (!this.raf && this.autostart) {
       this.start();
     }
     return e;
   }
 
-  start () {
+  start() {
     this.frameStart = performance.now();
     this.raf = requestAnimationFrame(() => this._update(this.frameStart));
   }
 
-  reset () {
-    if (this.raf) { cancelAnimationFrame(this.raf) }
+  reset() {
+    if (this.raf) {
+      cancelAnimationFrame(this.raf);
+    }
     this._particles.map(p => {
-      p.setContents('');
+      p.setContents("");
       p.setStyleText(this.reservoirCSS);
 
       this._push(p.element);
@@ -72,7 +73,7 @@ export default class TextParticleManager {
     this._emitters = [];
   }
 
-  clearEmitters () {
+  clearEmitters() {
     this._emitters.map(e => e.onDestroy(e));
     this._emitters = [];
   }
@@ -80,19 +81,21 @@ export default class TextParticleManager {
   _update(timestamp) {
     let dt = timestamp - this.frameStart;
     this.frameStart = timestamp;
-    let f = (dt/1000);
+    let f = dt / 1000;
 
     let particlesToDestroy = [];
     this._particles = this._particles.filter(p => {
       p.update(f);
-      if (!p.alive) { particlesToDestroy.push(p) }
+      if (!p.alive) {
+        particlesToDestroy.push(p);
+      }
       return p.alive;
     });
 
     particlesToDestroy.map(p => {
       // reset styles and return to pool
       p.onDestroy(p);
-      p.setContents('');
+      p.setContents("");
       p.setStyleText(this.reservoirCSS);
 
       this._push(p.element);
@@ -101,45 +104,46 @@ export default class TextParticleManager {
     let emittersToDestroy = [];
     this._emitters = this._emitters.filter(e => {
       e.update(f);
-      if (!e.alive) { emittersToDestroy.push(e); }
+      if (!e.alive) {
+        emittersToDestroy.push(e);
+      }
       return e.alive;
     });
 
     emittersToDestroy.map(e => e.onDestroy(e));
 
-    if (this._emitters.length === 0 && this._particles.length === 0){
+    if (this._emitters.length === 0 && this._particles.length === 0) {
       cancelAnimationFrame(this.raf);
       this.raf = false;
     } else {
-      requestAnimationFrame((t) => this._update(t));
+      requestAnimationFrame(t => this._update(t));
     }
   }
 
-  _push (el) {
+  _push(el) {
     this._pool.push(el);
   }
 
-  _pop (el) {
-    if (this._pool.length > 0){
+  _pop(el) {
+    if (this._pool.length > 0) {
       return this._pool.pop();
     } else {
       return this._create();
     }
   }
 
-  _create () {
+  _create() {
     let element = document.createElement(this.tagName);
     element.style.cssText = this.reservoirCSS;
     this.foldElement.appendChild(element);
     return element;
   }
 
-  _allocate (n) {
-    if (this._pool.length < n){
-      for(let i = this._pool.length; i < n; i++){
+  _allocate(n) {
+    if (this._pool.length < n) {
+      for (let i = this._pool.length; i < n; i++) {
         this._push(this._create());
       }
     }
   }
-
 }

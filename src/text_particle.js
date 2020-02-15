@@ -1,15 +1,15 @@
-import { propValueToFunction } from './utilities';
+import { propValueToFunction } from "./utilities";
 
 export const DEFAULT_PARTICLE_OPTIONS = {
   ttl: 1000,
-  contents: '.',
-  style: { display: 'inline-block', zIndex: 1 },
-  onCreate: () => { },
-  onUpdate: () => { },
-  onDestroy: () => { },
+  contents: ".",
+  style: { display: "inline-block", zIndex: 1 },
+  onCreate: () => {},
+  onUpdate: () => {},
+  onDestroy: () => {},
   heading: false,
-  grid: false,
-}
+  grid: false
+};
 
 export default class TextParticle {
   constructor(options) {
@@ -62,7 +62,7 @@ export default class TextParticle {
           // dynamic property; calculate function for it
           dynamicProps[propKey] = propValueToFunction(propValue);
         }
-      } else if (typeof styleValue === 'object') {
+      } else if (typeof styleValue === "object") {
         // Not implemented yet, but I guess per-property easing one day (>.<)
       } else {
         // Either a fixed value or a getter, either way, just assign it
@@ -92,13 +92,15 @@ export default class TextParticle {
   }
 
   getSnapshot() {
-    let snapshot = Object.keys(this.dynamicProps)
-      .reduce((a, b) => ({
+    let snapshot = Object.keys(this.dynamicProps).reduce(
+      (a, b) => ({
         ...a,
         [b]: this.dynamicProps[b](this.lifeFrac)
-      }), { ...this.fixedProps });
+      }),
+      { ...this.fixedProps }
+    );
 
-    return { ...snapshot, transform: this.getScaledTransform(snapshot) }
+    return { ...snapshot, transform: this.getScaledTransform(snapshot) };
   }
 
   getScaledTransform(snapshot) {
