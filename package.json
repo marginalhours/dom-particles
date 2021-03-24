@@ -1,20 +1,23 @@
 {
   "name": "dom-particles",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "Particle effects for and with DOM elements",
-  "browser": "lib/dom-particles.js",
+  "main": "lib/dom-particles.cjs.js",
+  "module": "lib/dom-particles.esm.js",
+  "browser": "lib/dom-particles.umd.js",
   "scripts": {
-    "dev": "parcel devPlayground.html --global DomParticles",
-    "build": "parcel build src/index.js --out-file dom-particles.js --out-dir lib --global DomParticles",
-    "test": "mocha --require @babel/register"
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "mocha --require @babel/register --require jsdom-global/register",
+    "pretest": "npm run build"
   },
+  "files": [
+    "lib"
+  ],
   "babel": {
     "presets": [
       "@babel/preset-env"
     ]
-  },
-  "engines": {
-    "node": "8.1.x"
   },
   "repository": {
     "url": "https://github.com/MisterKeefe/dom-particles#readme"
@@ -35,10 +38,11 @@
     "eslint-plugin-prettier": "^3.1.2",
     "jsdom": "13.1.0",
     "jsdom-global": "3.0.2",
-    "mocha": "^5.2.0",
-    "parcel": "^1.12.4",
-    "prettier": "1.19.1"
-  },
-  "browserslist": "> 0.25%, not dead",
-  "dependencies": {}
+    "mocha": "^8.3.2",
+    "prettier": "1.19.1",
+    "rollup": "^2.42.3",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
 }
