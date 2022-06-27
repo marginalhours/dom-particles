@@ -1,8 +1,14 @@
 # dom-particles
 
-[![CircleCI](https://circleci.com/gh/marginalhours/dom-particles.svg?style=shield)](https://circleci.com/gh/marginalhours/dom-particles)   [![npm](https://img.shields.io/npm/v/dom-particles.svg)](https://www.npmjs.com/package/dom-particles)
+[![CircleCI](https://circleci.com/gh/marginalhours/dom-particles.svg?style=shield)](https://circleci.com/gh/marginalhours/dom-particles) [![npm](https://img.shields.io/npm/v/dom-particles.svg)](https://www.npmjs.com/package/dom-particles)
 
 A small JS library to provide particle-style effects within the DOM, without leveraging `<canvas>` or other techniques.
+
+<p float="left">
+  <img src="./1.gif" width="32%" />
+  <img src="./2.gif" width="32%" /> 
+  <img src="./3.gif" width="32%" />
+</p>
 
 [Demo Page](http://marginalhours.github.io/dom-particles)
 
@@ -72,24 +78,23 @@ By default, a DomParticles only uses the `requestAnimationFrame` API to update i
 while a particle or emitter is extant. After the last particle or emitter reaches the end of its
 lifespan, the DomParticles will unregister itself and stop updating until the next `add` or `addEmitter` call.
 
-
 ### Options
 
-| Name      | Default                   | Remarks                            |
-| ----      | -------                   | ---------------------------------- |
-| `max`     | `100`                     | Maximum number of particles on screen at any one time. Global across all emitters |
-| `preallocate` | `10`                  | How many particle elements to create by default and add to the DOM. More will be created on-demand, up to the `max` amount.
-| `tagName` | `span`                    | Tag to use for particle elements
-| `container` | document `body` tag     | Parent container for all particles. Will have `position:relative` applied to the styles.
-| `autostart` | `true`                  | If `false`, particles will not be animated until `.start()` is called on the parent `DomParticles` instance
+| Name          | Default             | Remarks                                                                                                                     |
+| ------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `max`         | `100`               | Maximum number of particles on screen at any one time. Global across all emitters                                           |
+| `preallocate` | `10`                | How many particle elements to create by default and add to the DOM. More will be created on-demand, up to the `max` amount. |
+| `tagName`     | `span`              | Tag to use for particle elements                                                                                            |
+| `container`   | document `body` tag | Parent container for all particles. Will have `position:relative` applied to the styles.                                    |
+| `autostart`   | `true`              | If `false`, particles will not be animated until `.start()` is called on the parent `DomParticles` instance                 |
 
 ### Methods
+
 - `.addParticle(options)` - Create a particle from the provided `options` object (see below for particle options)
 - `.addEmitter(options)` - Create a particle emitter from the provided `options` object (see below for emitter options)
 - `.start()` - If `autostart: false` was passed to this instance, call this function manually to begin animation.
 - `.reset()` - Removes all particles and emitters.
 - `.clearEmitters()` - Removes all emitters. Existing particles will remain until the end of their lifespan.
-
 
 ## Particles
 
@@ -107,22 +112,21 @@ There are also three update hooks which can be provided in the particle options:
 
 Velocity and acceleration are specified in units of pixels per second. For example, a particle with a `ttl` of `1000` milliseconds and a velocity of `{ x: 10 }` will travel ten pixels to the right during its lifespan.
 
-
 ### Options
 
-| Name      | Default                   | Remarks                             |
-| ----      | -------                   | ----------------------------------- |
-| `contents`  | `'.'`                     | innerHTML of the particle element |
-| `ttl`       | `1000`                    |  Set to an integer to destroy this particle after that many milliseconds have elapsed. |
-| `onCreate`  | N/A                       | Callback function on particle creation - called with the particle object as its first argument |
-| `onUpdate`  | N/A                       | Callback function on particle update - called with the particle object as its first argument, and elapsed time since last `onUpdate` call as the second argument |
-| `onDestroy` | N/A                       | Callback function on particle destruction - called with the particle object as its first argument |
-| `style` | `{}` | object of styles to be applied to the particle. Style values can be arrays, for animation purposes - see section **Styling Particles** below.
-| `heading` | `false` | Set to a number in range `0`...`2 * Math.PI` to manually control the particle heading in an `onUpdate` handler, otherwise animate using the `rotation` style.
-| `grid` | `false` | Set to a number to snap the particle's position to a grid of that size
-| `position` | `{x : 0, y: 0}` | Particle position. If particle is created by an emitter, this is taken to be relative to the emitter's position; if not, it's taken to be relative to the container element of the parent `DomParticles` object. For convenience, components which are zero need not be specified: `{x: 1}` and `{y: 1}` are both valid vectors. |
-| `velocity` | `{x : 0, y: 0}` | Particle velocity |
-| `acceleration` | `{x : 0, y: 0}` | Particle acceleration |
+| Name           | Default         | Remarks                                                                                                                                                                                                                                                                                                                          |
+| -------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `contents`     | `'.'`           | innerHTML of the particle element                                                                                                                                                                                                                                                                                                |
+| `ttl`          | `1000`          | Set to an integer to destroy this particle after that many milliseconds have elapsed.                                                                                                                                                                                                                                            |
+| `onCreate`     | N/A             | Callback function on particle creation - called with the particle object as its first argument                                                                                                                                                                                                                                   |
+| `onUpdate`     | N/A             | Callback function on particle update - called with the particle object as its first argument, and elapsed time since last `onUpdate` call as the second argument                                                                                                                                                                 |
+| `onDestroy`    | N/A             | Callback function on particle destruction - called with the particle object as its first argument                                                                                                                                                                                                                                |
+| `style`        | `{}`            | object of styles to be applied to the particle. Style values can be arrays, for animation purposes - see section **Styling Particles** below.                                                                                                                                                                                    |
+| `heading`      | `false`         | Set to a number in range `0`...`2 * Math.PI` to manually control the particle heading in an `onUpdate` handler, otherwise animate using the `rotation` style.                                                                                                                                                                    |
+| `grid`         | `false`         | Set to a number to snap the particle's position to a grid of that size                                                                                                                                                                                                                                                           |
+| `position`     | `{x : 0, y: 0}` | Particle position. If particle is created by an emitter, this is taken to be relative to the emitter's position; if not, it's taken to be relative to the container element of the parent `DomParticles` object. For convenience, components which are zero need not be specified: `{x: 1}` and `{y: 1}` are both valid vectors. |
+| `velocity`     | `{x : 0, y: 0}` | Particle velocity                                                                                                                                                                                                                                                                                                                |
+| `acceleration` | `{x : 0, y: 0}` | Particle acceleration                                                                                                                                                                                                                                                                                                            |
 
 ### Methods
 
@@ -149,7 +153,7 @@ The array of values can be any length. Most simple CSS properties (colours; unit
 
 There are also some CSS transform properties which are included as separate arguments for ease-of-use. These are as follows:
 
-- `scale` (or just `scaleX` or `scaleY`) - scale the element. This is the *transform* version of scale, not the general CSS property.
+- `scale` (or just `scaleX` or `scaleY`) - scale the element. This is the _transform_ version of scale, not the general CSS property.
 - `rotation` - rotate the element, but takes lower precedence than the `heading` property.
 - `skew` (or just `skewX` or `skewY`) - skew the element
 
@@ -157,19 +161,18 @@ There are also some CSS transform properties which are included as separate argu
 
 Emitters are created (and returned) by the `addEmitter` function on a `DomParticles` object. They provide a convenient way to create multiple particles with similar properties.
 
-
 ### Options
 
-| Name      | Default                   | Remarks                             |
-| ----      | -------                   | ----------------------------------- |
-| `maxEmissions` | `false`              | Maximum particles to emit. Set to a integer to destroy this emitter after that many have been created. |
-| `ttl`       | `false`                 | Set to an integer to destroy this emitter after that many milliseconds have elapsed. |
-| `emitEvery` | `500`                   | Number of milliseconds between particle emissions
-| `onCreate`  | N/A                     | Callback function on emitter creation - called with the particle object as its first argument |
-| `onUpdate`  | N/A                     | Callback function on emitter update - called with the emitter object as its first argument, and elapsed time since last `onUpdate` call as the second argument |
-| `onDestroy` | N/A                     | Callback function on emitter destruction - called with the emitter object as its first argument |
-| `heading` | `0` | Set to a number in range `0`...`2 * Math.PI` to rotate the direction from which particles are emitted.
-| `position` | `{x : 0, y: 0}` | Emitter position. Particles emitted from this emitter will have a position relative to the emitter's position, not the origin. |
-| `velocity` | `{x : 0, y: 0}` | Emitter velocity |
-| `acceleration` | `{x : 0, y: 0}` | Emitter acceleration |
-| `particleOptions` | default particle options | See subsection "Options" of the "Particle" section. |
+| Name              | Default                  | Remarks                                                                                                                                                        |
+| ----------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `maxEmissions`    | `false`                  | Maximum particles to emit. Set to a integer to destroy this emitter after that many have been created.                                                         |
+| `ttl`             | `false`                  | Set to an integer to destroy this emitter after that many milliseconds have elapsed.                                                                           |
+| `emitEvery`       | `500`                    | Number of milliseconds between particle emissions                                                                                                              |
+| `onCreate`        | N/A                      | Callback function on emitter creation - called with the particle object as its first argument                                                                  |
+| `onUpdate`        | N/A                      | Callback function on emitter update - called with the emitter object as its first argument, and elapsed time since last `onUpdate` call as the second argument |
+| `onDestroy`       | N/A                      | Callback function on emitter destruction - called with the emitter object as its first argument                                                                |
+| `heading`         | `0`                      | Set to a number in range `0`...`2 * Math.PI` to rotate the direction from which particles are emitted.                                                         |
+| `position`        | `{x : 0, y: 0}`          | Emitter position. Particles emitted from this emitter will have a position relative to the emitter's position, not the origin.                                 |
+| `velocity`        | `{x : 0, y: 0}`          | Emitter velocity                                                                                                                                               |
+| `acceleration`    | `{x : 0, y: 0}`          | Emitter acceleration                                                                                                                                           |
+| `particleOptions` | default particle options | See subsection "Options" of the "Particle" section.                                                                                                            |
