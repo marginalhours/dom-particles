@@ -4,11 +4,13 @@
 
 A small JS library to provide particle-style effects within the DOM, without leveraging `<canvas>` or other techniques.
 
+
 <p float="left">
   <img src="./1.gif" width="32%" />
   <img src="./2.gif" width="32%" /> 
   <img src="./3.gif" width="32%" />
 </p>
+
 
 [Demo Page](http://marginalhours.github.io/dom-particles)
 
